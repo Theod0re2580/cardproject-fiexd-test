@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>카드 관리</title>
+</head>
+<body>
+
+<h1>카드 관리</h1>
+
+<h2>카드 목록</h2>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>카드명</th>
+        <th>브랜드</th>
+        <th>관리</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="c : ${cards}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.cardName}"></td>
+        <td th:text="${c.cardBrand}"></td>
+
+        <td>
+            <a th:href="@{'/admin/cards/' + ${c.id} + '/edit'}">수정</a>
+
+            <form th:action="@{'/admin/cards/' + ${c.id} + '/delete'}"
+                  method="post" style="display:inline;">
+                <button type="submit" style="color:red;">삭제</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>카드 추가</h2>
+
+<form action="/admin/cards" method="post">
+    <input type="text" name="cardName" placeholder="카드명"><br>
+    <input type="text" name="cardBrand" placeholder="브랜드"><br>
+    <button type="submit">등록</button>
+</form>
+
+</body>
+</html>

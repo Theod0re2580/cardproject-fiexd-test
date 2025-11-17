@@ -3,6 +3,8 @@ package com.example.cardtest.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -13,19 +15,16 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/",
-                                "/events/**",   // 🔥 MBTI 포함 전체 허용
-                                "/css/**",
-                                "/js/**",
-                                "/images/**",
-                                "/mbti/**"      // 혹시 단독으로도 쓰면 대비
-                        ).permitAll()
-                        .anyRequest().permitAll() // 🔥 모든 요청 허용 (로그인 페이지 안뜨게)
+                        .anyRequest().permitAll()  // 🔥 모든 요청 허용 (우리는 세션+인터셉터 사용)
                 )
-                .formLogin(form -> form.disable())   // 🔥 로그인창 완전 비활성화
+                .formLogin(form -> form.disable())
                 .httpBasic(httpBasic -> httpBasic.disable());
 
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
