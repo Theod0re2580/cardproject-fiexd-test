@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  # DataSource ?? ?? ???? ? DB ?? CSV? ?? ??
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    cache: false   # ?? ??? false, ?? ? true? ??
+  messages:
+    encoding: UTF-8
+
+logging:
+  level:
+    root: INFO
+    com.example.cardgorilla: DEBUG
+
+app:
+  csv:
+    card: classpath:card_card.csv
+    benefit: classpath:card_benefit.csv

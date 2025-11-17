@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>카드브랜드 별 혜택 리스트</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        /* 브랜드 버튼 */
+        .brand-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .brand-buttons a {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-buttons a::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -75%;
+            width: 50%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: skewX(-25deg);
+            transition: all 0.5s ease;
+        }
+
+        .brand-buttons a:hover::after {
+            left: 125%;
+        }
+
+        .brand-buttons a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.3);
+        }
+
+        .brand-buttons a.selected {
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            opacity: 1 !important;
+        }
+
+        .brand-buttons a.dim {
+            opacity: 0.5;
+        }
+
+        /* 카드 리스트 */
+        .card-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .card-item {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            width: 280px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .card-item img {
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background-color: #e2e8f0;
+        }
+
+        .card-item h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.1em;
+            color: #333;
+            text-align: center;
+        }
+
+        .card-item p {
+            margin: 4px 0;
+            font-size: 0.9em;
+            color: #555;
+            text-align: center;
+        }
+
+        /* 혜택 / 상세 혜택 구분 */
+        .benefit-title {
+            font-weight: bold;
+            color: #2575fc;
+            margin-top: 10px;
+        }
+
+        .bnfContent {
+            color: #333;
+            font-size: 0.95em;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .bnfDetail {
+            max-height: 50px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            font-size: 0.85em;
+            color: #444;
+            text-align: left;
+            white-space: pre-line;
+        }
+
+        .bnfDetail.expanded {
+            max-height: 500px;
+        }
+
+        .toggle-btn {
+            cursor: pointer;
+            color: #2575fc;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        /* ✅ 더보기 버튼 */
+        #loadMoreBtn {
+            display: none;
+            margin: 30px auto;
+            padding: 10px 25px;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: 0.3s;
+        }
+
+        #loadMoreBtn:hover {
+            background-color: #222;
+        }
+
+        @media (max-width: 768px) {
+            .card-item { width: 45%; }
+        }
+
+        @media (max-width: 480px) {
+            .card-item { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<h1>카드 혜택 리스트</h1>
+
+<!-- 브랜드 선택 버튼 -->
+<div class="brand-buttons" id="brandButtons">
+    <a th:each="brand : ${brands}"
+       th:data-brand="${brand}"
+       th:text="${brand}"
+       href="javascript:void(0);"
+       onclick="filterByBrand(this)"></a>
+</div>
+
+<!-- 카드 리스트 -->
+<div class="card-list" id="cardList">
+    <div class="card-item" th:each="ev : ${events}" th:data-brand="${ev.card.cardBrand}">
+        <img th:src="${ev.card.cardImg != '' ? ev.card.cardImg : '/images/bono.png'}"
+             onerror="this.onerror=null;this.src='/images/bono.png';" alt="card image">
+        <h3 th:text="${ev.card.cardName}"></h3>
+        <p>브랜드: <span th:text="${ev.card.cardBrand}"></span></p>
+
+        <p class="benefit-title">혜택</p>
+        <p class="bnfContent" th:text="${ev.bnfContent}">혜택 요약</p>
+
+        <p class="benefit-title">상세 혜택</p>
+        <p class="bnfDetail" th:text="${ev.bnfDetail}"></p>
+        <span class="toggle-btn" onclick="toggleDetail(this)">더보기</span>
+    </div>
+</div>
+
+<!-- ✅ 카드 더보기 버튼 -->
+<button id="loadMoreBtn">더보기</button>
+
+<script>
+    function toggleDetail(btn) {
+        const detail = btn.previousElementSibling;
+        if (detail.classList.contains('expanded')) {
+            detail.classList.remove('expanded');
+            btn.innerText = '더보기';
+        } else {
+            detail.classList.add('expanded');
+            btn.innerText = '접기';
+        }
+    }
+
+    function filterByBrand(btn) {
+        const selectedBrand = btn.dataset.brand;
+        const cards = document.querySelectorAll('#cardList > .card-item');
+
+        cards.forEach(card => {
+            card.style.display = (card.dataset.brand === selectedBrand) ? 'flex' : 'none';
+        });
+
+        const buttons = document.querySelectorAll('#brandButtons a');
+        buttons.forEach(b => b.classList.remove('selected', 'dim'));
+        btn.classList.add('selected');
+        buttons.forEach(b => {
+            if (!b.classList.contains('selected')) b.classList.add('dim');
+        });
+
+        applyLoadMore(); // ✅ 브랜드 필터 후 더보기 초기화
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('#brandButtons a');
+        buttons.forEach(btn => {
+            const color1 = getRandomColor();
+            const color2 = getRandomColor();
+            btn.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+        });
+        applyLoadMore(); // ✅ 초기에도 적용
+    });
+
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    // ✅ 20개씩 단계적으로 로드
+    function applyLoadMore() {
+        const cards = Array.from(document.querySelectorAll('#cardList > .card-item'))
+            .filter(c => c.style.display !== 'none');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const batchSize = 20;
+        let currentCount = 0;
+
+        // 초기화
+        cards.forEach(card => card.style.display = 'none');
+
+        function showNextBatch() {
+            const nextBatch = cards.slice(currentCount, currentCount + batchSize);
+            nextBatch.forEach(card => card.style.display = 'flex');
+            currentCount += batchSize;
+
+            if (currentCount >= cards.length) {
+                loadMoreBtn.style.display = 'none';
+            } else {
+                loadMoreBtn.style.display = 'block';
+            }
+        }
+
+        // 첫 20개 표시
+        if (cards.length > 0) showNextBatch();
+
+        // 더보기 버튼 동작
+        loadMoreBtn.onclick = showNextBatch;
+
+        // 카드가 20개 이하일 때는 버튼 숨김
+        if (cards.length <= batchSize) {
+            loadMoreBtn.style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>

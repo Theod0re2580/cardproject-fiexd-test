@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>인기 카드 TOP 10</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 40px;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+        }
+        body.loaded { opacity: 1; }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* 카드 리스트 */
+        .card-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 260px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+            overflow: hidden;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+        .card img { width: 100%; height: 150px; object-fit: contain; }
+
+        h3 { margin: 10px 0 5px 0; color: #222; }
+        p { margin: 3px 0; color: #555; font-size: 0.9em; }
+
+        /* 혜택 상세 */
+        .bnfDetail {
+            max-height: 50px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            font-size: 0.85em;
+            color: #444;
+            text-align: left;
+            white-space: pre-line;
+        }
+
+        .bnfDetail.expanded { max-height: 500px; }
+
+        .toggle-btn {
+            cursor: pointer;
+            color: #2575fc;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto 40px auto;
+            max-width: 700px;
+        }
+    </style>
+</head>
+<body>
+<h1>🔥 인기 카드 TOP 10</h1>
+
+<!-- 차트 -->
+<canvas id="topChart" width="700" height="350"></canvas>
+
+<!-- 카드 리스트 -->
+<div class="card-list">
+    <div class="card" th:each="ev : ${events}">
+        <img th:src="${ev.card.cardImg != '' ? ev.card.cardImg : '/images/bono.png'}"
+             onerror="this.onerror=null;this.src='/images/bono.png';"
+             alt="card image">
+        <h3 th:text="${ev.card.cardName}"></h3>
+        <p th:text="'브랜드: ' + ${ev.card.cardBrand}"></p>
+        <p th:text="'혜택: ' + ${ev.benefit.bnfContent}"></p>
+
+        <p class="bnfDetail" th:text="${ev.benefit.bnfDetail}"></p>
+        <span class="toggle-btn" onclick="toggleDetail(this)">더보기</span>
+
+        <p th:text="'인기도 지수: ' + ${ev.card.cardRecord}"></p>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:inline="javascript">
+    window.addEventListener('load', () => {
+        document.body.classList.add('loaded');
+
+        // ✅ 안전하게 Thymeleaf 데이터를 JS로 전달
+        const events = /*[[${events}]]*/ [];
+        const labels = events.map(ev => ev.card.cardName);
+        const data = events.map(ev => ev.card.cardRecord);
+
+        // ✅ 데이터 존재 시 차트 생성
+        if (labels.length > 0 && data.length > 0) {
+            new Chart(document.getElementById('topChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '인기도 지수',
+                        data: data,
+                        backgroundColor: 'rgba(54,162,235,0.6)',
+                        borderColor: 'rgba(54,162,235,1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    scales: { x: { beginAtZero: true } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        } else {
+            console.warn('차트를 표시할 데이터가 없습니다.');
+        }
+    });
+
+    // ✅ 더보기 / 접기
+    function toggleDetail(btn) {
+        const detail = btn.previousElementSibling;
+        if(detail.classList.contains('expanded')) {
+            detail.classList.remove('expanded');
+            btn.innerText = '더보기';
+        } else {
+            detail.classList.add('expanded');
+            btn.innerText = '접기';
+        }
+    }
+</script>
+</body>
+</html>

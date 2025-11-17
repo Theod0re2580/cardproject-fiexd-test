@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>카드 MBTI 테스트</title>
+
+    <style>
+        body { font-family: 'Segoe UI'; background: #f4f4f4; padding: 30px; }
+        .container {
+            max-width: 600px; margin: auto;
+            background: white; padding: 30px;
+            border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 { text-align: center; margin-bottom: 20px; }
+        .question { margin: 20px 0; }
+        button {
+            width: 100%; padding: 12px;
+            background: #6a5acd; color: white;
+            border: none; border-radius: 8px;
+            font-size: 1.2em; cursor: pointer;
+        }
+        h3 { margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>카드 MBTI 테스트 (20문항)</h1>
+
+    <form action="/events/mbti/result" method="post">
+
+        <!-- 1번 성향: E / I (5문항) -->
+        <h3>📌 소비 성향이 어떻게 되시나요?</h3>
+
+        <div class="question">
+            <p>1. 소비 스타일은?</p>
+            <label><input type="radio" name="ei1" value="E"> FLEX! 쓰는 게 행복</label><br>
+            <label><input type="radio" name="ei1" value="I"> 조용히 아끼는 스타일</label>
+        </div>
+
+        <div class="question">
+            <p>2. 주말 소비 패턴?</p>
+            <label><input type="radio" name="ei2" value="E"> 밖에서 적극적으로 소비</label><br>
+            <label><input type="radio" name="ei2" value="I"> 집에서 필요한 것만 소비</label>
+        </div>
+
+        <div class="question">
+            <p>3. 사고 싶을 때?</p>
+            <label><input type="radio" name="ei3" value="E"> 바로 질러버림</label><br>
+            <label><input type="radio" name="ei3" value="I"> 오래 고민함</label>
+        </div>
+
+        <div class="question">
+            <p>4. 할인 이벤트를 보면?</p>
+            <label><input type="radio" name="ei4" value="E"> 일단 구경부터 함</label><br>
+            <label><input type="radio" name="ei4" value="I"> 관심 있는 것만 확인</label>
+        </div>
+
+        <div class="question">
+            <p>5. 소비 기준?</p>
+            <label><input type="radio" name="ei5" value="E"> 기분 좋으면 산다</label><br>
+            <label><input type="radio" name="ei5" value="I"> 꼭 필요할 때만 산다</label>
+        </div>
+
+
+        <!-- 2번 성향: N / S (5문항) -->
+        <h3>📌 선호하시는 혜택은 어떤건가요?</h3>
+
+        <div class="question">
+            <p>6. 포인트/캐시백?</p>
+            <label><input type="radio" name="ns1" value="N"> 혜택 많은 것 선호</label><br>
+            <label><input type="radio" name="ns1" value="S"> 기본 캐시백이 좋음</label>
+        </div>
+
+        <div class="question">
+            <p>7. 혜택 설명?</p>
+            <label><input type="radio" name="ns2" value="N"> 광고 문구에 끌림</label><br>
+            <label><input type="radio" name="ns2" value="S"> 상세 조건 먼저 확인</label>
+        </div>
+
+        <div class="question">
+            <p>8. 카드 선택 기준?</p>
+            <label><input type="radio" name="ns3" value="N"> 트렌드를 보고 판단</label><br>
+            <label><input type="radio" name="ns3" value="S"> 실제 쓸 곳 중심으로 선택</label>
+        </div>
+
+        <div class="question">
+            <p>9. 카드 혜택 방향?</p>
+            <label><input type="radio" name="ns4" value="N"> 다양한 혜택 환영</label><br>
+            <label><input type="radio" name="ns4" value="S"> 단순하고 명확한 혜택 선호</label>
+        </div>
+
+        <div class="question">
+            <p>10. 카드 첫인상?</p>
+            <label><input type="radio" name="ns5" value="N"> 디자인이 중요하다</label><br>
+            <label><input type="radio" name="ns5" value="S"> 혜택표가 더 중요하다</label>
+        </div>
+
+
+        <!-- 3번 성향: T / F (5문항) -->
+        <h3>📌 소비 판단 기준이 어떠신가요?</h3>
+
+        <div class="question">
+            <p>11. 소비 판단?</p>
+            <label><input type="radio" name="tf1" value="T"> 계산적·논리적</label><br>
+            <label><input type="radio" name="tf1" value="F"> 감성적 소비 중시</label>
+        </div>
+
+        <div class="question">
+            <p>12. 카드 혜택 비교?</p>
+            <label><input type="radio" name="tf2" value="T"> 표로 비교함</label><br>
+            <label><input type="radio" name="tf2" value="F"> 느낌으로 결정</label>
+        </div>
+
+        <div class="question">
+            <p>13. 연회비?</p>
+            <label><input type="radio" name="tf3" value="T"> 연회비 대비 효율 중요</label><br>
+            <label><input type="radio" name="tf3" value="F"> 브랜드/감성 중요</label>
+        </div>
+
+        <div class="question">
+            <p>14. 소비 후 만족감?</p>
+            <label><input type="radio" name="tf4" value="T"> 잘 샀다는 논리적 만족</label><br>
+            <label><input type="radio" name="tf4" value="F"> 감정적 충족이 더 중요</label>
+        </div>
+
+        <div class="question">
+            <p>15. 혜택 조건?</p>
+            <label><input type="radio" name="tf5" value="T"> 꼼꼼히 읽어봄</label><br>
+            <label><input type="radio" name="tf5" value="F"> 대충 보고 구매</label>
+        </div>
+
+
+        <!-- 4번 성향: J / P (5문항) -->
+        <h3>📌 당신의 소비 패턴은 어떠한가요?</h3>
+
+        <div class="question">
+            <p>16. 이동 스타일?</p>
+            <label><input type="radio" name="jp1" value="J"> 계획적인 이동</label><br>
+            <label><input type="radio" name="jp1" value="P"> 즉흥적 이동</label>
+        </div>
+
+        <div class="question">
+            <p>17. 지출 관리?</p>
+            <label><input type="radio" name="jp2" value="J"> 정리해서 관리함</label><br>
+            <label><input type="radio" name="jp2" value="P"> 그때그때 씀</label>
+        </div>
+
+        <div class="question">
+            <p>18. 쇼핑 패턴?</p>
+            <label><input type="radio" name="jp3" value="J"> 가격 비교 후 구매</label><br>
+            <label><input type="radio" name="jp3" value="P"> 즉흥 구매</label>
+        </div>
+
+        <div class="question">
+            <p>19. 일정?</p>
+            <label><input type="radio" name="jp4" value="J"> 일정대로 움직임</label><br>
+            <label><input type="radio" name="jp4" value="P"> 계획 없이 자유롭게</label>
+        </div>
+
+        <div class="question">
+            <p>20. 혜택 사용?</p>
+            <label><input type="radio" name="jp5" value="J"> 꼼꼼히 챙겨 씀</label><br>
+            <label><input type="radio" name="jp5" value="P"> 귀찮으면 그냥 패스</label>
+        </div>
+
+
+        <input type="hidden" id="resultMbti" name="mbti">
+
+        <button type="submit" onclick="return makeMbti();">결과 보기</button>
+    </form>
+</div>
+
+<script>
+    function makeMbti() {
+
+        const ei = ["ei1","ei2","ei3","ei4","ei5"].map(n => document.querySelector(`input[name="${n}"]:checked`)?.value);
+        const ns = ["ns1","ns2","ns3","ns4","ns5"].map(n => document.querySelector(`input[name="${n}"]:checked`)?.value);
+        const tf = ["tf1","tf2","tf3","tf4","tf5"].map(n => document.querySelector(`input[name="${n}"]:checked`)?.value);
+        const jp = ["jp1","jp2","jp3","jp4","jp5"].map(n => document.querySelector(`input[name="${n}"]:checked`)?.value);
+
+        if ([...ei, ...ns, ...tf, ...jp].includes(undefined)) {
+            alert("모든 문항을 선택해주세요!");
+            return false;
+        }
+
+        const pick = arr => {
+            const count = arr.reduce((m,v) => (m[v] = (m[v]||0)+1, m), {});
+            return Object.entries(count).sort((a,b)=>b[1]-a[1])[0][0];
+        };
+
+        const mbti = pick(ei) + pick(ns) + pick(tf) + pick(jp);
+
+        document.getElementById("resultMbti").value = mbti.toUpperCase();
+        return true;
+    }
+</script>
+
+</body>
+</html>

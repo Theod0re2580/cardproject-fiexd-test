@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>카드 브랜드 선택</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 30px;
+            background-color: #f4f6f8;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .brand-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .brand-buttons a {
+            flex: 0 0 calc(20% - 15px); /* 한 줄 5개 */
+            display: inline-block;
+            padding: 18px 0; /* 높이 늘림 */
+            font-size: 18px; /* 글자 키움 */
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+        }
+
+        .brand-buttons a::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -75%;
+            width: 50%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: skewX(-25deg);
+            transition: all 0.5s ease;
+        }
+
+        .brand-buttons a:hover::after {
+            left: 125%;
+        }
+
+        .brand-buttons a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 14px rgba(0,0,0,0.3);
+        }
+
+        /* 반응형 */
+        @media (max-width: 1024px) { .brand-buttons a { flex: 0 0 calc(25% - 12px); } }
+        @media (max-width: 768px)  { .brand-buttons a { flex: 0 0 calc(33.33% - 10px); } }
+        @media (max-width: 480px)  { .brand-buttons a { flex: 0 0 calc(50% - 10px); } }
+    </style>
+</head>
+<body>
+<h1>카드 브랜드 선택</h1>
+<div class="brand-buttons">
+    <a th:each="brand : ${brands}"
+       th:href="@{/events/brand(brand=${brand})}"
+       th:text="${brand}"></a>
+</div>
+</body>
+</html>

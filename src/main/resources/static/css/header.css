@@ -1,0 +1,130 @@
+/* 기본 리셋 */
+*{margin: 0; padding: 0;}
+ul{list-style: none;}
+a{color: black; text-decoration: none;}
+img{vertical-align: top; border: 0;}
+
+body{
+    margin: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #fff;
+}
+
+/* 네비게이션 */
+.navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 40px;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+    z-index: 999;
+}
+
+.nav-left .logo{
+    height: 34px;
+}
+
+.nav-center{
+    display: flex;
+    gap: 28px;
+    align-items: center;
+}
+
+.nav-center a{
+    font-weight: 600;
+    transition: .3s;
+}
+
+.nav-center a:hover{
+    color: #ffb400;
+}
+
+/* 오른쪽 */
+.nav-right{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.login{
+    width: 150px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.icons{
+    display: flex;
+    gap: 14px;
+    position: relative;
+}
+
+.icons .fa-magnifying-glass{
+    color: black;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.icons .fa-magnifying-glass:hover{
+    color: #ffb400;
+}
+
+/* ----------------------------- */
+/*        🔽 드롭다운 수정        */
+/* ----------------------------- */
+.nav-item.dropdown{
+    position: relative;
+}
+
+.dropdown-toggle{
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 5px 8px;
+}
+
+.dropdown-toggle:hover{
+    color: #ffb400;
+}
+
+/* 🔥 슬라이드 애니메이션 적용 */
+.dropdown-menu{
+    position: absolute;
+    top: 40px;
+    left: -10px;
+    min-width: 180px;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 0; /* 내부 padding 제거 후 li에서 처리 */
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    z-index: 9999;
+
+    /* 🔥 키포인트 */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+}
+
+/* 열렸을 때 */
+.dropdown-menu.open{
+    max-height: 300px; /* 충분히 크게 */
+    padding: 8px 0;
+}
+
+.dropdown-menu li a{
+    display: block;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.dropdown-menu li a:hover{
+    background: #f7f7f7;
+    color: #ffb400;
+}

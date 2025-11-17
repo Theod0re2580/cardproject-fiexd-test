@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>header-fragment</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+
+    <!-- 아이콘 -->
+    <script src="https://kit.fontawesome.com/f982cc5938.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div th:fragment="header">
+    <nav class="navbar">
+        <div class="nav-left">
+            <img th:src="@{/images/bi_bk_header.png}" alt="CARD GORILLA" class="logo">
+        </div>
+
+        <ul class="nav-center">
+            <li><a th:href="@{/events}">브랜드별 카드 추천</a></li>
+            <li><a th:href="@{/events/top}">인기 카드 TOP10</a></li>
+            <li><a th:href="@{/events/benefits}">혜택별 카드 추천</a></li>
+
+            <!-- 드롭다운 -->
+            <li class="nav-item dropdown">
+                <button type="button" class="dropdown-toggle">
+                    이색카드 추천
+                </button>
+
+                <ul class="dropdown-menu">
+                    <li><a th:href="@{/events/random}">🎲 지금의 행운 카드</a></li>
+                    <li><a th:href="@{/events/mbti}">MBTI별 카드추천</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#">카드리뷰</a></li>
+            <li><a href="#">카드커버</a></li>
+        </ul>
+
+        <div class="nav-right">
+            <div class="login">
+                <p class="login-ti"><a th:href="@{/login}">로그인</a></p>
+                <p class="signin"><a th:href="@{/signin}">회원가입</a></p>
+                <a th:href="@{/mypage}" class="mypage"><i class="fa-solid fa-user"></i></a>
+            </div>
+
+            <div class="icons">
+                <input type="text" class="search"
+                       style="background-color:#eee;border:none;width:200px;
+                       padding:10px 15px;border-radius:50px;">
+                <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 🔽 슬라이드 드롭다운 JS -->
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const toggles = document.querySelectorAll('.dropdown-toggle');
+
+            toggles.forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+
+                    const parent = this.closest('.dropdown');
+                    const menu = parent.querySelector('.dropdown-menu');
+
+                    // 다른 드롭다운 닫기
+                    document.querySelectorAll('.dropdown-menu').forEach(function (m) {
+                        if (m !== menu) m.classList.remove('open');
+                    });
+
+                    // 현재 메뉴 슬라이드 토글
+                    menu.classList.toggle('open');
+                });
+            });
+
+            // 바깥 클릭 시 닫기
+            document.addEventListener('click', function () {
+                document.querySelectorAll('.dropdown-menu').forEach(function (m) {
+                    m.classList.remove('open');
+                });
+            });
+        });
+    </script>
+
+</div>
+</body>
+</html>

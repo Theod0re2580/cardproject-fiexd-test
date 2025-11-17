@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>오늘의 카드 🎲</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0;
+            padding: 50px 20px;
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 30px;
+        }
+
+        /* ✅ 카드 컨테이너 */
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 50px; /* 💥 카드 간격 크게 조정 */
+            margin-bottom: 40px;
+            transition: filter 0.4s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .flip-card {
+            width: 280px;
+            height: 420px;
+            perspective: 1000px;
+            cursor: pointer;
+            transition: transform 0.5s ease, margin 0.5s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .flip-card-inner {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .flip-card-front {
+            background: linear-gradient(135deg, #2b5876, #4e4376);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .flip-card-back {
+            background-color: #fff;
+            color: #333;
+            transform: rotateY(180deg);
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .flip-card-back img {
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+            border-radius: 10px;
+            background-color: #f1f5f9;
+            margin-bottom: 10px;
+        }
+
+        .bnfDetail {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+        }
+
+        .toggle-btn {
+            color: #2575fc;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85em;
+            margin-top: auto;
+        }
+
+        .btn-area {
+            margin-top: 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn-area button {
+            background: linear-gradient(135deg, #ff7f50, #ff416c);
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            margin: 0 10px;
+        }
+
+        .btn-area button:hover {
+            transform: translateY(-3px);
+        }
+
+        .date {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #ddd;
+        }
+
+        /* ✅ 모달 스타일 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 2000;
+        }
+
+        .modal.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            color: #333;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            padding: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            animation: popin 0.4s ease;
+            position: relative;
+            text-align: left;
+        }
+
+        @keyframes popin {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-content img {
+            width: 100%;
+            border-radius: 10px;
+            background: #f1f5f9;
+            margin-bottom: 15px;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: #222;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .close-btn:hover {
+            color: #ff416c;
+        }
+    </style>
+</head>
+<body>
+<h1>🎴 오늘의 카드 3장을 뒤집어보세요!</h1>
+
+<!-- ✅ 모달 -->
+<div class="modal" id="cardModal">
+    <div class="modal-content" id="modalContent">
+        <span class="close-btn" onclick="closeModal()">×</span>
+    </div>
+</div>
+
+<div class="cards-container" id="cards">
+    <div th:each="ev : ${randoms}" class="flip-card" onclick="flipCard(this)">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                🎲 카드 뒤집기
+            </div>
+            <div class="flip-card-back" onclick="event.stopPropagation(); showModal(this)">
+                <img th:src="${ev.card.cardImg != '' ? ev.card.cardImg : '/images/bono.png'}"
+                     onerror="this.onerror=null;this.src='/images/bono.png';" alt="card">
+                <h2 th:text="${ev.card.cardName}"></h2>
+                <p><strong>브랜드:</strong> <span th:text="${ev.card.cardBrand}"></span></p>
+                <p class="benefit" th:text="${ev.benefit.bnfContent}"></p>
+                <p class="bnfDetail" th:text="${ev.benefit.bnfDetail}"></p>
+                <span class="toggle-btn">👆 자세히 보기</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="btn-area">
+    <button onclick="location.href='/events/random'">🔁 다시 뽑기</button>
+    <button onclick="location.href='/events/benefits'">➡ 혜택별 보기</button>
+</div>
+
+<div class="date" th:text="'추천 날짜: ' + ${date}"></div>
+
+<script>
+    function flipCard(card) {
+        if (!card.classList.contains('flipped')) {
+            card.classList.add('flipped');
+        }
+    }
+
+    function showModal(el) {
+        const modal = document.getElementById('cardModal');
+        const modalContent = document.getElementById('modalContent');
+
+        const img = el.querySelector('img').src;
+        const name = el.querySelector('h2').innerText;
+        const brand = el.querySelector('span').innerText;
+        const benefit = el.querySelector('.benefit').innerText;
+        const detail = el.querySelector('.bnfDetail').innerText;
+
+        modalContent.innerHTML = `
+        <span class="close-btn" onclick="closeModal()">×</span>
+        <img src="${img}" alt="card">
+        <h2>${name}</h2>
+        <p><strong>브랜드:</strong> ${brand}</p>
+        <p><strong>혜택:</strong> ${benefit}</p>
+        <p style="white-space: pre-line;"><strong>상세혜택:</strong><br>${detail}</p>
+      `;
+
+        modal.classList.add('show');
+    }
+
+    function closeModal() {
+        document.getElementById('cardModal').classList.remove('show');
+    }
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+</script>
+</body>
+</html>
