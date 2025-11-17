@@ -12,14 +12,17 @@ public class EventView {
 
     private Card card;
 
+    // 카드 혜택 목록
     private List<Benefit> benefits = new ArrayList<>();
 
-    private String jsonBenefits;     // 모달용 JSON
-    private String benefitNames;     // "커피,편의점"
-    private String categoryString;   // "카페/디저트,편의점"  ← HTML 필터용 (중요!)
-    private Set<String> categories = new HashSet<>(); // 내부 관리용 Set
+    // HTML/JS에서 사용할 값들
+    private String jsonBenefits;       // 모달용 JSON
+    private String benefitNames;       // "커피,편의점"
+    private String categoryString;     // "카페·디저트,편의점"
+    private Set<String> categories = new HashSet<>(); // 중복 제거용 Set
 
     public EventView() {}
+
     public EventView(Card card) {
         this.card = card;
     }
@@ -30,11 +33,12 @@ public class EventView {
 
     /**
      * joinData() 이후 실행
+     * 카테고리 매핑 + JSON + 정제 문자열 생성
      */
     public void finalizeBenefits(Map<String, String> categoryMap) {
 
         /* -------------------------
-           1) 혜택 JSON 생성
+           1) JSON 변환
         ------------------------- */
         this.jsonBenefits = benefits.stream()
                 .map(b -> String.format(
@@ -44,7 +48,7 @@ public class EventView {
                 .collect(Collectors.joining(",", "[", "]"));
 
         /* -------------------------
-           2) 혜택명 리스트 생성
+           2) 혜택명 리스트
         ------------------------- */
         this.benefitNames = benefits.stream()
                 .map(Benefit::getBnfName)
@@ -54,14 +58,14 @@ public class EventView {
                 .collect(Collectors.joining(","));
 
         /* -------------------------
-           3) 상위 카테고리 그룹 자동 생성
+           3) 상위 카테고리 그룹 생성
         ------------------------- */
         this.categories = benefits.stream()
                 .map(Benefit::getBnfName)
                 .filter(Objects::nonNull)
                 .flatMap(name ->
                         categoryMap.entrySet().stream()
-                                .filter(e -> name.contains(e.getKey()))   // 포함 매칭
+                                .filter(e -> name.contains(e.getKey()))
                                 .map(Map.Entry::getValue)
                 )
                 .collect(Collectors.toSet());
@@ -70,7 +74,7 @@ public class EventView {
             this.categories.add("기타");
         }
 
-        /* HTML에서 사용할 문자열 버전 */
+        /* HTML에서 사용 가능한 문자열 */
         this.categoryString = String.join(",", this.categories);
     }
 
@@ -81,7 +85,7 @@ public class EventView {
                 .replace("\r", " ");
     }
 
-    /* Getter */
+    /* 편의 Getter */
     public String getCardName() {
         return card != null ? card.getCardName() : "";
     }
@@ -91,8 +95,8 @@ public class EventView {
     }
 
     public int getRecord() {
-        return card != null ? card.getCardRecord() : 0;
+        try { return Integer.parseInt(card.getCardRecord()); }
+        catch (Exception e) { return 0; }
     }
-
 
 }

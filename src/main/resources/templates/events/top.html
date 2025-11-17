@@ -89,9 +89,15 @@
              alt="card image">
         <h3 th:text="${ev.card.cardName}"></h3>
         <p th:text="'브랜드: ' + ${ev.card.cardBrand}"></p>
-        <p th:text="'혜택: ' + ${ev.benefit.bnfContent}"></p>
+        <!-- 첫 번째 혜택만 안전하게 표시 -->
+        <p th:if="${!ev.benefits.isEmpty()}"
+           th:text="'혜택: ' + ${ev.benefits[0].bnfContent}">
+        </p>
 
-        <p class="bnfDetail" th:text="${ev.benefit.bnfDetail}"></p>
+        <p class="bnfDetail"
+           th:if="${!ev.benefits.isEmpty()}"
+           th:text="${ev.benefits[0].bnfDetail}">
+        </p>
         <span class="toggle-btn" onclick="toggleDetail(this)">더보기</span>
 
         <p th:text="'인기도 지수: ' + ${ev.card.cardRecord}"></p>

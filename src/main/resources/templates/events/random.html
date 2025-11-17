@@ -225,8 +225,13 @@
                      onerror="this.onerror=null;this.src='/images/bono.png';" alt="card">
                 <h2 th:text="${ev.card.cardName}"></h2>
                 <p><strong>브랜드:</strong> <span th:text="${ev.card.cardBrand}"></span></p>
-                <p class="benefit" th:text="${ev.benefit.bnfContent}"></p>
-                <p class="bnfDetail" th:text="${ev.benefit.bnfDetail}"></p>
+                <p class="benefit"
+                   th:text="${#lists.isEmpty(ev.benefits) ? '혜택 정보 없음' : ev.benefits.get(0).bnfContent}">
+                </p>
+
+                <p class="bnfDetail"
+                   th:text="${#lists.isEmpty(ev.benefits) ? '' : ev.benefits.get(0).bnfDetail}">
+                </p>
                 <span class="toggle-btn">👆 자세히 보기</span>
             </div>
         </div>

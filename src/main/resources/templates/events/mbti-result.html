@@ -150,7 +150,9 @@
         <h3 th:text="${ev.card.cardName}">카드 이름</h3>
         <p><strong th:text="${ev.card.cardBrand}"></strong></p>
 
-        <p class="benefit" th:text="${ev.bnfContent}">혜택 내용</p>
+        <p class="benefit"
+           th:text="${#lists.isEmpty(ev.benefits) ? '혜택 정보 없음' : ev.benefits.get(0).bnfContent}">
+        </p>
     </div>
 </div>
 

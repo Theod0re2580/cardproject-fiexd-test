@@ -3,15 +3,11 @@ package com.example.cardtest.service;
 import com.example.cardtest.domain.Benefit;
 import com.example.cardtest.domain.Card;
 import com.example.cardtest.domain.EventView;
+import com.example.cardtest.repository.CardRepository;
+import com.example.cardtest.repository.BenefitRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -19,18 +15,11 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class EventSearchService {
 
-    @Value("${app.csv.card}")
-    private Resource cardCsv;
-
-    @Value("${app.csv.benefit}")
-    private Resource benefitCsv;
-
-    private final Map<String, Card> cardMap = new HashMap<>();
-    private final List<Benefit> benefits = new ArrayList<>();
-    private final List<EventView> allEvents = new ArrayList<>();
+    private final CardRepository cardRepository;
+    private final BenefitRepository benefitRepository;
 
     /* ===========================================================
-       ⭐ 상위 카테고리 매핑 규칙
+       ⭐ 상위 카테고리 매핑
     =========================================================== */
     private static final Map<String, String> CATEGORY_MAP = Map.ofEntries(
             Map.entry("커피", "카페·디저트"),
@@ -67,140 +56,52 @@ public class EventSearchService {
     );
 
     /* ===========================================================
-       INIT
+       ⭐ DB → EventView 변환
+       🔥 Card.id / Benefit.cardId 둘 다 String 으로 강제 통일
     =========================================================== */
-    @PostConstruct
-    public void init() throws Exception {
+    private List<EventView> buildEventViews() {
 
-        loadCardsCsv();
-        loadBenefitsCsv();
-        joinData();
-        filterInvalidBenefits();
-    }
+        List<Card> cards = cardRepository.findAll();
+        List<Benefit> benefits = benefitRepository.findAll();
 
-    /* ===========================================================
-       1. CSV LOADING
-    =========================================================== */
+        // KEY = Long (card.id)
+        Map<Long, EventView> map = new HashMap<>();
 
-    private void loadCardsCsv() throws Exception {
-        List<String[]> rows = readCsv(cardCsv, 9);
-
-        for (String[] arr : rows) {
-            if (arr.length < 9) continue;
-
-            Card c = new Card(
-                    getSafe(arr, 0),
-                    getSafe(arr, 1),
-                    getSafe(arr, 2),
-                    getSafe(arr, 3),
-                    getSafe(arr, 4),
-                    getSafe(arr, 5),
-                    getSafe(arr, 6),
-                    parseIntSafe(getSafe(arr, 7)),
-                    getSafe(arr, 8)
-            );
-
-            cardMap.put(c.getId(), c);
+        // 카드 등록
+        for (Card card : cards) {
+            map.put(card.getId(), new EventView(card));
         }
-    }
 
-    private void loadBenefitsCsv() throws Exception {
-        List<String[]> rows = readCsv(benefitCsv, 5);
+        // 혜택 연결
+        for (Benefit b : benefits) {
+            Long bCardId = b.getCardId();
+            if (bCardId == null) continue;
 
-        for (String[] arr : rows) {
-            if (arr.length < 5) continue;
-
-            benefits.add(new Benefit(
-                    getSafe(arr, 0),
-                    getSafe(arr, 1),
-                    getSafe(arr, 2),
-                    getSafe(arr, 3),
-                    getSafe(arr, 4)
-            ));
-        }
-    }
-
-    private List<String[]> readCsv(Resource resource, int expectedColumns) throws Exception {
-        List<String[]> result = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
-
-            br.readLine(); // skip header
-
-            StringBuilder buffer = new StringBuilder();
-            String line;
-
-            while ((line = br.readLine()) != null) {
-
-                if (line.isBlank()) continue;
-
-                buffer.append(line);
-                String[] arr = splitCsv(buffer.toString());
-
-                if (arr.length < expectedColumns) {
-                    buffer.append("\n");
-                    continue;
-                }
-
-                result.add(arr);
-                buffer.setLength(0);
+            EventView ev = map.get(bCardId);
+            if (ev != null) {
+                ev.addBenefit(b);
             }
         }
 
-        return result;
+        List<EventView> list = new ArrayList<>(map.values());
+
+        // 카테고리/JSON 생성
+        list.forEach(ev -> ev.finalizeBenefits(CATEGORY_MAP));
+
+        return list;
     }
 
     /* ===========================================================
-       2. JOIN CARD + BENEFITS
+       🔍 검색
     =========================================================== */
-    private void joinData() {
-
-        Map<String, EventView> map = new HashMap<>();
-
-        for (Benefit b : benefits) {
-            Card card = cardMap.get(b.getCardId());
-            if (card == null) continue;
-
-            EventView ev = map.computeIfAbsent(card.getId(), id -> new EventView(card));
-            ev.addBenefit(b);
-        }
-
-        allEvents.clear();
-        allEvents.addAll(map.values());
-
-        allEvents.sort(Comparator.comparingInt(EventView::getRecord).reversed());
-
-        allEvents.forEach(ev -> ev.finalizeBenefits(CATEGORY_MAP));
-    }
-
-    /* ===========================================================
-       3. BAD DATA FILTER
-    =========================================================== */
-    private void filterInvalidBenefits() {
-
-        List<String> excludeWords = List.of("꼭 확인하세요!", "집갈래", "잇힝");
-
-        allEvents.removeIf(ev ->
-                ev.getBenefits().stream().anyMatch(b ->
-                        excludeWords.stream().anyMatch(word ->
-                                contains(b.getBnfName(), word) ||
-                                        contains(b.getBnfDetail(), word)
-                        )
-                )
-        );
-    }
-
-    /* ===========================================================
-       4. SEARCH
-    =========================================================== */
-
     public List<EventView> search(String benefit, String brand) {
-        Stream<EventView> stream = allEvents.stream();
 
+        List<EventView> events = buildEventViews();
+        Stream<EventView> stream = events.stream();
+
+        // 혜택 검색
         if (benefit != null && !benefit.isBlank()) {
             String q = benefit.toLowerCase();
-
             stream = stream.filter(ev ->
                     ev.getBenefits().stream().anyMatch(b ->
                             containsIgnoreCase(b.getBnfName(), q) ||
@@ -210,12 +111,12 @@ public class EventSearchService {
             );
         }
 
+        // 브랜드 검색
         if (brand != null && !brand.isBlank()) {
             String q = brand.toLowerCase();
-
             stream = stream.filter(ev ->
-                    ev.getCardBrand() != null &&
-                            ev.getCardBrand().toLowerCase().equals(q)
+                    ev.getCard().getCardBrand() != null &&
+                            ev.getCard().getCardBrand().equalsIgnoreCase(q)
             );
         }
 
@@ -226,9 +127,22 @@ public class EventSearchService {
         return search(keyword, null);
     }
 
+    /* ===========================================================
+       ⭐ TOP 10
+    =========================================================== */
+    public List<EventView> getTop10Cards() {
+        List<EventView> list = buildEventViews();
+
+        list.sort(Comparator.comparingInt(EventView::getRecord).reversed());
+        return list.stream().limit(10).toList();
+    }
+
+    /* ===========================================================
+       ⭐ 브랜드 리스트
+    =========================================================== */
     public List<String> getBrands() {
-        return cardMap.values().stream()
-                .map(Card::getCardBrand)
+        return buildEventViews().stream()
+                .map(ev -> ev.getCard().getCardBrand())
                 .filter(Objects::nonNull)
                 .distinct()
                 .sorted()
@@ -236,89 +150,45 @@ public class EventSearchService {
     }
 
     /* ===========================================================
-       5. MBTI 추천
+       ⭐ MBTI 추천
     =========================================================== */
-
     public List<EventView> getCardsByMbti(String mbti) {
+
+        List<EventView> list = buildEventViews();
+
         return switch (mbti) {
-            case "ENFP", "ESFP" -> getHighBenefitCards();
-            case "ISTJ", "ISFJ" -> getCashbackCards();
-            case "ENTJ", "INTJ" -> getPointCards();
-            case "ESTJ", "ESTP" -> getTransportCards();
-            case "INFP", "INFJ" -> getCultureCards();
-            default -> getTop10Cards();
+            case "ENFP", "ESFP" -> filterByKeyword(list, "할인", "적립", "혜택");
+            case "ISTJ", "ISFJ" -> filterByKeyword(list, "캐시백");
+            case "ENTJ", "INTJ" -> filterByKeyword(list, "포인트");
+            case "ESTJ", "ESTP" -> filterByKeyword(list, "교통", "주유", "버스");
+            case "INFP", "INFJ" -> filterByKeyword(list, "카페", "문화", "영화", "커피");
+            default -> list.stream().limit(10).toList();
         };
     }
 
-    private List<EventView> filterByKeyword(String... keywords) {
-        return allEvents.stream().filter(ev ->
+    private List<EventView> filterByKeyword(List<EventView> list, String... keywords) {
+        return list.stream().filter(ev ->
                 ev.getBenefits().stream().anyMatch(b ->
                         Arrays.stream(keywords).anyMatch(k ->
-                                contains(b.getBnfContent(), k) ||
-                                        contains(b.getBnfDetail(), k)
+                                containsIgnoreCase(b.getBnfContent(), k) ||
+                                        containsIgnoreCase(b.getBnfDetail(), k)
                         )
                 )
         ).toList();
     }
 
-    public List<EventView> getHighBenefitCards() {
-        return filterByKeyword("할인", "적립", "혜택");
-    }
-
-    public List<EventView> getCashbackCards() {
-        return filterByKeyword("캐시백");
-    }
-
-    public List<EventView> getPointCards() {
-        return filterByKeyword("포인트");
-    }
-
-    public List<EventView> getTransportCards() {
-        return filterByKeyword("교통", "주유", "버스");
-    }
-
-    public List<EventView> getCultureCards() {
-        return filterByKeyword("카페", "문화", "영화", "커피");
-    }
-
-    public List<EventView> getTop10Cards() {
-        return allEvents.stream().limit(10).toList();
-    }
-
     /* ===========================================================
-       PUBLIC ACCESS (⭐ 추가)
+       ⭐ 전체
     =========================================================== */
     public List<EventView> getAllEvents() {
-        return allEvents;
+        return buildEventViews();
     }
 
     /* ===========================================================
-       UTILS
+       ⭐ util
     =========================================================== */
-
-    private boolean contains(String text, String keyword) {
-        return text != null && keyword != null && text.contains(keyword);
-    }
-
     private boolean containsIgnoreCase(String text, String keyword) {
         return text != null && keyword != null &&
                 text.toLowerCase().contains(keyword);
-    }
-
-    private static String[] splitCsv(String line) {
-        return line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-    }
-
-    private static String getSafe(String[] arr, int idx) {
-        if (idx < 0 || idx >= arr.length) return "";
-        return arr[idx].replaceAll("^\"|\"$", "").trim();
-    }
-
-    private static int parseIntSafe(String s) {
-        try {
-            return Integer.parseInt(s.replaceAll("[^0-9-]", ""));
-        } catch (Exception e) {
-            return 0;
-        }
     }
 }

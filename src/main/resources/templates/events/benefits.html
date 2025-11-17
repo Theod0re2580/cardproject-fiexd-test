@@ -176,14 +176,23 @@
 <div class="benefit-buttons" id="benefitButtons"></div>
 
 <div class="card-list" id="cardList">
-    <div class="card" th:each="ev : ${events}" th:data-bnf="${ev.benefit.bnfName}">
+    <div class="card" th:each="ev : ${events}"
+         th:data-bnf="${#lists.isEmpty(ev.benefits) ? '' : ev.benefits.get(0).bnfName}">
+
         <img th:src="${ev.card.cardImg != '' ? ev.card.cardImg : '/images/bono.png'}"
              onerror="this.onerror=null;this.src='/images/bono.png';"
              alt="card image">
+
         <h3 th:text="${ev.card.cardName}"></h3>
         <p th:text="'브랜드: ' + ${ev.card.cardBrand}"></p>
-        <p th:text="${ev.benefit.bnfContent}"></p>
-        <p class="bnfDetail" th:text="${ev.benefit.bnfDetail}"></p>
+
+        <!-- 혜택 요약 -->
+        <p th:text="${#lists.isEmpty(ev.benefits) ? '' : ev.benefits.get(0).bnfContent}"></p>
+
+        <!-- 혜택 상세 -->
+        <p class="bnfDetail"
+           th:text="${#lists.isEmpty(ev.benefits) ? '' : ev.benefits.get(0).bnfDetail}"></p>
+
         <span class="toggle-btn" onclick="toggleDetail(this)">더보기</span>
     </div>
 </div>
