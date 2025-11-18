@@ -79,31 +79,6 @@ body {
     gap: 16px;      /* 폭 제한 제거 + 자연스러운 간격 */
 }
 
-/* ---------------- 검색 영역 ------------------ */
-.icons {
-    display: flex;
-    position: relative;
-    align-items: center;
-}
-
-.search {
-    background-color: #eee;
-    border: none;
-    width: 200px;
-    padding: 10px 15px;
-    border-radius: 50px;
-}
-
-.search-btn .fa-magnifying-glass {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    color: black;
-}
-
-.search-btn .fa-magnifying-glass:hover {
-    color: #ffb400;
-}
 
 /* ---------------- 드롭다운 ------------------ */
 .nav-item.dropdown {

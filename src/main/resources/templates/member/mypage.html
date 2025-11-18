@@ -15,7 +15,8 @@
 
         <h2>내 정보</h2>
 
-        <form th:action="@{/member/info}" method="post">
+        <!-- ✔ 읽기 전용 Form -->
+        <form>
 
             <p>
                 <label>로그인 ID</label>
@@ -24,23 +25,27 @@
 
             <p>
                 <label>이름</label>
-                <input type="text" name="name" th:value="${member.name}">
+                <input type="text" name="name" th:value="${member.name}" readonly>
             </p>
 
             <p>
                 <label>이메일</label>
-                <input type="email" name="email" th:value="${member.email}">
+                <input type="email" name="email" th:value="${member.email}" readonly>
             </p>
 
             <p>
                 <label>생년월일</label>
-                <input type="date" name="birth"
-                       th:value="${member.birth}">
+                <input type="date" name="birth" th:value="${member.birth}" readonly>
             </p>
 
-            <button type="submit" class="btn-update">정보 수정</button>
         </form>
 
+        <!-- ✔ 정보 수정 버튼: edit 페이지로 이동 -->
+        <div class="edit-btn-box">
+            <a th:href="@{'/member/' + ${member.id} + '/edit'}" class="btn-update">정보 수정</a>
+        </div>
+
+        <!-- 회원 탈퇴 -->
         <form th:action="@{/member/delete}" method="post" class="delete-form">
             <button type="submit" class="btn-delete">회원 탈퇴</button>
         </form>

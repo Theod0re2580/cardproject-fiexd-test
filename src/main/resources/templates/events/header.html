@@ -28,6 +28,11 @@
             </li>
         </ul>
 
+        <!-- ADMIN MENU -->
+        <li th:if="${session.loggedMember != null and session.loggedMember.role.name() == 'ADMIN'}">
+            <a th:href="@{/admin}">관리자 페이지</a>
+        </li>
+
         <!-- RIGHT MENU -->
         <div class="nav-right">
 
@@ -40,16 +45,9 @@
             <!-- 로그인 O -->
             <div class="login" th:if="${session.loggedMember != null}">
                 <span th:text="${session.loggedMember.loginId + '님'}"></span>
-                <a th:href="@{/member/info}">마이페이지</a>
+                <a th:href="@{/member/mypage}">마이페이지</a>
                 <a th:href="@{/member/logout}">로그아웃</a>
             </div>
-
-            <!-- SEARCH -->
-            <div class="icons">
-                <input type="text" class="search">
-                <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </div>
-
         </div>
     </nav>
 

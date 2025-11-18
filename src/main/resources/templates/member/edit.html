@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>정보 수정</title>
+    <link rel="stylesheet" th:href="@{/css/edit.css}">
+</head>
+
+<body>
+<div th:replace="events/header :: header"></div>
+
+<section class="edit-section">
+
+    <div class="edit-box">
+
+        <h2>정보 수정</h2>
+
+        <p th:if="${msg}" class="error-msg" th:text="${msg}"></p>
+
+        <form th:action="@{'/member/' + ${member.id} + '/edit'}" method="post">
+
+            <p>
+                <label>로그인 ID</label>
+                <span th:text="${member.loginId}"></span>
+            </p>
+
+            <p>
+                <label>이름</label>
+                <input type="text" name="name" th:value="${member.name}" required>
+            </p>
+
+            <p>
+                <label>이메일</label>
+                <input id="email" type="email" name="email" th:value="${member.email}" required>
+                <small id="email-msg"></small>
+            </p>
+
+            <p>
+                <label>생년월일</label>
+                <input type="date" name="birth" th:value="${member.birth}" required>
+            </p>
+
+            <hr>
+
+            <h3>비밀번호 변경 (선택)</h3>
+
+            <p>
+                <label>현재 비밀번호</label>
+                <input type="password" name="oldPw">
+            </p>
+
+            <p>
+                <label>새 비밀번호</label>
+                <input type="password" id="newPw" name="newPw">
+            </p>
+
+            <p>
+                <label>새 비밀번호 확인</label>
+                <input type="password" id="newPw2">
+                <small id="pw-msg"></small>
+            </p>
+
+            <button type="submit" class="btn-save">저장하기</button>
+        </form>
+
+        <div class="bottom-menu">
+            <a th:href="@{/member/mypage}">내 정보로 돌아가기</a>
+        </div>
+
+    </div>
+
+</section>
+
+<div th:replace="events/footer :: footer"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+    /* 이메일 중복 검사 AJAX */
+    $("#email").on("keyup", function () {
+        const email = $(this).val();
+
+        const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+        if (!regex.test(email)) {
+            $("#email-msg").text("이메일 형식이 잘못되었습니다.").css("color", "red");
+            return;
+        }
+
+        $.ajax({
+            url: "/member/check-email",
+            data: { email: email },
+            success: function(isDup) {
+                if (isDup) {
+                    $("#email-msg").text("이미 사용 중인 이메일입니다.").css("color", "red");
+                } else {
+                    $("#email-msg").text("사용 가능한 이메일입니다.").css("color", "green");
+                }
+            }
+        });
+    });
+
+    /* 비밀번호 확인 */
+    $("#newPw2").on("keyup", function () {
+        let pw1 = $("#newPw").val();
+        let pw2 = $("#newPw2").val();
+
+        if (pw1 !== pw2) {
+            $("#pw-msg").text("비밀번호가 일치하지 않습니다.").css("color", "red");
+        } else {
+            $("#pw-msg").text("비밀번호가 일치합니다.").css("color", "green");
+        }
+    });
+</script>
+
+</body>
+</html>

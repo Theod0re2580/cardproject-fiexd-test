@@ -69,6 +69,19 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    /** 비밀번호 검증 */
+    public void changePassword(Long id, String oldPw, String newPw) {
+
+        Member member = findById(id);
+
+        if (!passwordEncoder.matches(oldPw, member.getPassword())) {
+            throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
+        }
+
+        member.setPassword(passwordEncoder.encode(newPw));
+        memberRepository.save(member);
+    }
+
     /** 삭제 */
     public void delete(Long id) {
         memberRepository.deleteById(id);
