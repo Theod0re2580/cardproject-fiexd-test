@@ -1,17 +1,40 @@
-/* 기본 리셋 */
-*{margin: 0; padding: 0;}
-ul{list-style: none;}
-a{color: black; text-decoration: none;}
-img{vertical-align: top; border: 0;}
+/* 🔥 HEADER COMPONENT 전용 RESET */
 
-body{
+/* 헤더 영역 내부의 기본 reset */
+.navbar * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 리스트 기본값 제거 */
+.navbar ul {
+    list-style: none;
+}
+
+/* 링크 초기화 */
+.navbar a {
+    color: black;
+    text-decoration: none;
+}
+
+/* 이미지 초기화 */
+.navbar img {
+    border: 0;
+    vertical-align: top;
+}
+
+body {
     margin: 0;
     font-family: 'Noto Sans KR', sans-serif;
     background-color: #fff;
 }
 
-/* 네비게이션 */
-.navbar{
+/* -------------------------------------------------- */
+/*                    네비게이션                      */
+/* -------------------------------------------------- */
+
+.navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -21,63 +44,73 @@ body{
     z-index: 999;
 }
 
-.nav-left .logo{
+.nav-left .logo {
     height: 34px;
 }
 
-.nav-center{
+/* ---------------- 중앙 메뉴 ------------------ */
+.nav-center {
     display: flex;
-    gap: 28px;
+    gap: 40px;     /* 기존 28px → 40px (자연스러운 간격) */
     align-items: center;
 }
 
-.nav-center a{
+/* hover 효과 */
+.nav-center a {
     font-weight: 600;
     transition: .3s;
 }
 
-.nav-center a:hover{
+.nav-center a:hover {
     color: #ffb400;
 }
 
-/* 오른쪽 */
-.nav-right{
+/* ---------------- 오른쪽 영역 ------------------ */
+.nav-right {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
 }
 
-.login{
-    width: 150px;
+/* 로그인 / 회원가입 / 마이페이지 / 로그아웃 */
+.login {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 16px;      /* 폭 제한 제거 + 자연스러운 간격 */
 }
 
-.icons{
+/* ---------------- 검색 영역 ------------------ */
+.icons {
     display: flex;
-    gap: 14px;
     position: relative;
+    align-items: center;
 }
 
-.icons .fa-magnifying-glass{
-    color: black;
+.search {
+    background-color: #eee;
+    border: none;
+    width: 200px;
+    padding: 10px 15px;
+    border-radius: 50px;
+}
+
+.search-btn .fa-magnifying-glass {
     position: absolute;
-    top: 10px;
     right: 10px;
+    top: 10px;
+    color: black;
 }
 
-.icons .fa-magnifying-glass:hover{
+.search-btn .fa-magnifying-glass:hover {
     color: #ffb400;
 }
 
-/* ----------------------------- */
-/*        🔽 드롭다운 수정        */
-/* ----------------------------- */
-.nav-item.dropdown{
+/* ---------------- 드롭다운 ------------------ */
+.nav-item.dropdown {
     position: relative;
 }
 
-.dropdown-toggle{
+.dropdown-toggle {
     background: transparent;
     border: none;
     cursor: pointer;
@@ -86,12 +119,12 @@ body{
     padding: 5px 8px;
 }
 
-.dropdown-toggle:hover{
+.dropdown-toggle:hover {
     color: #ffb400;
 }
 
-/* 🔥 슬라이드 애니메이션 적용 */
-.dropdown-menu{
+/* 🔥 슬라이드 드롭다운 */
+.dropdown-menu {
     position: absolute;
     top: 40px;
     left: -10px;
@@ -99,32 +132,30 @@ body{
     background: white;
     border: 1px solid #eee;
     border-radius: 8px;
-    padding: 0; /* 내부 padding 제거 후 li에서 처리 */
+    padding: 0;
 
     box-shadow: 0 4px 12px rgba(0,0,0,0.12);
     z-index: 9999;
 
-    /* 🔥 키포인트 */
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.25s ease;
 }
 
-/* 열렸을 때 */
-.dropdown-menu.open{
-    max-height: 300px; /* 충분히 크게 */
+/* 열림 상태 */
+.dropdown-menu.open {
+    max-height: 300px;
     padding: 8px 0;
 }
 
-.dropdown-menu li a{
+.dropdown-menu li a {
     display: block;
     padding: 10px 15px;
     font-size: 14px;
-    font-weight: 500;
     color: #333;
 }
 
-.dropdown-menu li a:hover{
+.dropdown-menu li a:hover {
     background: #f7f7f7;
     color: #ffb400;
 }

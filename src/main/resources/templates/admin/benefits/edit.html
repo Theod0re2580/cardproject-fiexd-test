@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>혜택 수정</title>
+</head>
+<body>
+
+<h1>혜택 수정</h1>
+
+<form th:action="@{'/admin/benefits/' + ${benefit.id} + '/edit'}" method="post">
+
+    <p>
+        <label>혜택명:</label>
+        <input type="text" name="bnfName" th:value="${benefit.bnfName}">
+    </p>
+
+    <p>
+        <label>요약:</label>
+        <input type="text" name="bnfContent" th:value="${benefit.bnfContent}">
+    </p>
+
+    <p>
+        <label>상세 설명:</label><br>
+        <textarea name="bnfDetail" cols="60" rows="6"
+                  th:text="${benefit.bnfDetail}"></textarea>
+    </p>
+
+    <p>
+        <label>카드 변경:</label>
+        <select name="cardId">
+            <option th:each="c : ${cards}"
+                    th:value="${c.id}"
+                    th:selected="${c.id == benefit.card.id}"
+                    th:text="${c.cardName}"></option>
+        </select>
+    </p>
+
+    <button type="submit">수정</button>
+</form>
+
+</body>
+</html>

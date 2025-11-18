@@ -8,6 +8,8 @@
 
 <h1>카드 관리</h1>
 
+<a href="/admin/cards/add">카드 추가하기</a>
+
 <h2>카드 목록</h2>
 
 <table border="1">
@@ -23,7 +25,12 @@
     <tbody>
     <tr th:each="c : ${cards}">
         <td th:text="${c.id}"></td>
-        <td th:text="${c.cardName}"></td>
+        <!-- 카드 이름 클릭하면 detail로 이동 -->
+        <td>
+            <a th:href="@{'/admin/cards/' + ${c.id}}">
+                <span th:text="${c.cardName}"></span>
+            </a>
+        </td>
         <td th:text="${c.cardBrand}"></td>
 
         <td>
@@ -37,14 +44,6 @@
     </tr>
     </tbody>
 </table>
-
-<h2>카드 추가</h2>
-
-<form action="/admin/cards" method="post">
-    <input type="text" name="cardName" placeholder="카드명"><br>
-    <input type="text" name="cardBrand" placeholder="브랜드"><br>
-    <button type="submit">등록</button>
-</form>
 
 </body>
 </html>

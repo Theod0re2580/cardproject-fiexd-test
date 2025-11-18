@@ -1,24 +1,41 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>로그인</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
+
 <body>
+<div th:replace="events/header :: header"></div>
 
-<h1>로그인</h1>
+<section class="login-section">
 
-<form action="/member/login" method="post">
-    <input type="text" name="loginId" placeholder="아이디"><br>
-    <input type="password" name="password" placeholder="비밀번호"><br>
-    <button type="submit">로그인</button>
-</form>
+    <div class="login-box">
+        <h2>로그인</h2>
 
-<div th:if="${msg}" style="color:red;">
-    <p th:text="${msg}"></p>
-</div>
+        <!-- 에러 메시지 -->
+        <div th:if="${msg}" class="error-msg">
+            <p th:text="${msg}"></p>
+        </div>
 
-<p><a href="/member/signup">회원가입</a></p>
+        <form th:action="@{/member/login}" method="post">
 
+            <input type="text" name="loginId" placeholder="아이디" required>
+            <input type="password" name="password" placeholder="비밀번호" required>
+
+            <button type="submit" class="btn-login">로그인</button>
+        </form>
+
+        <div class="bottom-menu">
+            <a th:href="@{/member/signup}">회원가입</a>
+            <a th:href="@{/}">메인으로</a>
+        </div>
+
+    </div>
+
+</section>
+
+<div th:replace="events/footer :: footer"></div>
 </body>
 </html>

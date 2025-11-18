@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>카드 상세 정보</title>
+</head>
+<body>
+
+<h1>카드 상세 정보</h1>
+
+<p><strong>ID:</strong> <span th:text="${card.id}"></span></p>
+<p><strong>카드명:</strong> <span th:text="${card.cardName}"></span></p>
+<p><strong>브랜드:</strong> <span th:text="${card.cardBrand}"></span></p>
+
+<p><strong>전월 실적:</strong> <span th:text="${card.cardRecord}"></span></p>
+<p><strong>카드 이미지:</strong> <span th:text="${card.cardImg}"></span></p>
+
+<p><strong>해외 겸용:</strong> <span th:text="${card.cardOverseas}"></span></p>
+
+<p><strong>혜택 1:</strong> <span th:text="${card.cardInOut1}"></span></p>
+<p><strong>혜택 2:</strong> <span th:text="${card.cardInOut2}"></span></p>
+<p><strong>혜택 3:</strong> <span th:text="${card.cardInOut3}"></span></p>
+
+<br>
+
+<a th:href="@{/admin/cards}">← 카드 목록으로</a> |
+<a th:href="@{'/admin/cards/' + ${card.id} + '/edit'}">수정하기</a>
+
+</body>
+</html>

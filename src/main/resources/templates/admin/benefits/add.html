@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>혜택 추가</title>
+
+    <script>
+        function searchCard() {
+            let keyword = document.getElementById("cardSearch").value;
+
+            if (keyword.length < 1) {
+                document.getElementById("searchResult").innerHTML = "";
+                return;
+            }
+
+            fetch("/admin/cards/search?keyword=" + keyword)
+                .then(res => res.json())
+                .then(data => {
+                    let html = "";
+                    data.forEach(card => {
+                        html += `
+                        <div style="margin-bottom:5px;">
+                            <span>[${card.id}] ${card.cardName}</span>
+                            <button type="button" onclick="selectCard(${card.id})">선택</button>
+                        </div>
+                    `;
+                    });
+                    document.getElementById("searchResult").innerHTML = html;
+                });
+        }
+
+        function selectCard(cardId) {
+            document.getElementById("cardId").value = cardId;
+            alert("카드 ID " + cardId + " 선택됨!");
+        }
+    </script>
+
+</head>
+<body>
+
+<h1>혜택 추가</h1>
+
+<form action="/admin/benefits/add" method="post">
+
+    <label>혜택명</label><br>
+    <input type="text" name="bnfName" required><br><br>
+
+    <label>혜택 내용</label><br>
+    <textarea name="bnfContent" rows="3"></textarea><br><br>
+
+    <label>혜택 상세</label><br>
+    <textarea name="bnfDetail" rows="5"></textarea><br><br>
+
+    <!-- 🔥 카드 검색 기능 -->
+    <label>카드 검색</label><br>
+    <input type="text" id="cardSearch" placeholder="카드명 검색" onkeyup="searchCard()">
+    <div id="searchResult"
+         style="border:1px solid #aaa; padding:10px; margin-top:5px; width:300px;"></div>
+    <br>
+
+    <!-- 선택한 카드ID 들어가는 hidden -->
+    <label>선택된 카드 ID</label><br>
+    <input type="text" id="cardId" name="cardId" readonly required><br><br>
+
+    <button type="submit">등록하기</button>
+</form>
+
+</body>
+</html>

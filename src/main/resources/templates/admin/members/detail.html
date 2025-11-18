@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 상세보기</title>
+</head>
+<body>
+
+<h1>회원 상세정보</h1>
+
+<p><strong>ID:</strong> <span th:text="${member.id}"></span></p>
+<p><strong>로그인 ID:</strong> <span th:text="${member.loginId}"></span></p>
+<p><strong>이름:</strong> <span th:text="${member.name}"></span></p>
+<p><strong>이메일:</strong> <span th:text="${member.email}"></span></p>
+<p><strong>생년월일:</strong> <span th:text="${member.birth}"></span></p>
+<p><strong>권한:</strong> <span th:text="${member.role}"></span></p>
+
+<br>
+<a th:href="@{'/admin/members/' + ${member.id} + '/edit'}">수정하기</a>
+<br><br>
+<a href="/admin/members">← 목록으로 돌아가기</a>
+
+</body>
+</html>

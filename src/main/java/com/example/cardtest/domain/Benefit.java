@@ -1,18 +1,18 @@
 package com.example.cardtest.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "BENEFIT")
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Builder
 public class Benefit {
 
     @Id
-    @Column(name = "id")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "benefit_seq")
+    @SequenceGenerator(name = "benefit_seq", sequenceName = "SEQ_BENEFIT", allocationSize = 1)
+    private Long id;
 
     @Column(name = "bnf_name")
     private String bnfName;
@@ -23,11 +23,13 @@ public class Benefit {
     @Column(name = "bnf_detail")
     private String bnfDetail;
 
-    @Column(name = "card_id", insertable = false, updatable = false)
+    /** 🔥 insert / update 되는 진짜 FK 값 */
+    @Column(name = "card_id")
     private Long cardId;
 
+    /** 🔥 연관관계는 읽기 전용으로 둬야 충돌이 안 남 */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id")
+    @JoinColumn(name = "card_id", insertable = false, updatable = false)
     private Card card;
 }
 

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 삭제</title>
+</head>
+<body>
+
+<h1>회원 삭제</h1>
+
+<p>정말로 아래 회원을 삭제하시겠습니까?</p>
+
+<p>이름: <strong th:text="${member.name}"></strong></p>
+<p>로그인 ID: <strong th:text="${member.loginId}"></strong></p>
+<p>이메일: <strong th:text="${member.email}"></strong></p>
+
+<form th:action="@{/admin/members/{id}/delete(id=${member.id})}" method="post">
+    <button type="submit">삭제</button>
+</form>
+
+<br>
+<a href="/admin/members">← 회원 목록으로</a>
+
+</body>
+</html>

@@ -1,26 +1,48 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
+    <link rel="stylesheet" th:href="@{/css/signup.css}">
 </head>
+
 <body>
+<div th:replace="events/header :: header"></div>
 
-<h1>회원가입</h1>
+<section class="signup-section">
 
-<form action="/member/signup" method="post">
+    <div class="signup-box">
+        <h2>회원가입</h2>
 
-    <input type="text" name="loginId" placeholder="로그인 ID" required><br>
-    <input type="password" name="password" placeholder="비밀번호" required><br>
-    <input type="text" name="name" placeholder="이름" required><br>
-    <input type="email" name="email" placeholder="이메일" required><br>
+        <!-- 메시지(중복 오류 등) -->
+        <div th:if="${msg}" class="error-msg">
+            <p th:text="${msg}"></p>
+        </div>
 
-    <!-- Oracle 날짜 형식: yyyy-MM-dd -->
-    <input type="date" name="birth" required><br>
+        <form th:action="@{/member/signup}" method="post">
 
-    <button type="submit">가입하기</button>
+            <input type="text" name="loginId" placeholder="로그인 ID" required>
 
-</form>
+            <input type="password" name="password" placeholder="비밀번호" required>
 
+            <input type="text" name="name" placeholder="이름" required>
+
+            <input type="email" name="email" placeholder="이메일" required>
+
+            <!-- Oracle / JPA LocalDate 지원 형식 -->
+            <input type="date" name="birth" required>
+
+            <button type="submit" class="btn-signup">회원가입</button>
+        </form>
+
+        <div class="bottom-menu">
+            <a th:href="@{/member/login}">로그인</a>
+            <a th:href="@{/}">메인으로</a>
+        </div>
+    </div>
+
+</section>
+
+<div th:replace="events/footer :: footer"></div>
 </body>
 </html>

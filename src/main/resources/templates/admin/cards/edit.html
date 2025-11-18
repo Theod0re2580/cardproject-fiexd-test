@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>카드 수정</title>
+</head>
+<body>
+
+<h1>카드 수정</h1>
+
+<form th:action="@{|/admin/cards/${card.id}/edit|}" method="post" th:object="${card}">
+
+    <p>
+        <label>카드 ID: </label>
+        <span th:text="*{id}"></span>
+    </p>
+
+    <p>
+        <label>카드명:</label><br>
+        <input type="text" th:field="*{cardName}">
+    </p>
+
+    <p>
+        <label>카드 브랜드:</label><br>
+        <input type="text" th:field="*{cardBrand}">
+    </p>
+
+    <p>
+        <label>국내/해외 정보 1:</label><br>
+        <input type="text" th:field="*{cardInOut1}">
+    </p>
+
+    <p>
+        <label>국내/해외 정보 2:</label><br>
+        <input type="text" th:field="*{cardInOut2}">
+    </p>
+
+    <p>
+        <label>국내/해외 정보 3:</label><br>
+        <input type="text" th:field="*{cardInOut3}">
+    </p>
+
+    <p>
+        <label>카드 이미지 URL:</label><br>
+        <input type="text" th:field="*{cardImg}">
+    </p>
+
+    <p>
+        <label>전월실적:</label><br>
+        <input type="text" th:field="*{cardRecord}">
+    </p>
+
+    <p>
+        <label>해외겸용 브랜드:</label><br>
+        <input type="text" th:field="*{cardOverseas}">
+    </p>
+
+    <br>
+    <button type="submit">수정 완료</button>
+</form>
+
+<br>
+<a href="/admin/cards">목록으로 돌아가기</a>
+
+</body>
+</html>

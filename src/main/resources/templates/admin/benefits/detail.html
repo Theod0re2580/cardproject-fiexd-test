@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>혜택 상세 정보</title>
+</head>
+<body>
+
+<h1>혜택 상세</h1>
+
+<p><strong>ID:</strong> <span th:text="${benefit.id}"></span></p>
+<p><strong>혜택명:</strong> <span th:text="${benefit.bnfName}"></span></p>
+<p><strong>요약:</strong> <span th:text="${benefit.bnfContent}"></span></p>
+
+<p><strong>상세 설명:</strong></p>
+<pre th:text="${benefit.bnfDetail}"></pre>
+
+<p><strong>카드:</strong> <span th:text="${benefit.card.cardName}"></span></p>
+
+<br>
+
+<a th:href="@{/admin/benefits}">← 목록</a> |
+<a th:href="@{'/admin/benefits/' + ${benefit.id} + '/edit'}">수정</a>
+
+</body>
+</html>

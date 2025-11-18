@@ -1,8 +1,28 @@
-*{margin: 0; padding: 0;}
-ul{list-style: none;}
-a{color: black; text-decoration: none;}
-img{vertical-align: top; border: 0;}
+/* 🔥 FOOTER COMPONENT 전용 RESET */
 
+/* footer 전체 영역 reset */
+.footer * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 리스트 스타일 제거 */
+.footer ul {
+    list-style: none;
+}
+
+/* 링크 스타일 리셋 */
+.footer a {
+    color: black;
+    text-decoration: none;
+}
+
+/* 이미지 초기화 */
+.footer img {
+    border: 0;
+    vertical-align: top;
+}
 
 .footer{
     margin-bottom: 50px;

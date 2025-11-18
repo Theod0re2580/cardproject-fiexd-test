@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 수정</title>
+</head>
+<body>
+
+<h1>회원 수정</h1>
+
+<form th:action="@{/admin/members/{id}/edit(id=${member.id})}" method="post">
+
+    <p>ID: <strong th:text="${member.id}"></strong></p>
+
+    <p>
+        로그인 ID:
+        <span th:text="${member.loginId}"></span>
+        <!-- 변경 불가 -->
+    </p>
+
+    <p>
+        이름:
+        <input type="text" name="name" th:value="${member.name}" required>
+    </p>
+
+    <p>
+        이메일:
+        <input type="email" name="email" th:value="${member.email}" required>
+    </p>
+
+    <p>
+        생년월일:
+        <input type="date" name="birth" th:value="${member.birth}" required>
+    </p>
+
+    <p>
+        권한(Role):
+        <select name="role">
+            <option th:each="r : ${roles}"
+                    th:value="${r}"
+                    th:text="${r}"
+                    th:selected="${r == member.role}">
+            </option>
+        </select>
+    </p>
+
+    <button type="submit">수정 완료</button>
+</form>
+
+<br>
+<a href="/admin/members">← 회원 목록으로</a>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+/* 기본 reset */
+* { margin: 0; padding: 0; }
+ul { list-style: none; }
+a { color: black; text-decoration: none; }
+img { vertical-align: top; border: 0; }
+
+/* 공통 input 스타일 */
+input {
+    border: 0px;
+    margin-top: 15px;
+    width: 500px;
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: #eee;
+}
+
+/* 기본 버튼 스타일 */
+button {
+    border: 0px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* 정보 수정 버튼 (검정색) */
+.btn-update {
+    background-color: #000;
+    color: white;
+}
+
+/* 회원 탈퇴 버튼 (빨강) */
+.btn-delete {
+    background-color: #d9534f;
+    color: white;
+}
+
+/* 페이지 전체 영역 */
+.mypage-section {
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 120px;
+    padding-bottom: 120px;
+    background-color: #f7f7f7;
+}
+
+/* 카드 박스 */
+.mypage-box {
+    width: 800px;
+    background: white;
+    padding: 50px 60px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    text-align: center;
+}
+
+/* 제목 */
+.mypage-box h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+/* label */
+.mypage-box label {
+    display: block;
+    margin-top: 30px;
+    font-size: 15px;
+    text-align: left;
+    color: #444;
+    font-weight: bold;
+}
+
+/* 버튼 그룹 */
+.mypage-box .btn-group {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* 회원 탈퇴 폼 */
+.delete-form {
+    margin-top: 30px;
+}
+
+/* 하단 메뉴 */
+.bottom-menu {
+    margin-top: 40px;
+}
+
+.bottom-menu a {
+    color: #333;
+    font-size: 16px;
+}

@@ -13,8 +13,14 @@ import lombok.Setter;
 public class Card {
 
     @Id
-    @Column(name = "id")
-    private Long id;   // 🔥 Long으로 변경
+    @Column(name = "ID")
+    @SequenceGenerator(
+            name = "card_seq_generator",
+            sequenceName = "SEQ_CARD",   // Oracle에 만들어 둔 시퀀스 이름
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card_seq_generator")
+    private Long id;
 
     @Column(name = "card_name")
     private String cardName;

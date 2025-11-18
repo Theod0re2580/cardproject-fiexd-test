@@ -8,6 +8,8 @@
 
 <h1>회원 리스트</h1>
 
+<a href="/admin/members/add">회원 등록하기</a>
+
 <table border="1">
     <thead>
     <tr>
@@ -24,7 +26,11 @@
     <tr th:each="m : ${members}">
         <td th:text="${m.id}"></td>
         <td th:text="${m.loginId}"></td>
-        <td th:text="${m.name}"></td>
+        <td>
+            <a th:href="@{'/admin/members/' + ${m.id}}">
+                <span th:text="${m.name}"></span>
+            </a>
+        </td>
         <td th:text="${m.email}"></td>
         <td th:text="${m.role}"></td>
         <td>

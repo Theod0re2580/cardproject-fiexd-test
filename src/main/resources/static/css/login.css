@@ -1,39 +1,72 @@
-*{margin: 0; padding: 0;}
-ul{list-style: none;}
-a{color: black; text-decoration: none;}
-img{vertical-align: top; border: 0;}
-
-input{
-  border: 0px;
-  margin-top: 20px;
-  width: 500px;
-  padding: 15px 25px 15px 25px;
-  border-radius: 10px;
-  font-size: 16px;
-  background-color: #eee;
-}
-button{
-  border: 0px;
-  margin-top: 20px;
-  width: 110px;
-  padding: 10px 15px 10px 15px;
-  border-radius: 10px;
-  background-color: rgb(0, 0, 0);
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
-  margin-left: 20px;
+/* 로그인 페이지 컨테이너 */
+.login-section {
+    display: flex;
+    justify-content: center;
+    padding-top: 150px;
+    padding-bottom: 150px;
+    background: #f8f8f8;
 }
 
-section{
-  width: 100%;
-  height: 100%;
-}
-.login-arr{
-  margin: 0 auto;
-  margin-top: 200px;
-  width: 800px;
-  align-items: center;
-  text-align: center;
+/* 로그인 박스 */
+.login-box {
+    width: 500px;
+    padding: 40px 50px;
+    background: white;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
 }
 
+/* 제목 */
+.login-box h2 {
+    font-size: 26px;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+/* 로그인 input */
+.login-box input {
+    width: 100%;
+    padding: 15px 20px;
+    background: #eee;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-top: 18px;
+}
+
+/* 버튼 */
+.login-box button,
+.btn-login {
+    width: 100%;
+    padding: 15px 20px;
+    margin-top: 20px;
+    background: #000;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* 에러 메시지 */
+.error-msg {
+    color: #c80000;
+    background: #ffdede;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* 하단 메뉴 */
+.bottom-menu {
+    margin-top: 25px;
+}
+
+.bottom-menu a {
+    margin: 0 10px;
+    color: #555;
+    font-size: 15px;
+}

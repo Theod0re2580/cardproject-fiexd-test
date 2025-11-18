@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>혜택 관리</title>
+</head>
+<body>
+
+<h1>혜택 목록</h1>
+
+<a href="/admin/benefits/add">혜택 추가하기</a>
+<br><br>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>혜택명</th>
+        <th>카드명</th>
+        <th>관리</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="b : ${benefits}">
+        <td th:text="${b.id}"></td>
+
+        <td>
+            <a th:href="@{'/admin/benefits/' + ${b.id}}">
+                <span th:text="${b.bnfName}"></span>
+            </a>
+        </td>
+
+        <td th:text="${b.card.cardName}"></td>
+
+        <td>
+            <a th:href="@{'/admin/benefits/' + ${b.id} + '/edit'}">수정</a>
+
+            <form th:action="@{'/admin/benefits/' + ${b.id} + '/delete'}"
+                  method="post" style="display:inline;">
+                <button style="color:red;">삭제</button>
+            </form>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>내 정보</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+</head>
+
+<body>
+<div th:replace="events/header :: header"></div>
+
+<section class="mypage-section">
+
+    <div class="mypage-box">
+
+        <h2>내 정보</h2>
+
+        <form th:action="@{/member/info}" method="post">
+
+            <p>
+                <label>로그인 ID</label>
+                <span th:text="${member.loginId}"></span>
+            </p>
+
+            <p>
+                <label>이름</label>
+                <input type="text" name="name" th:value="${member.name}">
+            </p>
+
+            <p>
+                <label>이메일</label>
+                <input type="email" name="email" th:value="${member.email}">
+            </p>
+
+            <p>
+                <label>생년월일</label>
+                <input type="date" name="birth"
+                       th:value="${member.birth}">
+            </p>
+
+            <button type="submit" class="btn-update">정보 수정</button>
+        </form>
+
+        <form th:action="@{/member/delete}" method="post" class="delete-form">
+            <button type="submit" class="btn-delete">회원 탈퇴</button>
+        </form>
+
+        <div class="bottom-menu">
+            <a th:href="@{/}">메인으로</a>
+        </div>
+
+    </div>
+
+</section>
+
+<div th:replace="events/footer :: footer"></div>
+</body>
+</html>
