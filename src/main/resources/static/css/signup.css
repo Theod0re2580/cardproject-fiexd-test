@@ -1,0 +1,196 @@
+/* ===========================
+      signup.css
+   회원가입 페이지 스타일
+=========================== */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f5f7fa;
+}
+
+/* 메인 섹션 */
+.signup-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 20px;
+    min-height: 80vh;
+}
+
+/* 회원가입 박스 */
+.signup-box {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    padding: 40px 35px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    animation: fadeIn .4s ease-in-out;
+}
+
+/* 타이틀 */
+.signup-box h2 {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #222;
+}
+
+/* 메시지 */
+.error-msg {
+    background-color: #ffe3e3;
+    border: 1px solid #ffbcbc;
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    color: #d42e2e;
+    font-size: 14px;
+}
+
+/* 입력 필드 */
+.signup-box input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 18px;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    transition: all .2s;
+}
+
+.signup-box input:focus {
+    border-color: #6b8afd;
+    box-shadow: 0 0 0 2px rgba(107, 138, 253, 0.2);
+}
+
+/* 회원가입 버튼 */
+.btn-signup {
+    width: 100%;
+    padding: 14px;
+    background: #6b8afd;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.btn-signup:hover {
+    background: #5873e8;
+}
+
+/* 로그인 / 메인 이동 링크 */
+.bottom-menu {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.bottom-menu a {
+    margin: 0 10px;
+    font-size: 14px;
+    color: #6b8afd;
+    text-decoration: none;
+    transition: color .2s;
+}
+
+.bottom-menu a:hover {
+    color: #3e55c7;
+}
+
+/* Fade-in 애니메이션 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 반응형 */
+@media (max-width: 480px) {
+    .signup-box {
+        padding: 30px 20px;
+    }
+    .signup-box h2 {
+        font-size: 22px;
+    }
+}
+
+/* ===========================
+       소셜 로그인 버튼
+=========================== */
+
+.social-login-box {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.social-title {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 12px;
+}
+
+/* 공통 버튼 */
+.social-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all .2s;
+}
+
+.social-btn img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+/* 구글 */
+.google-btn {
+    background: #ffffff;
+    border: 1px solid #dcdcdc;
+    color: #444;
+}
+
+.google-btn:hover {
+    background: #f2f2f2;
+}
+
+/* 카카오 */
+.kakao-btn {
+    background: #FEE500;
+    color: #3B1E1E;
+}
+
+.kakao-btn:hover {
+    background: #fada0a;
+}
+
+/* 네이버 */
+.naver-btn {
+    background: #03C75A;
+    color: white;
+}
+
+.naver-btn:hover {
+    background: #02b34f;
+}
+
+/* 반응형 */
+@media (max-width: 480px) {
+    .social-btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+}

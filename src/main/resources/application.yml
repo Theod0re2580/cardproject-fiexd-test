@@ -29,6 +29,8 @@ spring:
     view:
       prefix: /templates/
       suffix: .html
+  profiles:
+    include: oauth
 
 mybatis:
   mapper-locations: classpath:mybatis/mapper/**/*.xml

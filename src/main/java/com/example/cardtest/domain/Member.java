@@ -19,7 +19,7 @@ public class Member {
     @Column(name = "MEMBER_ID")
     @SequenceGenerator(
             name = "member_seq_generator",
-            sequenceName = "SEQ_MEMBER", // ❗ 없으면 MEMBER_SEQ 만들어줘
+            sequenceName = "SEQ_MEMBER",
             allocationSize = 1
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq_generator")

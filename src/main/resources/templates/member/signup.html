@@ -34,6 +34,29 @@
 
             <button type="submit" class="btn-signup">회원가입</button>
         </form>
+        <div class="social-login-box">
+
+            <p class="social-title">소셜 계정으로 가입하기</p>
+
+            <!-- 구글 -->
+            <a href="/oauth2/authorization/google" class="social-btn google-btn">
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="google">
+                Google로 계속하기
+            </a>
+
+            <!-- 카카오 -->
+            <a href="/oauth2/authorization/kakao" class="social-btn kakao-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Kakao_logo.jpg" alt="kakao">
+                카카오로 계속하기
+            </a>
+
+            <!-- 네이버 -->
+            <a href="/oauth2/authorization/naver" class="social-btn naver-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Naver_logo.png" alt="naver">
+                네이버로 계속하기
+            </a>
+
+        </div>
 
         <div class="bottom-menu">
             <a th:href="@{/member/login}">로그인</a>
