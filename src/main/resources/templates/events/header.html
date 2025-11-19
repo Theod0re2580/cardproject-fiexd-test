@@ -1,9 +1,13 @@
-<!-- header.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
 <div th:fragment="header">
+
     <link rel="stylesheet" th:href="@{/css/header.css}">
 
     <nav class="navbar">
-
         <!-- LOGO -->
         <div class="nav-left">
             <a th:href="@{/}">
@@ -17,7 +21,6 @@
             <li><a th:href="@{/events/top}">인기 카드 TOP10</a></li>
             <li><a th:href="@{/events/benefits}">혜택별 카드 추천</a></li>
 
-            <!-- Dropdown -->
             <li class="nav-item dropdown">
                 <button type="button" class="dropdown-toggle">이색카드 추천</button>
 
@@ -29,7 +32,7 @@
         </ul>
 
         <!-- ADMIN MENU -->
-        <li th:if="${session.loggedMember != null and session.loggedMember.role.name() == 'ADMIN'}">
+        <li sec:authorize="hasRole('ADMIN')">
             <a th:href="@{/admin}">관리자 페이지</a>
         </li>
 
@@ -37,21 +40,26 @@
         <div class="nav-right">
 
             <!-- 로그인 X -->
-            <div class="login" th:if="${session.loggedMember == null}">
+            <div class="login" sec:authorize="!isAuthenticated()">
                 <a th:href="@{/member/login}">로그인</a>
                 <a th:href="@{/member/signup}">회원가입</a>
             </div>
 
             <!-- 로그인 O -->
-            <div class="login" th:if="${session.loggedMember != null}">
-                <span th:text="${session.loggedMember.loginId + '님'}"></span>
+            <div class="login" sec:authorize="isAuthenticated()">
+                <span th:text="${#authentication.principal.member.loginId + '님'}"></span>
+
                 <a th:href="@{/member/mypage}">마이페이지</a>
-                <a th:href="@{/member/logout}">로그아웃</a>
+
+                <form th:action="@{/member/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="logout-btn">로그아웃</button>
+                </form>
             </div>
+
         </div>
     </nav>
 
-    <!-- Dropdown Script -->
+    <!-- JS -->
     <script th:inline="javascript">
         document.addEventListener("DOMContentLoaded", () => {
             const toggles = document.querySelectorAll(".dropdown-toggle");
@@ -76,3 +84,5 @@
     </script>
 
 </div>
+</body>
+</html>

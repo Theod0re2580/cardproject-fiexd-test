@@ -1,6 +1,5 @@
-package com.example.cardtest.web;
+package com.example.cardtest.domain;
 
-import com.example.cardtest.domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

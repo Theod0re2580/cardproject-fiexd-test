@@ -1,9 +1,11 @@
 package com.example.cardtest.web;
 
 import com.example.cardtest.domain.Member;
+import com.example.cardtest.domain.SessionMember;
 import com.example.cardtest.service.MemberService;
-import jakarta.servlet.http.HttpSession;
+import com.example.cardtest.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,52 +19,36 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    /** 로그인 폼 */
+    /** 로그인 폼 (Spring Security가 로그인 처리) */
     @GetMapping("/login")
-    public String loginForm(Model model, HttpSession session) {
+    public String loginForm(@RequestParam(value = "error", required = false) String error,
+                            @AuthenticationPrincipal CustomUserDetails principal,
+                            Model model) {
 
-        SessionMember logged = (SessionMember) session.getAttribute("loggedMember");
-        model.addAttribute("loggedMember", logged);
+        // 이미 로그인되어 있으면 홈으로
+        if (principal != null) {
+            return "redirect:/";
+        }
+
+        if (error != null) {
+            model.addAttribute("msg", "아이디 또는 비밀번호가 잘못되었습니다.");
+        }
 
         return "member/login";
     }
 
-    /** 로그인 처리 (예외 처리 적용됨) */
-    @PostMapping("/login")
-    public String login(@RequestParam String loginId,
-                        @RequestParam String password,
-                        HttpSession session,
-                        Model model) {
-
-        try {
-            Member member = memberService.login(loginId, password);
-
-            SessionMember sessionUser =
-                    new SessionMember(member.getId(), member.getLoginId(), member.getRole());
-
-            session.setAttribute("loggedMember", sessionUser);
-
-            return "redirect:/";
-
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("msg", e.getMessage());
-            return "member/login";
-        }
-    }
-
-    /** 로그아웃 */
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
-    }
+    /** 로그아웃은 Spring Security가 처리 (컨트롤러 메서드 삭제) */
+    // @PostMapping("/logout") 필요 없음
 
     /** 회원가입 폼 */
     @GetMapping("/signup")
-    public String signupForm(Model model, HttpSession session) {
+    public String signupForm(@AuthenticationPrincipal CustomUserDetails principal,
+                             Model model) {
 
-        SessionMember logged = (SessionMember) session.getAttribute("loggedMember");
-        model.addAttribute("loggedMember", logged);
+        // 로그인 상태면 굳이 가입 페이지 갈 필요 없음
+        if (principal != null) {
+            return "redirect:/";
+        }
 
         model.addAttribute("member", new Member());
         return "member/signup";
@@ -85,14 +71,17 @@ public class MemberController {
 
     /** 내 정보 보기 */
     @GetMapping("/mypage")
-    public String info(HttpSession session, Model model) {
+    public String info(@AuthenticationPrincipal CustomUserDetails principal,
+                       Model model) {
 
-        SessionMember logged = (SessionMember) session.getAttribute("loggedMember");
+        if (principal == null) {
+            return "redirect:/member/login";
+        }
 
-        // 로그인 안했으면 로그인 페이지로
-        if (logged == null) return "redirect:/member/login";
+        Member member = memberService.findById(principal.getId());
 
-        Member member = memberService.findById(logged.getId());
+        // 기존처럼 loggedMember 모델에 SessionMember 담아주기 (헤더 등에서 사용 시)
+        SessionMember logged = new SessionMember(member.getId(), member.getLoginId(), member.getRole());
 
         model.addAttribute("loggedMember", logged);
         model.addAttribute("member", member);
@@ -102,44 +91,48 @@ public class MemberController {
 
     /** 정보 수정 */
     @PostMapping("/mypage")
-    public String update(@ModelAttribute Member member, HttpSession session) {
+    public String update(@ModelAttribute Member updateDto,
+                         @AuthenticationPrincipal CustomUserDetails principal) {
 
-        SessionMember logged = (SessionMember) session.getAttribute("loggedMember");
+        if (principal == null) {
+            return "redirect:/member/login";
+        }
 
-        if (logged == null) return "redirect:/member/login";
-
-        memberService.update(logged.getId(), member);
+        memberService.update(principal.getId(), updateDto);
 
         return "redirect:/member/mypage";
     }
 
     /** 회원 삭제 */
     @PostMapping("/delete")
-    public String delete(HttpSession session) {
+    public String delete(@AuthenticationPrincipal CustomUserDetails principal) {
 
-        SessionMember logged = (SessionMember) session.getAttribute("loggedMember");
+        if (principal == null) {
+            return "redirect:/member/login";
+        }
 
-        if (logged == null) return "redirect:/member/login";
-
-        memberService.delete(logged.getId());
-        session.invalidate();
+        memberService.delete(principal.getId());
 
         return "redirect:/";
     }
 
     /** 정보 수정 페이지 이동 */
     @GetMapping("/{id}/edit")
-    public String editForm(@PathVariable Long id, HttpSession session, Model model) {
+    public String editForm(@PathVariable Long id,
+                           @AuthenticationPrincipal CustomUserDetails principal,
+                           Model model) {
 
-        SessionMember logged = (SessionMember) session.getAttribute("loggedMember");
-
-        // 로그인 검증
-        if (logged == null) return "redirect:/member/login";
+        if (principal == null) {
+            return "redirect:/member/login";
+        }
 
         // 본인만 접근 가능
-        if (!logged.getId().equals(id)) return "redirect:/";
+        if (!principal.getId().equals(id)) {
+            return "redirect:/";
+        }
 
         Member member = memberService.findById(id);
+        SessionMember logged = new SessionMember(member.getId(), member.getLoginId(), member.getRole());
 
         model.addAttribute("loggedMember", logged);
         model.addAttribute("member", member);
@@ -155,12 +148,11 @@ public class MemberController {
                        @RequestParam String birth,
                        @RequestParam(required = false) String oldPw,
                        @RequestParam(required = false) String newPw,
-                       HttpSession session,
+                       @AuthenticationPrincipal CustomUserDetails principal,
                        Model model) {
 
-        SessionMember logged = (SessionMember) session.getAttribute("loggedMember");
-        if (logged == null) return "redirect:/member/login";
-        if (!logged.getId().equals(id)) return "redirect:/";
+        if (principal == null) return "redirect:/member/login";
+        if (!principal.getId().equals(id)) return "redirect:/";
 
         // ✨ 이메일 중복 검사 — 본인 제외
         Member current = memberService.findById(id);
@@ -172,7 +164,7 @@ public class MemberController {
         }
 
         try {
-            // ✨ A) 이름 / 이메일 / 생년월일 수정 → 기존 update() 사용
+            // A) 이름 / 이메일 / 생년월일 수정
             Member updateDto = new Member();
             updateDto.setName(name);
             updateDto.setEmail(email);
@@ -180,7 +172,7 @@ public class MemberController {
 
             memberService.update(id, updateDto);
 
-            // ✨ B) 비밀번호 변경
+            // B) 비밀번호 변경
             if (oldPw != null && !oldPw.isBlank() &&
                     newPw != null && !newPw.isBlank()) {
                 memberService.changePassword(id, oldPw, newPw);
