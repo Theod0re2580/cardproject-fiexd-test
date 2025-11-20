@@ -3,12 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <title>카드 관리</title>
+
+    <style>
+        /* 검색창 스타일(기본 유지하면서 개선) */
+        #searchBox {
+            padding: 10px 14px;
+            width: 280px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            margin-bottom: 18px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #f1f1f1;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+    </style>
+
 </head>
 <body>
 
 <h1>카드 관리</h1>
 
 <a href="/admin/cards/add">카드 추가하기</a>
+
+<br><br>
+
+<!-- 🔎 검색창 추가 -->
+<input type="text" id="searchBox" placeholder="카드명 또는 브랜드 검색...">
 
 <h2>카드 목록</h2>
 
@@ -22,15 +59,17 @@
     </tr>
     </thead>
 
-    <tbody>
+    <tbody id="cardTableBody">
     <tr th:each="c : ${cards}">
         <td th:text="${c.id}"></td>
-        <!-- 카드 이름 클릭하면 detail로 이동 -->
+
+        <!-- 카드 이름 → detail 이동 -->
         <td>
             <a th:href="@{'/admin/cards/' + ${c.id}}">
                 <span th:text="${c.cardName}"></span>
             </a>
         </td>
+
         <td th:text="${c.cardBrand}"></td>
 
         <td>
@@ -44,6 +83,30 @@
     </tr>
     </tbody>
 </table>
+
+<!-- JS 필터 기능 -->
+<script>
+    const searchBox = document.getElementById("searchBox");
+    const tableBody = document.getElementById("cardTableBody");
+
+    searchBox.addEventListener("keyup", function () {
+        const keyword = this.value.toLowerCase();
+        const rows = tableBody.querySelectorAll("tr");
+
+        rows.forEach(row => {
+            const id = row.children[0].textContent.toLowerCase();
+            const name = row.children[1].textContent.toLowerCase();
+            const brand = row.children[2].textContent.toLowerCase();
+
+            const match =
+                id.includes(keyword) ||
+                name.includes(keyword) ||
+                brand.includes(keyword);
+
+            row.style.display = match ? "" : "none";
+        });
+    });
+</script>
 
 </body>
 </html>

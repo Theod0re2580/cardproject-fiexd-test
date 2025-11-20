@@ -5,7 +5,10 @@ import com.example.cardtest.service.EventSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -102,5 +105,25 @@ public class EventController {
         model.addAttribute("cards", cards);
 
         return "events/mbti-result";
+    }
+
+    @GetMapping("/list")
+    public String listPage(
+            @RequestParam(required = false) String keyword,
+            Model model
+    ) {
+        List<EventView> events;
+
+        if (keyword == null || keyword.isBlank()) {
+            events = service.getAllEvents();  // 전체 카드
+        } else {
+            events = service.search(keyword, null); // 키워드 검색
+        }
+
+        model.addAttribute("events", events);
+        model.addAttribute("brands", service.getBrands());
+        model.addAttribute("keyword", keyword);
+
+        return "events/list";  // 🔥 이 파일이 렌더링됨
     }
 }
