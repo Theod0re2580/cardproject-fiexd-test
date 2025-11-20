@@ -4,137 +4,198 @@
     <meta charset="UTF-8">
     <title>MBTI 카드 추천 결과</title>
 
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
     <style>
+        /* ============================
+   GLOBAL
+============================ */
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(145deg, #edf2ff, #dbe4ff);
+            font-family: 'Pretendard Variable', 'Segoe UI', sans-serif;
             margin: 0;
-            padding: 40px 20px;
             text-align: center;
+            color: #222;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
 
         h1 {
             font-size: 2.4em;
-            color: #333;
-            margin-bottom: 5px;
+            color: #111;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
 
-        /* 🔥 MBTI 박스 점프 애니메이션 */
+        /* ============================
+           MBTI BOX
+        ============================ */
         .mbti-box {
-            font-size: 1.4em;
-            background: #4c6ef5;
+            font-size: 1.5em;
+            background: linear-gradient(135deg, #4c6ef5, #748ffc);
             display: inline-block;
-            padding: 8px 20px;
+            padding: 12px 26px;
             color: white;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            font-weight: bold;
+            border-radius: 14px;
+            margin-bottom: 35px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            box-shadow: 0 6px 18px rgba(76,110,245,0.35);
 
+            animation: mbtiPop 0.85s cubic-bezier(.34,1.56,.64,1) forwards;
             opacity: 0;
             transform: translateY(40px) scale(0.8);
-            animation: mbtiPop 0.8s cubic-bezier(.34,1.56,.64,1) forwards;
         }
 
         @keyframes mbtiPop {
-            0% {
-                opacity: 0;
-                transform: translateY(40px) scale(0.8);
-            }
-            60% {
-                opacity: 1;
-                transform: translateY(-10px) scale(1.1);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            0% { opacity: 0; transform: translateY(40px) scale(0.8); }
+            60% { opacity: 1; transform: translateY(-8px) scale(1.08); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         h2 {
             color: #333;
             margin-bottom: 25px;
             font-size: 1.8em;
+            font-weight: 600;
         }
 
+        /* ============================
+           CARD GRID
+        ============================ */
         .card-list {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 25px;
+            gap: 26px;
             margin-top: 20px;
+            padding: 10px;
         }
 
+        /* ============================
+           CARD ITEM
+        ============================ */
         .card-item {
             width: 280px;
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0px 8px 20px rgba(0,0,0,0.12);
-            transition: 0.3s;
+            background: #ffffff;
+            padding: 22px 18px;
+            border-radius: 16px;
+            box-shadow: 0px 8px 18px rgba(0,0,0,0.10);
+            transition: 0.32s ease;
             text-align: center;
+            border: 1px solid rgba(230,233,255,0.6);
+
+            transform: translateY(0);
         }
 
         .card-item:hover {
-            transform: translateY(-7px);
-            box-shadow: 0px 12px 28px rgba(0,0,0,0.2);
+            transform: translateY(-9px);
+            box-shadow: 0px 14px 32px rgba(0,0,0,0.16);
+            border-color: rgba(76,110,245,0.45);
         }
 
+        /* 카드 이미지 */
         .card-item img {
             width: 100%;
-            height: 180px;
+            height: 170px;
             object-fit: contain;
-            border-radius: 10px;
-            background: #f1f3f5;
+            border-radius: 12px;
+            background: #f3f5fa;
             margin-bottom: 15px;
+            padding: 8px;
         }
 
+        /* 카드 제목 */
         .card-item h3 {
-            margin: 8px 0;
+            margin: 10px 0 3px;
             font-size: 1.15em;
-            color: #333;
+            font-weight: 700;
+            color: #222;
         }
 
-        .benefit {
-            color: #555;
+        /* 브랜드명 */
+        .card-item p strong {
             font-size: 0.9em;
-            margin-top: 5px;
-            line-height: 1.4;
-            min-height: 40px;
+            color: #666;
         }
 
-        .again-btn {
-            margin-top: 40px;
+        /* 혜택 */
+        .benefit {
+            color: #4c6ef5;
+            font-size: 0.9em;
+            margin-top: 8px;
+            line-height: 1.45;
+            font-weight: 600;
+        }
+
+        /* ============================
+           LOAD MORE BUTTON
+        ============================ */
+        #loadMoreBtn {
+            margin-top: 35px;
             padding: 12px 30px;
             background: #4c6ef5;
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 1.1em;
+            border-radius: 14px;
             cursor: pointer;
-            transition: 0.3s;
+            font-size: 1.05em;
+            font-weight: 600;
+            transition: 0.25s ease;
+            box-shadow: 0 6px 14px rgba(76,110,245,0.3);
+        }
+
+        #loadMoreBtn:hover {
+            background: #3b5bdb;
+            transform: translateY(-3px);
+        }
+
+        /* ============================
+           AGAIN BUTTON
+        ============================ */
+        .again-btn {
+            margin-top: 45px;
+            padding: 13px 32px;
+            background: #4c6ef5;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.15em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
             text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 6px 14px rgba(76,110,245,0.3);
         }
 
         .again-btn:hover {
             background: #364fc7;
+            transform: translateY(-3px);
         }
 
-        /* 📌 더보기 버튼 */
-        #loadMoreBtn {
-            margin-top: 30px;
-            padding: 10px 25px;
-            background: #4c6ef5;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1.1em;
-            display: none;
+        /* ============================
+           RESPONSIVE
+        ============================ */
+        @media (max-width: 480px) {
+            .card-item {
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 1.9em;
+            }
         }
+
     </style>
 </head>
 
 <body>
+
+<div th:replace="events/header :: header"></div>
 
 <h1>당신의 카드 MBTI는?</h1>
 <div class="mbti-box" th:text="${mbti}">ENFP</div>
@@ -144,19 +205,25 @@
 <div class="card-list" id="cardList">
     <div class="card-item" th:each="ev, iter : ${cards}"
          th:style="${iter.index} >= 10 ? 'display:none' : ''">
+
         <img th:src="${ev.card.cardImg != '' ? ev.card.cardImg : '/images/bono.png'}"
              onerror="this.src='/images/bono.png'">
 
         <h3 th:text="${ev.card.cardName}">카드 이름</h3>
         <p><strong th:text="${ev.card.cardBrand}"></strong></p>
 
+        <!-- 안전혜택 표시 -->
         <p class="benefit"
-           th:text="${#lists.isEmpty(ev.benefits) ? '혜택 정보 없음' : ev.benefits.get(0).bnfContent}">
+           th:text="${#lists.isEmpty(ev.benefits) ? '혜택 정보 없음' :
+                    (ev.benefits.get(0).bnfContent != '' ? ev.benefits.get(0).bnfContent : '혜택 내용 없음')}">
         </p>
+
     </div>
 </div>
 
 <button id="loadMoreBtn">더보기</button>
+
+<div th:replace="events/footer :: footer"></div>
 
 <a class="again-btn" th:href="@{/events/mbti}">🔄 MBTI 테스트 다시하기</a>
 

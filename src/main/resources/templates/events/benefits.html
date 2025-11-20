@@ -3,302 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <title>혜택별 카드 추천</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f4f6f8;
-            margin: 0;
-            padding: 40px;
-            opacity: 0;
-            transition: opacity 0.6s ease-in-out;
-        }
-        body.loaded { opacity: 1; }
 
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <style>
+        /* --------------------------------------
+   전체 기본 스타일
+---------------------------------------*/
+        body {
+            font-family: 'Pretendard Variable','Segoe UI',sans-serif;
+            margin: 0;
+            opacity: 0;
+            transition: .6s;
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
+
+        /* 제목 */
         h1 {
             text-align: center;
-            color: #333;
-            margin-bottom: 20px;
+            color: #121212;
+            margin-bottom: 35px;
+            font-size: 34px;
+            font-weight: 700;
         }
 
+        /* --------------------------------------
+           검색창
+        ---------------------------------------*/
         form {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            width: 250px;
-            border-radius: 20px;
-            border: 1px solid #aaa;
-        }
-
-        button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #667eea;
-            color: white;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        button:hover { background-color: #5a67d8; }
-
-        /* 모드 전환 버튼 */
-        .mode-toggle {
             text-align: center;
             margin-bottom: 25px;
         }
 
-        .mode-toggle button {
-            background: #444;
-            padding: 8px 15px;
-            border-radius: 10px;
-            color: #fff;
-            cursor: pointer;
-            border: none;
-            font-size: 0.9em;
-            transition: 0.3s;
+        form input[type=text] {
+            padding: 12px 18px;
+            width: 300px;
+            border-radius: 30px;
+            border: 1.5px solid #d4d7e2;
+            font-size: 15px;
+            outline: none;
+            transition: .2s;
+            background: white;
         }
 
-        .mode-toggle button:hover { background: #222; }
+        form input[type=text]:focus {
+            border-color: #5773ff;
+            box-shadow: 0 0 0 4px rgba(87,115,255,0.15);
+        }
 
-        /* 혜택 버튼 */
+        form button {
+            padding: 12px 25px;
+            background: #5773ff;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: .25s;
+        }
+
+        form button:hover {
+            background: #4456d4;
+        }
+
+        /* --------------------------------------
+           혜택 카테고리 버튼
+        ---------------------------------------*/
         .benefit-buttons {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
-            margin: 25px 0;
+            gap: 12px;
+            margin: 35px 0;
         }
 
         .benefit-buttons button {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #e8ecf8;
             border: none;
-            color: white;
-            padding: 8px 15px;
+            padding: 8px 18px;
+            color: #4b5bc7;
             border-radius: 20px;
-            font-size: 0.9em;
+            font-size: 14px;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            font-weight: 500;
+            transition: 0.25s ease;
         }
 
         .benefit-buttons button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.25);
+            background: #d7dcf7;
         }
 
         .benefit-buttons button.active {
-            background: #ff7f50;
+            background: #5866f7;
+            color: white;
+            font-weight: 600;
         }
 
-        /* 카드 리스트 */
+        /* --------------------------------------
+           카드 리스트 레이아웃
+        ---------------------------------------*/
         .card-list {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
+            gap: 26px;
+            padding-bottom: 60px;
         }
 
+        /* --------------------------------------
+           카드 디자인
+        ---------------------------------------*/
         .card {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            width: 260px;
-            padding: 15px;
-            text-align: center;
-            overflow: hidden;
-            transition: all 0.3s ease-in-out;
+            width: 290px;
+            padding: 20px;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            display: none;
+            transition: 0.3s ease;
+            border: 1px solid #eef0f7;
+            position: relative;
         }
 
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+        }
+
+        /* 카드 이미지 */
         .card img {
             width: 100%;
-            height: 150px;
+            height: 160px;
             object-fit: contain;
+            margin-bottom: 15px;
         }
 
-        h3 { margin: 10px 0; color: #222; }
-        p { margin: 4px 0; color: #555; font-size: 0.9em; }
+        /* 카드 이름 */
+        .card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 6px;
+        }
 
-        /* 혜택 상세 */
-        .bnfDetail {
-            max-height: 50px;
+        /* 브랜드 */
+        .card p {
+            font-size: 15px;
+            color: #555;
+            margin: 2px 0 6px 0;
+        }
+
+        /* --------------------------------------
+           혜택 영역
+        ---------------------------------------*/
+        .benefit-block {
+            background: #f8faff;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-top: 10px;
+            max-height: 140px;
             overflow: hidden;
-            transition: max-height 0.3s ease;
-            font-size: 0.85em;
-            color: #444;
-            text-align: left;
-            white-space: pre-line;
+            transition: max-height .3s ease;
+            border: 1px solid #e1e7ff;
         }
 
-        .bnfDetail.expanded { max-height: 500px; }
+        .benefit-block.expanded {
+            max-height: 2000px;
+        }
 
+        .benefit-block p {
+            margin: 3px 0;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* 혜택 이름 강조 */
+        .benefit-block strong {
+            color: #4158d0;
+            font-size: 15px;
+        }
+
+        /* 더보기 버튼 */
         .toggle-btn {
             cursor: pointer;
-            color: #2575fc;
-            font-weight: bold;
-            font-size: 0.9em;
-            margin-top: 5px;
+            color: #4158d0;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 6px;
             display: inline-block;
         }
 
-        /* 카드 더보기 버튼 */
+        /* --------------------------------------
+           더보기 버튼
+        ---------------------------------------*/
         .load-more {
             display: none;
-            margin: 25px auto;
-            padding: 10px 25px;
-            background-color: #444;
+            margin: 30px auto;
+            padding: 12px 32px;
+            background: #424242;
             color: white;
-            border: none;
-            border-radius: 20px;
+            border-radius: 26px;
             cursor: pointer;
-            font-size: 1em;
-            transition: 0.3s;
+            font-size: 15px;
+            font-weight: 600;
+            transition: .25s;
         }
 
-        .load-more:hover { background-color: #222; }
+        .load-more:hover {
+            background: #2c2c2c;
+        }
+
+        /* --------------------------------------
+           반응형
+        ---------------------------------------*/
+        @media (max-width: 768px) {
+            .card { width: 85%; }
+        }
+
+        @media (max-width: 480px) {
+            form input[type=text] { width: 70%; }
+            .card { width: 92%; }
+        }
+
     </style>
 </head>
+
 <body>
-<h1>🎯 혜택별 카드 추천</h1>
+<div th:replace="events/header :: header"></div>
+<h1>혜택별 카드 추천</h1>
 
 <form action="/events/benefits" method="get">
     <input type="text" name="keyword" placeholder="예: 커피, 주유, 교통" th:value="${keyword}">
     <button type="submit">검색</button>
 </form>
 
-<div class="mode-toggle">
-    <button id="modeBtn">현재 모드: OR</button>
-</div>
-
 <div class="benefit-buttons" id="benefitButtons"></div>
 
 <div class="card-list" id="cardList">
-    <div class="card" th:each="ev : ${events}"
-         th:data-bnf="${#lists.isEmpty(ev.benefits) ? '' : ev.benefits.get(0).bnfName}">
 
-        <img th:src="${ev.card.cardImg != '' ? ev.card.cardImg : '/images/bono.png'}"
-             onerror="this.onerror=null;this.src='/images/bono.png';"
-             alt="card image">
+    <div class="card" th:each="ev : ${events}" th:data-categories="${ev.categoryString}">
+
+        <!-- ★ 이미지 파싱 오류 방지: 삼항 연산 완전 안전 버전 -->
+        <img th:src="${ev.card.cardImg != null && ev.card.cardImg != '' ? ev.card.cardImg : '/images/bono.png'}"
+             onerror="this.src='/images/bono.png'">
 
         <h3 th:text="${ev.card.cardName}"></h3>
+
         <p th:text="'브랜드: ' + ${ev.card.cardBrand}"></p>
 
-        <!-- 혜택 요약 -->
-        <p th:text="${#lists.isEmpty(ev.benefits) ? '' : ev.benefits.get(0).bnfContent}"></p>
+        <div class="benefit-block">
+            <div th:each="b : ${ev.benefits}">
+                <p><strong th:text="${b.bnfName}"></strong></p>
+                <p th:text="${b.bnfContent}"></p>
+                <p th:text="${b.bnfDetail}"></p>
+                <br>
+            </div>
+        </div>
 
-        <!-- 혜택 상세 -->
-        <p class="bnfDetail"
-           th:text="${#lists.isEmpty(ev.benefits) ? '' : ev.benefits.get(0).bnfDetail}"></p>
-
-        <span class="toggle-btn" onclick="toggleDetail(this)">더보기</span>
+        <span class="toggle-btn" onclick="toggleBlock(this)">더보기</span>
     </div>
+
 </div>
 
-<!-- ✅ 카드 더보기 버튼 -->
 <button id="loadMoreBtn" class="load-more">카드 더보기</button>
 
+<div th:replace="events/footer :: footer"></div>
+
+<!-- ★ Thymeleaf 파싱 오류 완전 방지: JSON Safe 방식 -->
 <script th:inline="javascript">
-    window.addEventListener('load', () => {
-        document.body.classList.add('loaded');
+    const events = [[${events}]];
+</script>
 
-        const events = /*[[${events}]]*/ [];
-        const container = document.getElementById('benefitButtons');
-        const modeBtn = document.getElementById('modeBtn');
-        const loadMoreBtn = document.getElementById('loadMoreBtn');
+<script>
+    window.addEventListener("load", () => {
+        document.body.classList.add("loaded");
 
-        let filterMode = 'OR';
-        const activeBenefits = new Set();
+        const cards = [...document.querySelectorAll(".card")];
+        const loadBtn = document.getElementById("loadMoreBtn");
+        const btnArea = document.getElementById("benefitButtons");
 
-        // ✅ 혜택 이름 필터링 (5글자 이하 + 숫자 없음)
-        const bnfNames = [...new Set(events
-            .map(ev => ev.benefit?.bnfName)
-            .filter(name => name && name.length <= 5 && !/\d/.test(name))
-        )].sort();
+        let active = new Set();
 
-        // ✅ 모드 전환
-        modeBtn.addEventListener('click', () => {
-            filterMode = filterMode === 'OR' ? 'AND' : 'OR';
-            modeBtn.innerText = `현재 모드: ${filterMode}`;
-            applyFilter();
+        /* 카테고리 */
+        const rawCategories = new Set(
+            events.flatMap(ev => (ev.categoryString || "").split(","))
+        );
+        const categoryList = [...rawCategories].sort();
+
+        categoryList.forEach(cat => {
+            const btn = document.createElement("button");
+            btn.textContent = cat;
+
+            btn.onclick = () => {
+                if (active.has(cat)) {
+                    active.delete(cat);
+                    btn.classList.remove("active");
+                } else {
+                    active.add(cat);
+                    btn.classList.add("active");
+                }
+                filterCards();
+            };
+
+            btnArea.appendChild(btn);
         });
 
-        // ✅ 버튼 생성
-        bnfNames.forEach(name => {
-            const btn = document.createElement('button');
-            btn.textContent = name;
-            btn.addEventListener('click', () => {
-                if (activeBenefits.has(name)) {
-                    activeBenefits.delete(name);
-                    btn.classList.remove('active');
-                } else {
-                    activeBenefits.add(name);
-                    btn.classList.add('active');
-                }
-                applyFilter();
-            });
-            container.appendChild(btn);
-        });
+        let visibleCards = [];
+        let loadedCount = 0;
 
-        // ✅ 20개씩 단계적 더보기
-        function applyFilter() {
-            const activeArray = [...activeBenefits];
-            const cards = Array.from(document.querySelectorAll('.card'));
+        function filterCards() {
+            const keywords = [...active];
+            visibleCards = [];
 
-            // 매칭된 카드 계산
-            const matchedCards = cards.filter(card => {
-                const bnf = card.dataset.bnf || "";
-                if (activeArray.length === 0) return true;
-                return filterMode === 'OR'
-                    ? activeArray.some(keyword => bnf.includes(keyword))
-                    : activeArray.every(keyword => bnf.includes(keyword));
+            cards.forEach(c => {
+                const cats = (c.dataset.categories || "").split(",").filter(x => x);
+                const match = keywords.length === 0 || keywords.some(k => cats.includes(k));
+
+                if (match) visibleCards.push(c);
+                c.style.display = "none";
             });
 
-            // 초기화
-            cards.forEach(c => c.style.display = 'none');
-
-            const batchSize = 20;
-            let currentCount = 0;
-
-            function showNextBatch() {
-                const nextBatch = matchedCards.slice(currentCount, currentCount + batchSize);
-                nextBatch.forEach(card => card.style.display = 'block');
-                currentCount += batchSize;
-
-                if (currentCount >= matchedCards.length) {
-                    loadMoreBtn.style.display = 'none';
-                } else {
-                    loadMoreBtn.style.display = 'block';
-                }
-            }
-
-            if (matchedCards.length > 0) showNextBatch();
-
-            loadMoreBtn.onclick = showNextBatch;
-
-            if (matchedCards.length <= batchSize) {
-                loadMoreBtn.style.display = 'none';
-            }
+            loadedCount = 0;
+            loadMore();
         }
 
-        applyFilter(); // 초기 적용
+        function loadMore() {
+            const next = visibleCards.slice(loadedCount, loadedCount + 10);
+
+            next.forEach(c => c.style.display = "block");
+            loadedCount += next.length;
+
+            loadBtn.style.display = loadedCount >= visibleCards.length ? "none" : "block";
+        }
+
+        loadBtn.onclick = loadMore;
+
+        filterCards();
     });
 
-    // ✅ 혜택 상세 더보기
-    function toggleDetail(btn) {
-        const detail = btn.previousElementSibling;
-        if (detail.classList.contains('expanded')) {
-            detail.classList.remove('expanded');
-            btn.innerText = '더보기';
-        } else {
-            detail.classList.add('expanded');
-            btn.innerText = '접기';
-        }
+    function toggleBlock(btn) {
+        const box = btn.previousElementSibling;
+        box.classList.toggle("expanded");
+        btn.textContent = box.classList.contains("expanded") ? "접기" : "더보기";
     }
 </script>
+
 </body>
 </html>
-
-

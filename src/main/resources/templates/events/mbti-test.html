@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <title>카드 MBTI 테스트</title>
 
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
     <style>
-        body { font-family: 'Segoe UI'; background: #f4f4f4; padding: 30px; }
+        body { font-family: 'Segoe UI';}
         .container {
             max-width: 600px; margin: auto;
             background: white; padding: 30px;
@@ -13,16 +16,13 @@
         }
         h1 { text-align: center; margin-bottom: 20px; }
         .question { margin: 20px 0; }
-        button {
-            width: 100%; padding: 12px;
-            background: #6a5acd; color: white;
-            border: none; border-radius: 8px;
-            font-size: 1.2em; cursor: pointer;
-        }
+
         h3 { margin-top: 30px; }
     </style>
 </head>
 <body>
+
+<div th:replace="events/header :: header"></div>
 
 <div class="container">
     <h1>카드 MBTI 테스트 (20문항)</h1>
@@ -167,9 +167,15 @@
 
         <input type="hidden" id="resultMbti" name="mbti">
 
-        <button type="submit" onclick="return makeMbti();">결과 보기</button>
+        <button type="submit" onclick="return makeMbti();"
+                style="width: 100%; padding: 12px;
+            background: #6a5acd; color: white;
+            border: none; border-radius: 8px;
+            font-size: 1.2em; cursor: pointer;">결과 보기</button>
     </form>
 </div>
+
+<div th:replace="events/footer :: footer"></div>
 
 <script>
     function makeMbti() {

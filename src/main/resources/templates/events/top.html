@@ -3,80 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <title>인기 카드 TOP 10</title>
+
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
     <style>
+        /* ------------------------------
+    전체 레이아웃 / 기본 스타일
+ --------------------------------*/
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f4f6f8;
+            font-family: 'Pretendard Variable', 'Segoe UI', sans-serif;
             margin: 0;
-            padding: 40px;
             opacity: 0;
             transition: opacity 0.6s ease-in-out;
         }
-        body.loaded { opacity: 1; }
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
+        body.loaded {
+            opacity: 1;
         }
 
-        /* 카드 리스트 */
+        /* 제목 */
+        h1 {
+            text-align: center;
+            color: #222;
+            margin-top: 120px;
+            margin-bottom: 40px;
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        /* ------------------------------
+           차트 숨기기
+        --------------------------------*/
+        #topChart {
+            display: none !important;
+        }
+
+
+        /* ------------------------------
+              카드 리스트 레이아웃
+        --------------------------------*/
         .card-list {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
+            gap: 28px;
+            padding: 20px;
+            margin-bottom: 80px;
         }
 
+        /* ------------------------------
+                 카드 디자인
+        --------------------------------*/
         .card {
+            width: 280px;
+            min-height: 330px;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            width: 260px;
-            padding: 15px;
+            border-radius: 18px;
+            padding: 20px;
             text-align: center;
-            transition: transform 0.3s;
-            overflow: hidden;
+
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+            transition: 0.3s ease;
+            border: 1px solid #e8e8e8;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
         }
 
-        .card:hover { transform: translateY(-5px); }
-        .card img { width: 100%; height: 150px; object-fit: contain; }
+        /* Hover 효과 */
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 26px rgba(0,0,0,0.15);
+        }
 
-        h3 { margin: 10px 0 5px 0; color: #222; }
-        p { margin: 3px 0; color: #555; font-size: 0.9em; }
+        /* 카드 이미지 */
+        .card img {
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            transition: 0.25s ease;
+        }
 
-        /* 혜택 상세 */
+        .card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* 카드 타이틀 */
+        .card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 6px;
+        }
+
+        /* 브랜드 정보 */
+        .card p {
+            font-size: 15px;
+            color: #555;
+            margin: 4px 0;
+        }
+
+        /* ------------------------------
+               혜택 텍스트 디자인
+        --------------------------------*/
+
+        /* 혜택 제목 */
+        .card p:nth-of-type(2) {
+            font-weight: 600;
+            color: #3b57ff;
+        }
+
+        /* 혜택 상세 내용 */
         .bnfDetail {
-            max-height: 50px;
+            max-height: 48px;
             overflow: hidden;
-            transition: max-height 0.3s ease;
-            font-size: 0.85em;
-            color: #444;
-            text-align: left;
             white-space: pre-line;
+            text-align: left;
+            background: #f8faff;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 6px;
+            font-size: 14px;
+            color: #444;
+
+            transition: max-height 0.35s ease;
+            border: 1px solid #e2e8ff;
         }
 
-        .bnfDetail.expanded { max-height: 500px; }
+        .bnfDetail.expanded {
+            max-height: 400px;
+        }
 
+        /* 더보기 버튼 */
         .toggle-btn {
+            margin-top: 8px;
             cursor: pointer;
-            color: #2575fc;
-            font-weight: bold;
-            font-size: 0.9em;
-            margin-top: 5px;
+            color: #3b57ff;
+            font-weight: 600;
+            font-size: 14px;
             display: inline-block;
         }
 
-        canvas {
-            display: block;
-            margin: 0 auto 40px auto;
-            max-width: 700px;
+
+        /* 인기도 지수 */
+        .card p:last-of-type {
+            margin-top: auto;
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
         }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .card { width: 44%; }
+        }
+        @media (max-width: 480px) {
+            .card { width: 90%; }
+        }
+
     </style>
 </head>
+
 <body>
-<h1>🔥 인기 카드 TOP 10</h1>
+<div th:replace="events/header :: header"></div>
+
+<h1>인기 카드 TOP 10</h1>
 
 <!-- 차트 -->
 <canvas id="topChart" width="700" height="350"></canvas>
@@ -84,39 +179,46 @@
 <!-- 카드 리스트 -->
 <div class="card-list">
     <div class="card" th:each="ev : ${events}">
-        <img th:src="${ev.card.cardImg != '' ? ev.card.cardImg : '/images/bono.png'}"
+
+        <!-- 이미지 -->
+        <img th:src="${ev.card.cardImg == null or ev.card.cardImg == '' ? '/images/bono.png' : ev.card.cardImg}"
              onerror="this.onerror=null;this.src='/images/bono.png';"
              alt="card image">
+
         <h3 th:text="${ev.card.cardName}"></h3>
         <p th:text="'브랜드: ' + ${ev.card.cardBrand}"></p>
-        <!-- 첫 번째 혜택만 안전하게 표시 -->
-        <p th:if="${!ev.benefits.isEmpty()}"
-           th:text="'혜택: ' + ${ev.benefits[0].bnfContent}">
+
+        <!-- 혜택 첫 개 표시 (오류 없음) -->
+        <p th:text="${#lists.isEmpty(ev.benefits)
+                        ? '혜택: 정보 없음'
+                        : '혜택: ' + ev.benefits[0].bnfContent}">
         </p>
 
+        <!-- 상세 혜택 -->
         <p class="bnfDetail"
-           th:if="${!ev.benefits.isEmpty()}"
-           th:text="${ev.benefits[0].bnfDetail}">
+           th:text="${#lists.isEmpty(ev.benefits) ? '' : ev.benefits[0].bnfDetail}">
         </p>
+
         <span class="toggle-btn" onclick="toggleDetail(this)">더보기</span>
 
         <p th:text="'인기도 지수: ' + ${ev.card.cardRecord}"></p>
     </div>
 </div>
+<div th:replace="events/footer :: footer"></div>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script th:inline="javascript">
     window.addEventListener('load', () => {
         document.body.classList.add('loaded');
 
-        // ✅ 안전하게 Thymeleaf 데이터를 JS로 전달
         const events = /*[[${events}]]*/ [];
-        const labels = events.map(ev => ev.card.cardName);
-        const data = events.map(ev => ev.card.cardRecord);
 
-        // ✅ 데이터 존재 시 차트 생성
-        if (labels.length > 0 && data.length > 0) {
+        const labels = events.map(ev => ev.card.cardName || '이름없음');
+        const data = events.map(ev => ev.card.cardRecord || 0);
+
+        if (labels.length > 0) {
             new Chart(document.getElementById('topChart'), {
                 type: 'bar',
                 data: {
@@ -132,25 +234,22 @@
                 options: {
                     indexAxis: 'y',
                     scales: { x: { beginAtZero: true } },
-                    plugins: { legend: { display: false } }
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: true }
+                    }
                 }
             });
-        } else {
-            console.warn('차트를 표시할 데이터가 없습니다.');
         }
     });
 
-    // ✅ 더보기 / 접기
+    // 상세 혜택 toggle
     function toggleDetail(btn) {
         const detail = btn.previousElementSibling;
-        if(detail.classList.contains('expanded')) {
-            detail.classList.remove('expanded');
-            btn.innerText = '더보기';
-        } else {
-            detail.classList.add('expanded');
-            btn.innerText = '접기';
-        }
+        detail.classList.toggle('expanded');
+        btn.innerText = detail.classList.contains('expanded') ? '접기' : '더보기';
     }
 </script>
+
 </body>
 </html>

@@ -1,244 +1,118 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
-    <title>card</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <title>Card</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
-    <!-- Your CSS -->
+    <!-- Custom CSS -->
     <link rel="stylesheet" th:href="@{/css/index.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
-
 </head>
 
 <body>
+<!-- Header -->
 <div th:replace="events/header :: header"></div>
+
 <section>
-    <!-- Banner Slider -->
+    <!-- 배너 슬라이더 -->
     <div class="banner">
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
-                <div class="swiper-slide"><img th:src="@{/images/toss.png}" alt=""></div>
-                <div class="swiper-slide"><img th:src="@{/images/samsung.jpg}" alt=""></div>
-                <div class="swiper-slide"><img th:src="@{/images/samsungcard.png}" alt=""></div>
-                <div class="swiper-slide"><img th:src="@{/images/CardGorilla_Main_Selection_PC.jpg}" alt=""></div>
+                <div class="swiper-slide"><img th:src="@{/images/toss.png}" alt="toss"></div>
+                <div class="swiper-slide"><img th:src="@{/images/samsung.jpg}" alt="samsung"></div>
+                <div class="swiper-slide"><img th:src="@{/images/samsungcard.png}" alt="samsungcard"></div>
+                <div class="swiper-slide"><img th:src="@{/images/CardGorilla_Main_Selection_PC.jpg}" alt="gorilla"></div>
             </div>
 
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
-
             <div class="swiper-pagination"></div>
         </div>
     </div>
 
-
-
-    <!-- 카드 추천 -->
+    <!-- 메인 카드 추천 -->
     <div class="main-card-title">
         <h2>카드고릴라! 최대 95만원 혜택</h2>
         <ul class="cardti">
-
-            <li>
-                <a href="#">
-                    <img th:src="@{/images/sam.png}" alt="삼성">
-                    <h5><span>최대</span>95만원 받기</h5>
-                    <p>삼성카드</p>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <img th:src="@{/images/lot.png}" alt="">
-                    <h5><span>최대</span> 43만원 받기</h5>
-                    <p>롯데카드</p>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <img th:src="@{/images/wr.png}" alt="">
-                    <h5><span>최대</span> 36.5만원 받기</h5>
-                    <p>우리카드</p>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <img th:src="@{/images/sh.png}" alt="">
-                    <h5><span>최대</span> 30만원 받기</h5>
-                    <p>신한카드</p>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <img th:src="@{/images/KB.png}" alt="">
-                    <h5><span>최대</span>25만원 받기</h5>
-                    <p>KB국민카드</p>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <img th:src="@{/images/bc.png}" alt="">
-                    <h5><span>최대</span> 25만원 받기</h5>
-                    <p>BC바로카드</p>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <img th:src="@{/images/hd.png}" alt="">
-                    <h5><span>최대</span>20만원 받기</h5>
-                    <p>현대카드</p>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <img th:src="@{/images/nh.png}" alt="">
-                    <h5><span>최대</span>14만원 받기</h5>
-                    <p>NH농협카드</p>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <img th:src="@{/images/ibk.png}" alt="">
-                    <h5><span>최대</span> 12.5만원 받기</h5>
-                    <p>IBK기업은행</p>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <img th:src="@{/images/tips_card_symbol_cp.png}" alt="">
-                    <h5><span>연 최대</span> 62만원 혜택</h5>
-                    <p>쿠팡 와우카드</p>
-                </a>
-            </li>
-
+            <li><a href="#"><img th:src="@{/images/sam.png}" alt="삼성"><h5><span>최대</span>95만원 받기</h5><p>삼성카드</p></a></li>
+            <li><a href="#"><img th:src="@{/images/lot.png}" alt="롯데"><h5><span>최대</span>43만원 받기</h5><p>롯데카드</p></a></li>
+            <li><a href="#"><img th:src="@{/images/wr.png}" alt="우리"><h5><span>최대</span>36.5만원 받기</h5><p>우리카드</p></a></li>
+            <li><a href="#"><img th:src="@{/images/sh.png}" alt="신한"><h5><span>최대</span>30만원 받기</h5><p>신한카드</p></a></li>
+            <li><a href="#"><img th:src="@{/images/KB.png}" alt="KB"><h5><span>최대</span>25만원 받기</h5><p>KB국민카드</p></a></li>
+            <li><a href="#"><img th:src="@{/images/bc.png}" alt="BC"><h5><span>최대</span>25만원 받기</h5><p>BC바로카드</p></a></li>
+            <li><a href="#"><img th:src="@{/images/hd.png}" alt="현대"><h5><span>최대</span>20만원 받기</h5><p>현대카드</p></a></li>
+            <li><a href="#"><img th:src="@{/images/nh.png}" alt="농협"><h5><span>최대</span>14만원 받기</h5><p>NH농협카드</p></a></li>
+            <li><a href="#"><img th:src="@{/images/ibk.png}" alt="IBK"><h5><span>최대</span>12.5만원 받기</h5><p>IBK기업은행</p></a></li>
+            <li><a href="#"><img th:src="@{/images/tips_card_symbol_cp.png}" alt="쿠팡"><h5><span>연 최대</span>62만원 혜택</h5><p>쿠팡 와우카드</p></a></li>
         </ul>
     </div>
 
-
-
-    <!-- 중간 카드 리스트 -->
+    <!-- 인기 카드 리스트 -->
     <div class="inner-card">
         <h2>👇🏻 11월 주목할 만한 캐시백 카드 추천</h2>
         <ul class="inner_car">
+            <li><a href="#"><div class="circle"><img th:src="@{/images/2441card_3.png}"></div><h5>KB국민 MY WE:SH카드</h5><p class="com">KB국민카드</p><p class="money">최대 25만원 캐시백</p></a></li>
 
-            <li>
-                <a href="#">
-                    <div class="crecle">
-                        <img th:src="@{/images/2441card_3.png}">
-                    </div>
-                    <h5>KB국민 MY WE:SH카드</h5>
-                    <p class="com">KB국민카드</p>
-                    <p class="money">최대 25만원 캐시백</p>
-                </a>
-            </li>
+            <li><a href="#"><div class="circle"><img th:src="@{/images/2719card.jpg}"></div><h5>카드의정석 EVERY DISCOUNT</h5><p class="com">우리카드</p><p class="money">최대 36.5만원 혜택</p></a></li>
 
-            <li>
-                <a href="#">
-                    <div class="crecle">
-                        <img th:src="@{/images/2719card.jpg}">
-                    </div>
-                    <h5>카드의정석 EVERY<br>DISCOUNT</h5>
-                    <p class="com">우리카드</p>
-                    <p class="money">최대 36.5만원 혜택</p>
-                </a>
-            </li>
+            <li><a href="#"><div class="circle"><img th:src="@{/images/39card.png}"></div><h5>신한카드 Deep Oil</h5><p class="com">신한카드</p><p class="money">최대 29만원 캐시백</p></a></li>
 
-            <li>
-                <a href="#">
-                    <div class="crecle">
-                        <img th:src="@{/images/39card.png}">
-                    </div>
-                    <h5>신한카드 Deep Oil</h5>
-                    <p class="com">신한카드</p>
-                    <p class="money">최대 29만원 캐시백</p>
-                </a>
-            </li>
+            <li><a href="#"><div class="circle"><img th:src="@{/images/2690card.png}"></div><h5>K-패스 (신용)</h5><p class="com">IBK 기업은행</p><p class="money">최대 12.5만원 캐시백</p></a></li>
 
-            <li>
-                <a href="#">
-                    <div class="crecle">
-                        <img th:src="@{/images/2690card.png}">
-                    </div>
-                    <h5>K -패스 (신용)</h5>
-                    <p class="com">IBK 기업은행</p>
-                    <p class="money">최대 12.5만원 캐시백</p>
-                </a>
-            </li>
+            <li><a href="#"><div class="circle"><img th:src="@{/images/2885card_1.png}"></div><h5>삼성 iD SELECT ALL 카드</h5><p class="com">삼성카드</p><p class="money">최대 95만원 혜택</p></a></li>
 
-            <li>
-                <a href="#">
-                    <div class="crecle">
-                        <img th:src="@{/images/2885card_1.png}">
-                    </div>
-                    <h5>삼성 iD SELECT ALL 카드</h5>
-                    <p class="com">삼성카드</p>
-                    <p class="money">최대 95만원 혜택</p>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <div class="crecle">
-                        <img th:src="@{/images/666card.png}">
-                    </div>
-                    <h5>올바른 FLEX 카드</h5>
-                    <p class="com">NH농협카드</p>
-                    <p class="money">최대 14만원 캐시백</p>
-                </a>
-            </li>
-
+            <li><a href="#"><div class="circle"><img th:src="@{/images/666card.png}"></div><h5>올바른 FLEX 카드</h5><p class="com">NH농협카드</p><p class="money">최대 14만원 캐시백</p></a></li>
         </ul>
     </div>
 
-
+    <!-- 게시판 이미지 -->
     <div class="m_hide">
-        <img th:src="@{/images/board_pc.jpg}">
+        <img th:src="@{/images/board_pc.jpg}" alt="board">
     </div>
 
-
-    <div class="video-fi">
+    <!-- YouTube 영상 -->
+    <div class="video-wrap">
         <iframe width="800" height="500"
-                style="margin-left: 362px; margin-top: 50px; margin-bottom: 100px;"
                 src="https://www.youtube.com/embed/rZ535tRJdxY"
                 allowfullscreen></iframe>
     </div>
-    <div class="video-fi">
+
+    <div class="video-wrap">
         <iframe width="800" height="500"
-                style="margin-left: 362px; margin-top: 50px; margin-bottom: 100px;"
                 src="https://www.youtube.com/embed/n6NzfrI1JbQ?si=sz90atAFT0h48v2n"
                 allowfullscreen></iframe>
     </div>
 
 </section>
 
+<!-- Footer -->
 <div th:replace="events/footer :: footer"></div>
 
-<!-- Swiper Script -->
+<!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
-    var swiper = new Swiper(".mySwiper", {
+    new Swiper(".mySwiper", {
         spaceBetween: 30,
         centeredSlides: true,
+        speed: 900,
         autoplay: {
             delay: 2500,
-            disableOnInteraction: false,
+            disableOnInteraction: false
         },
-        pagination: { el: ".swiper-pagination", clickable: true },
-        navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" }
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+        }
     });
 </script>
 
