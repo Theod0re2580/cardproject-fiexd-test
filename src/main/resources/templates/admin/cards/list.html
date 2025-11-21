@@ -15,7 +15,6 @@
         <table class="admin-table">
             <thead>
             <tr>
-                <th><input type="checkbox" id="selectAll"></th>
                 <th>ID</th>
                 <th>카드명</th>
                 <th>브랜드</th>
@@ -25,7 +24,6 @@
 
             <tbody id="cardTableBody">
             <tr th:each="c : ${cards}">
-                <td><input type="checkbox" class="rowCheck" name="ids" th:value="${c.id}"></td>
 
                 <td th:text="${c.id}"></td>
 
@@ -67,14 +65,9 @@
 
 
 <!-- =========================
-     검색 / 전체선택 JS
+     검색 JS
 ========================= -->
 <script>
-    // 전체 선택 체크박스
-    document.getElementById("selectAll").addEventListener("click", function () {
-        const checked = this.checked;
-        document.querySelectorAll(".rowCheck").forEach(chk => chk.checked = checked);
-    });
 
     // 검색 기능 (index 의존 X)
     document.getElementById("searchBox").addEventListener("keyup", function () {
