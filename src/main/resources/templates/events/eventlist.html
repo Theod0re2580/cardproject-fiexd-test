@@ -14,7 +14,7 @@
             color: #333;
         }
 
-        .header {
+        .header-title {
             text-align: center;
             padding: 60px 20px 40px 20px;
             background: linear-gradient(135deg, #444, #777);
@@ -22,20 +22,19 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        .header h1 {
+        .header-title h1 {
             font-size: 3rem;
             margin: 0;
             font-weight: 800;
             text-shadow: 1px 1px 6px rgba(0,0,0,0.2);
         }
 
-        .header p {
+        .header-title p {
             font-size: 1.2rem;
             margin-top: 12px;
             color: rgba(255,255,255,0.9);
         }
 
-        /* ---------------- 검색 폼 ---------------- */
         .search-form {
             margin-top: 20px;
         }
@@ -136,13 +135,15 @@
 </head>
 <body>
 
-<div class="header">
+<!-- ⚡ 헤더 삽입 -->
+<th:block th:replace="events/header :: header"></th:block>
+
+<div class="header-title">
     <h1>진행중 이벤트</h1>
     <p th:text="|${currentDate}, 지금 참여 가능한 최신 이벤트를 확인하세요!|">
         2025년 11월, 지금 참여 가능한 최신 이벤트를 확인하세요!
     </p>
 
-    <!-- ====================== 검색 폼 ====================== -->
     <form class="search-form" th:action="@{/event/eventlist}" method="get">
         <input type="text" name="keyword" placeholder="검색어 입력" th:value="${keyword}">
         <button type="submit">🔍 검색</button>
@@ -158,12 +159,15 @@
              alt="이벤트 이미지" class="event-banner">
 
         <div class="event-info">
-            <h2 th:text="${event.eventName}">이벤트 제목</h2>
-            <p th:text="${event.startDate} + ' ~ ' + ${event.endDate}">기간</p>
+            <h2 th:text="${event.eventName}"></h2>
+            <p th:text="${event.startDate} + ' ~ ' + ${event.endDate}"></p>
             <p><strong>🎁 혜택:</strong> <span th:text="${event.eventDescription}"></span></p>
         </div>
     </a>
 </div>
+
+<!-- ⚡ 푸터 삽입 -->
+<th:block th:replace="events/footer :: footer"></th:block>
 
 </body>
 </html>
