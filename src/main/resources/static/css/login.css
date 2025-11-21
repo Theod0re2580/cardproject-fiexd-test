@@ -1,72 +1,186 @@
-/* 로그인 페이지 컨테이너 */
+/* ===========================
+      공통 기본 스타일
+=========================== */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f5f7fa;
+}
+
+/* 전체 섹션 */
 .login-section {
     display: flex;
     justify-content: center;
-    padding-top: 150px;
-    padding-bottom: 150px;
-    background: #f8f8f8;
+    align-items: center;
+    padding: 80px 20px;
 }
 
 /* 로그인 박스 */
 .login-box {
-    width: 500px;
-    padding: 40px 50px;
-    background: white;
-    border-radius: 20px;
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    padding: 40px 35px;
+    border-radius: 18px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+    animation: fadeIn .35s ease-in-out;
     text-align: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
 }
 
 /* 제목 */
 .login-box h2 {
-    font-size: 26px;
+    font-size: 28px;
+    font-weight: 700;
     margin-bottom: 30px;
-    font-weight: 700;
-}
-
-/* 로그인 input */
-.login-box input {
-    width: 100%;
-    padding: 15px 20px;
-    background: #eee;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    margin-top: 18px;
-}
-
-/* 버튼 */
-.login-box button,
-.btn-login {
-    width: 100%;
-    padding: 15px 20px;
-    margin-top: 20px;
-    background: #000;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 10px;
-    font-weight: 700;
-    cursor: pointer;
+    color: #222;
 }
 
 /* 에러 메시지 */
 .error-msg {
-    color: #c80000;
-    background: #ffdede;
+    background: #ffe3e3;
+    border: 1px solid #ffbcbc;
     padding: 12px;
     border-radius: 10px;
-    font-weight: bold;
     margin-bottom: 20px;
+    color: #d42e2e;
+    font-size: 14px;
 }
 
-/* 하단 메뉴 */
+/* ===========================
+      입력 필드
+=========================== */
+.login-box input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 16px;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    background: #fff;
+    box-sizing: border-box;
+    transition: .2s;
+}
+
+.login-box input:focus {
+    border-color: #6b8afd;
+    box-shadow: 0 0 0 2px rgba(107,138,253,0.25);
+}
+
+/* ===========================
+      로그인 버튼 (기준 사이즈)
+=========================== */
+.btn-login {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    background: #6b8afd;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 17px;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: .2s;
+}
+
+.btn-login:hover {
+    background: #5873e8;
+}
+
+/* ===========================
+      소셜 로그인
+=========================== */
+
+.social-login-box {
+    margin-top: 26px;
+    width: 100%;
+    text-align: center;
+}
+
+.social-title {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 14px;
+}
+
+/* 로그인 버튼과 동일 폭·높이 느낌 맞추기 */
+.social-btn {
+    width: 100%;
+    min-height: 48px;              /* 로그인 버튼과 통일 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 16px;            /* 로그인 버튼과 거의 동일 패딩 */
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    box-sizing: border-box;        /* border 포함해서 크기 고정 */
+    border: 1px solid transparent; /* 두께 통일 */
+    cursor: pointer;
+    transition: .2s;
+}
+
+.social-btn img {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+/* Google */
+.google-btn {
+    background: #ffffff;
+    border-color: #dcdcdc;
+    color: #444;
+}
+.google-btn:hover {
+    background: #f3f3f3;
+}
+
+/* Kakao */
+.kakao-btn {
+    background: #FEE500;
+    color: #3B1E1E;
+}
+.kakao-btn:hover {
+    background: #f3d800;
+}
+
+/* Naver */
+.naver-btn {
+    background: #03C75A;
+    color: white;
+}
+.naver-btn:hover {
+    background: #02b34f;
+}
+
+/* ===========================
+      하단 링크
+=========================== */
 .bottom-menu {
-    margin-top: 25px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
 }
 
 .bottom-menu a {
-    margin: 0 10px;
-    color: #555;
-    font-size: 15px;
+    color: #6b8afd;
+    text-decoration: none;
+    padding: 0 8px;
+}
+
+.bottom-menu a:hover {
+    color: #3e55c7;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
 }

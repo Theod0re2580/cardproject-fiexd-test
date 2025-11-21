@@ -7,65 +7,77 @@
 </head>
 
 <body>
+
 <div th:replace="events/header :: header"></div>
 
-<section class="signup-section">
+<section class="signup-container">
 
     <div class="signup-box">
-        <h2>회원가입</h2>
 
-        <!-- 메시지(중복 오류 등) -->
-        <div th:if="${msg}" class="error-msg">
+        <h2 class="signup-title">회원가입</h2>
+
+        <!-- 오류 메시지 -->
+        <div th:if="${msg}" class="alert-error">
             <p th:text="${msg}"></p>
         </div>
 
-        <form th:action="@{/member/signup}" method="post">
+        <form th:action="@{/member/signup}" method="post" class="signup-form">
 
-            <input type="text" name="loginId" placeholder="로그인 ID" required>
+            <div class="form-group">
+                <input type="text" name="loginId" placeholder="로그인 ID" required>
+            </div>
 
-            <input type="password" name="password" placeholder="비밀번호" required>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="비밀번호" required>
+            </div>
 
-            <input type="text" name="name" placeholder="이름" required>
+            <div class="form-group">
+                <input type="text" name="name" placeholder="이름" required>
+            </div>
 
-            <input type="email" name="email" placeholder="이메일" required>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="이메일" required>
+            </div>
 
-            <!-- Oracle / JPA LocalDate 지원 형식 -->
-            <input type="date" name="birth" required>
+            <div class="form-group">
+                <input type="date" name="birth" required>
+            </div>
 
-            <button type="submit" class="btn-signup">회원가입</button>
+            <button type="submit" class="btn-primary">회원가입</button>
         </form>
-        <div class="social-login-box">
 
+        <!-- 소셜 로그인 -->
+        <div class="social-section">
             <p class="social-title">소셜 계정으로 가입하기</p>
 
-            <!-- 구글 -->
-            <a href="/oauth2/authorization/google" class="social-btn google-btn">
+            <a href="/oauth2/authorization/google" class="social-btn google">
                 <img src="https://developers.google.com/identity/images/g-logo.png" alt="google">
                 Google로 계속하기
             </a>
 
-            <!-- 카카오 -->
-            <a href="/oauth2/authorization/kakao" class="social-btn kakao-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Kakao_logo.jpg" alt="kakao">
+            <a href="/oauth2/authorization/kakao" class="social-btn kakao">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/KakaoTalk_logo.svg" alt="kakao">
                 카카오로 계속하기
             </a>
 
-            <!-- 네이버 -->
-            <a href="/oauth2/authorization/naver" class="social-btn naver-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Naver_logo.png" alt="naver">
+            <a href="/oauth2/authorization/naver" class="social-btn naver">
+                <img src="/images/naver.png" alt="naver">
                 네이버로 계속하기
             </a>
-
         </div>
 
-        <div class="bottom-menu">
+        <!-- 하단 메뉴 -->
+        <div class="bottom-links">
             <a th:href="@{/member/login}">로그인</a>
+            <span>·</span>
             <a th:href="@{/}">메인으로</a>
         </div>
+
     </div>
 
 </section>
 
 <div th:replace="events/footer :: footer"></div>
+
 </body>
 </html>
