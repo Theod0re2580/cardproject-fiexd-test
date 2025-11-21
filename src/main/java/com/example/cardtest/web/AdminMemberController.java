@@ -49,9 +49,9 @@ public class AdminMemberController {
                 .role(role)
                 .build();
 
-        memberService.signup(member); // 비밀번호 암호화 + role 저장
+        memberService.signup(member);
 
-        return "redirect:/admin/members";
+        return "redirect:/admin?tab=members";
     }
 
     /** 회원 수정 폼 */
@@ -72,24 +72,24 @@ public class AdminMemberController {
 
         memberService.adminUpdate(id, name, email, birth, role);
 
-        return "redirect:/admin/members";
+        return "redirect:/admin?tab=members";
     }
 
     /** 회원 삭제 */
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id) {
         memberService.delete(id);
-        return "redirect:/admin/members";
+        return "redirect:/admin?tab=members";
     }
 
-    /** 회원 상세 정보 */
+    /** 회원 상세 */
     @GetMapping("/{id}")
     public String detail(@PathVariable Long id, Model model) {
         model.addAttribute("member", memberService.findById(id));
         return "admin/members/detail";
     }
 
-    /** 중복체크 */
+    /** 중복 체크 */
     @GetMapping("/check-loginId")
     @ResponseBody
     public boolean checkLoginId(@RequestParam String loginId) {

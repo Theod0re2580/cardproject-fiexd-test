@@ -52,7 +52,7 @@ public class AdminBenefitController {
 
         benefitService.add(cardId, benefit);
 
-        return "redirect:/admin/benefits";
+        return "redirect:/admin?tab=benefits";
     }
 
     /** 수정 폼 */
@@ -67,13 +67,13 @@ public class AdminBenefitController {
     @PostMapping("/{id}/edit")
     public String edit(@PathVariable Long id, @ModelAttribute Benefit benefit) {
         benefitService.update(id, benefit);
-        return "redirect:/admin/benefits";
+        return "redirect:/admin?tab=benefits";
     }
 
     /** 삭제 */
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id) {
         benefitService.delete(id);
-        return "redirect:/admin/benefits";
+        return "redirect:/admin?tab=benefits";
     }
 }

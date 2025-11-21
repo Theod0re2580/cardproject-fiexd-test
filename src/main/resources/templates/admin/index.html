@@ -132,7 +132,16 @@
 
     // 🔥 관리자 첫 화면에 대시보드 자동 표시
     window.onload = function() {
-        loadPage('dashboard');
+        const urlParams = new URLSearchParams(window.location.search);
+        const tab = urlParams.get("tab");
+
+        if (tab) {
+            loadPage(tab);
+            document.querySelectorAll('.menu-item').forEach(e => e.classList.remove("active"));
+            document.querySelector(`.menu-item[data-tab="${tab}"]`).classList.add("active");
+        } else {
+            loadPage("dashboard");
+        }
     }
 </script>
 
