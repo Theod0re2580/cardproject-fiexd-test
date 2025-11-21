@@ -1,5 +1,6 @@
 package com.example.cardtest.repository;
 
+import com.example.cardtest.domain.Card;
 import com.example.cardtest.domain.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,9 @@ public interface EventListRepository extends JpaRepository<Event, Long> {
             "AND (e.eventName LIKE %:keyword% OR e.eventDescription LIKE %:keyword%)")
     List<Event> searchRunningEvents(@Param("now") LocalDate now,
                                     @Param("keyword") String keyword);
+    /** 🔥 최신 이벤트 N개 조회 */
+    @Query(value = "SELECT * FROM EVENT ORDER BY EVENT_ID DESC FETCH FIRST :limit ROWS ONLY",
+            nativeQuery = true)
+    List<Event> findLatest(@Param("limit") int limit);
+    List<Event> findByEventNameContaining(String keyword);
 }

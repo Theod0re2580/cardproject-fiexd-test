@@ -1,0 +1,128 @@
+<div class="admin-section">
+
+    <h1 class="page-title">이벤트 관리</h1>
+
+    <!-- 상단 버튼 -->
+    <div class="top-action">
+        <a href="/admin/event/add" class="btn btn-green">이벤트 추가하기</a>
+    </div>
+
+    <table class="admin-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>이벤트명</th>
+            <th>기간</th>
+            <th>관리</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="e : ${events}">
+            <td th:text="${e.eventId}"></td>
+
+            <td class="event-name">
+                <a th:href="@{|/admin/event/${e.eventId}|}" class="table-link">
+                    <span th:text="${e.eventName}"></span>
+                </a>
+            </td>
+
+            <td>
+                <span th:text="${e.startDate}"></span> ~
+                <span th:text="${e.endDate}"></span>
+            </td>
+
+            <td>
+                <a th:href="@{|/admin/event/${e.eventId}/edit|}" class="btn btn-green">수정</a>
+
+                <form th:action="@{|/admin/event/${e.eventId}/delete|}"
+                      method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-red"
+                            onclick="return confirm('삭제하시겠습니까?');">삭제</button>
+                </form>
+            </td>
+        </tr>
+
+        <tr th:if="${events == null or #lists.isEmpty(events)}">
+            <td colspan="4">등록된 이벤트가 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<style>
+    /* ===== admin-section ===== */
+    .admin-section {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* ===== 제목 ===== */
+    .page-title {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    /* ===== 상단 버튼 영역 ===== */
+    .top-action {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 15px;
+    }
+
+    /* ===== 버튼 공통 ===== */
+    .btn {
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 0.9em;
+        font-weight: 600;
+        cursor: pointer;
+        color: #fff;
+        margin: 2px;
+        display: inline-block;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .btn-green { background: #37b24d; }
+    .btn-green:hover { background: #2f9e44; }
+
+    .btn-red { background: #ff6b6b; }
+    .btn-red:hover { background: #fa5252; }
+
+    .table-link {
+        color: #4c6ef5;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    /* ===== 테이블 ===== */
+    .admin-table {
+        width: 100%;
+        background: #fff;
+        border-collapse: collapse;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    th, td {
+        padding: 14px;
+        font-size: 0.95em;
+        border-bottom: 1px solid #e1e5ee;
+        text-align: center;
+    }
+
+    th {
+        background: #e9ecf5;
+        font-weight: 700;
+    }
+
+    tr:hover td {
+        background: #f8faff;
+    }
+</style>

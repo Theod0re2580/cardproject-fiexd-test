@@ -118,9 +118,15 @@
             <button class="more-btn" onclick="loadPage('members')">전체보기 →</button>
         </div>
 
-        <!-- placeholder -->
-        <div class="dash-box placeholder">
-            Coming Soon...
+        <!-- 최근 이벤트 -->
+        <div class="dash-box">
+            <div class="dash-title">최근 이벤트</div>
+            <div class="dash-list-wrapper">
+                <div th:each="e : ${latestEvents}" class="dash-item">
+                    <span th:text="${e.eventName}"></span>
+                </div>
+            </div>
+            <button class="more-btn" onclick="loadPage('event')">전체보기 →</button>
         </div>
 
     </div>

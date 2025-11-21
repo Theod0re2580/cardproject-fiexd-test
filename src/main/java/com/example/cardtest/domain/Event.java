@@ -7,7 +7,15 @@ import java.time.LocalDate;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "event_seq",
+            sequenceName = "EVENT_SEQ",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "event_seq"
+    )
     private Long eventId;
 
     private String eventName;

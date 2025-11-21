@@ -2,6 +2,7 @@ package com.example.cardtest.web;
 
 import com.example.cardtest.service.BenefitService;
 import com.example.cardtest.service.CardService;
+import com.example.cardtest.service.EventListService;
 import com.example.cardtest.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ public class AdminController {
     private final CardService cardService;
     private final BenefitService benefitService;
     private final MemberService memberService;
+    private final EventListService eventListService;
 
     @GetMapping
     public String adminHome(Model model) {
@@ -43,6 +45,7 @@ public class AdminController {
         model.addAttribute("latestCards", cardService.findLatest(5));
         model.addAttribute("latestBenefits", benefitService.findLatest(5));
         model.addAttribute("latestMembers", memberService.findLatest(5));
+        model.addAttribute("latestEvents", eventListService.findLatest(5));
 
         return "admin/dashboard";
     }

@@ -1,0 +1,93 @@
+<div class="admin-section">
+
+    <h1 class="page-title">이벤트 상세</h1>
+
+    <div class="detail-box">
+
+        <p><strong>ID :</strong> <span th:text="${event.eventId}"></span></p>
+
+        <p><strong>이벤트명 :</strong> <span th:text="${event.eventName}"></span></p>
+
+        <p><strong>기간 :</strong>
+            <span th:text="${event.startDate}"></span> ~
+            <span th:text="${event.endDate}"></span>
+        </p>
+
+        <p><strong>설명 :</strong></p>
+        <div class="desc-area" th:text="${event.eventDescription}"></div>
+
+        <p><strong>배너 이미지 :</strong></p>
+        <img th:if="${event.bannerImage}" th:src="${event.bannerImage}" class="banner-img">
+
+    </div>
+
+    <div class="detail-actions">
+        <a th:href="@{|/admin/event/${event.eventId}/edit|}" class="btn btn-green">수정</a>
+
+        <form th:action="@{|/admin/event/${event.eventId}/delete|}" method="post">
+            <button type="submit" class="btn btn-red"
+                    onclick="return confirm('삭제하시겠습니까?')">삭제</button>
+        </form>
+    </div>
+
+</div>
+
+<style>
+    .admin-section {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .page-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .detail-box {
+        background: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        margin-bottom: 20px;
+        font-size: 1rem;
+    }
+
+    .desc-area {
+        background: #f8f9fa;
+        padding: 12px;
+        border-radius: 8px;
+        white-space: pre-line;
+        margin-bottom: 15px;
+        border: 1px solid #e1e5ee;
+    }
+
+    .banner-img {
+        max-width: 100%;
+        border-radius: 12px;
+        margin-top: 10px;
+    }
+
+    .detail-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        border-radius: 8px;
+        color: #fff;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+        border: none;
+        font-size: 1rem;
+    }
+
+    .btn-green { background: #37b24d; }
+    .btn-green:hover { background: #2f9e44; }
+
+    .btn-red { background: #ff6b6b; }
+    .btn-red:hover { background: #fa5252; }
+</style>

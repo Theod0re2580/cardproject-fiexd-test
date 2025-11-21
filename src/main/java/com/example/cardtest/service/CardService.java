@@ -102,5 +102,4 @@ public class CardService {
     public List<Card> findLatest(int limit) {
         return cardRepository.findLatest(limit);
     }
-
 }

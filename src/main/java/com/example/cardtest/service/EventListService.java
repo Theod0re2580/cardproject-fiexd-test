@@ -1,42 +1,88 @@
-    package com.example.cardtest.service;
+package com.example.cardtest.service;
 
-    import com.example.cardtest.domain.Event;
-    import com.example.cardtest.repository.EventListRepository;
-    import org.springframework.stereotype.Service;
+import com.example.cardtest.domain.Event;
+import com.example.cardtest.repository.EventListRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-    import java.time.LocalDate;
-    import java.util.List;
+import java.time.LocalDate;
+import java.util.List;
 
-    @Service
-    public class EventListService {
+@Service
+@RequiredArgsConstructor
+public class EventListService {
 
-        private final EventListRepository eventListRepository;
+    private final EventListRepository eventListRepository;
 
-        public EventListService(EventListRepository eventListRepository) {
-            this.eventListRepository = eventListRepository;
-        }
-
-        /** 진행중 이벤트 전체 조회 */
-        public List<Event> getOngoingEvents() {
-            LocalDate today = LocalDate.now();
-            return eventListRepository.findByStartDateBeforeAndEndDateAfter(today, today);
-        }
-
-        /** 검색 + 진행중 이벤트 */
-        public List<Event> searchEvents(String keyword) {
-            LocalDate today = LocalDate.now();
-
-            // 검색어 없으면 전체 리스트 보여주기
-            if (keyword == null || keyword.trim().isEmpty()) {
-                return getOngoingEvents();
-            }
-
-            // 변경된 JPQL 검색 메서드 사용
-            return eventListRepository.searchRunningEvents(today, keyword);
-        }
-
-        /** 이벤트 상세 조회 */
-        public Event getEventDetail(Long id) {
-            return eventListRepository.findById(id).orElse(null);
-        }
+    /** 전체 조회 */
+    public List<Event> findAll() {
+        return eventListRepository.findAll();
     }
+
+    /** 🔥 상세 조회 (Admin & User 공통) */
+    public Event findById(Long id) {
+        return eventListRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("이벤트를 찾을 수 없습니다. id=" + id));
+    }
+
+    /** 일반 유저용 상세 조회 */
+    public Event getEventDetail(Long id) {
+        return findById(id);
+    }
+
+    /** 진행중 이벤트 조회 */
+    public List<Event> getOngoingEvents() {
+        LocalDate today = LocalDate.now();
+        return eventListRepository.findByStartDateBeforeAndEndDateAfter(today, today);
+    }
+
+    /** 일반 유저 검색 */
+    public List<Event> searchEvents(String keyword) {
+        LocalDate today = LocalDate.now();
+
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return getOngoingEvents();
+        }
+        return eventListRepository.searchRunningEvents(today, keyword);
+    }
+
+    /** 관리자 검색 */
+    public List<Event> searchAdminEvents(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return findAll();
+        }
+        return eventListRepository.findByEventNameContaining(keyword);
+    }
+
+    /** 등록 */
+    public Event addEvent(Event event) {
+        return eventListRepository.save(event);
+    }
+
+    /** 수정 */
+    public Event updateEvent(Long id, Event update) {
+        Event event = findById(id);
+
+        event.setEventName(update.getEventName());
+        event.setEventDescription(update.getEventDescription());
+        event.setStartDate(update.getStartDate());
+        event.setEndDate(update.getEndDate());
+        event.setBannerImage(update.getBannerImage());
+        event.setBenefit(update.getBenefit());
+
+        return eventListRepository.save(event);
+    }
+
+    /** 삭제 */
+    public void deleteEvent(Long id) {
+        if (!eventListRepository.existsById(id)) {
+            throw new IllegalArgumentException("삭제할 이벤트가 존재하지 않습니다. id=" + id);
+        }
+        eventListRepository.deleteById(id);
+    }
+
+    /** 최신 N개 */
+    public List<Event> findLatest(int limit) {
+        return eventListRepository.findLatest(limit);
+    }
+}

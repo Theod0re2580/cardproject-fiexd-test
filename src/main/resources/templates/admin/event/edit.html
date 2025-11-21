@@ -1,0 +1,80 @@
+<div class="admin-section">
+
+    <h1 class="page-title">이벤트 수정</h1>
+
+    <form th:action="@{|/admin/event/${event.eventId}/edit|}" method="post" class="admin-form">
+
+        <label>이벤트명</label>
+        <input type="text" name="eventName" th:value="${event.eventName}" required>
+
+        <label>이벤트 설명</label>
+        <textarea name="eventDescription" rows="6"
+                  th:text="${event.eventDescription}"></textarea>
+
+        <label>시작일</label>
+        <input type="date" name="startDate" th:value="${event.startDate}" required>
+
+        <label>종료일</label>
+        <input type="date" name="endDate" th:value="${event.endDate}" required>
+
+        <label>배너 이미지 URL</label>
+        <input type="text" name="bannerImage" th:value="${event.bannerImage}">
+
+        <button type="submit" class="btn btn-green submit-btn">수정 완료</button>
+    </form>
+
+</div>
+
+<style>
+    .admin-section {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .page-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .admin-form {
+        background: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    label {
+        font-weight: 600;
+    }
+
+    input, textarea {
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        font-size: 15px;
+        width: 100%;
+    }
+
+    .btn-green {
+        background: #37b24d;
+        padding: 10px 16px;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .btn-green:hover {
+        background: #2f9e44;
+    }
+
+    .submit-btn {
+        margin-top: 20px;
+    }
+</style>
