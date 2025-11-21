@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <title>관리자 페이지</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+        * {
+            box-sizing: border-box;
+            font-family: 'Pretendard', sans-serif;
+        }
 
         body {
             margin: 0;
@@ -12,7 +15,9 @@
             background: #f5f7fb;
         }
 
-        /* 🟦 사이드바 유지 */
+        /* ===============================
+           🔵 사이드바 (공통 통합)
+        ================================*/
         .sidebar {
             width: 240px;
             height: 100vh;
@@ -21,12 +26,16 @@
             top: 0;
             left: 0;
             z-index: 100;
-            padding: 25px;
+            padding: 25px 20px;
             color: white;
         }
 
-        .sidebar h2 { font-size: 20px; margin-bottom: 30px; }
+        .sidebar h2 {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
 
+        /* 메뉴 공통 스타일 */
         .menu-item {
             padding: 12px 15px;
             background: #343a40;
@@ -35,38 +44,63 @@
             cursor: pointer;
             transition: .2s;
         }
-        .menu-item:hover { background: #495057; }
-        .menu-item.active { background: #4dabf7; color: black; font-weight: bold; }
 
-        /* 🟧 우측 콘텐츠 전체 영역 */
+        .menu-item:hover { background: #495057; }
+
+        .menu-item.active {
+            background: #4dabf7;
+            color: black;
+            font-weight: bold;
+        }
+
+        /* 메인으로 버튼 */
+        .side-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px 10px;
+            background: #4dabf7;
+            text-align: center;
+            border-radius: 8px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        /* ===============================
+           🟧 콘텐츠 영역 (통합)
+        ================================*/
         .content {
             margin-left: 240px;
             width: calc(100% - 240px);
             min-height: 100vh;
-            padding: 50px 0;
+            padding: 50px 0;              /* 세로 패딩 */
             background: #f5f7fb;
+            display: flex;
+            justify-content: center;       /* 중앙 정렬 */
             overflow-x: hidden;
         }
 
-        /* 🟨 대시보드 전체 고정 폭 + 정중앙 */
+        /* ===============================
+           🟨 내부 콘텐츠 박스 (통합)
+        ================================*/
         #content-area {
-            max-width: 1200px;
             width: 100%;
-            margin: 0 auto;
+            max-width: 1400px;             /* 두 버전 중 더 넓은 값 사용 */
             padding: 0 30px;
+            margin: 0 auto;
         }
     </style>
-
 </head>
 
 <body>
 <div class="sidebar">
     <h2>관리자 페이지</h2>
 
-    <div class="menu-item" onclick="loadPage('cards/list', event)">카드 관리</div>
-    <div class="menu-item" onclick="loadPage('benefits/list', event)">혜택 관리</div>
-    <div class="menu-item" onclick="loadPage('members/list', event)">회원 관리</div>
-    <div class="menu-item" onclick="loadPage('events/list', event)">회원 관리</div>
+    <div class="menu-item" onclick="loadPage('cards', event)">카드 관리</div>
+    <div class="menu-item" onclick="loadPage('benefits', event)">혜택 관리</div>
+    <div class="menu-item" onclick="loadPage('members', event)">회원 관리</div>
 
     <button onclick="location.href='/'" class="back-home-btn side-btn"
             style="background:#4c6ef5;color:#fff;padding:10px 18px;border-radius:8px;border:none;cursor:pointer;font-size:15px;font-weight:600;">

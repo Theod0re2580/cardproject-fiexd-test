@@ -1,62 +1,65 @@
 <style>
-    /* 대시보드 전체 안전 영역 */
-    .dashboard-wrapper {
-        width: 100%;
-        max-width: 1400px;
-        margin: 0 auto;
-        padding-left: 100px; /* 사이드바와 거리 조정 */
-    }
-
-    .dashboard-wrapper h1{
-        margin-top: 50px;
-    }
-    /* 제목 위치: 왼쪽 상단 정확히 */
+    /* 상단 제목 스타일 */
     .dash-title-main {
         font-size: 34px;
         font-weight: 900;
-        margin: 0 0 28px 0;
-        text-align: left;
+        padding-left: 20px;
+        margin-bottom: 40px;
     }
 
-    /* 🔥 2×2 유지 + 간격만 축소 */
+    /* 전체 래퍼 */
+    .dashboard-wrapper {
+        width: 100%;
+        max-width: 1200px;
+        margin-left: 90px;
+        margin-top: 60px;   /* 🔥 제목+카드 전체 아래로 */
+    }
+
+    /* 2x2 그리드 */
     .dash-container {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 22px 26px; /* 카드 사이 공간만 줄임 */
-        align-items: start;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
     }
 
-    /* 카드 크기 절대 변경 X */
     .dash-box {
-        background: #fff;
-        border-radius: 16px;
-        padding: 28px 30px; /* 기존 유지 */
-        min-height: 250px; /* 유지 */
+        background: #ffffff;
+        padding: 30px 32px;
+        border-radius: 18px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.07);
         display: flex;
         flex-direction: column;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        height: 340px;
     }
 
-    /* 내부 내용도 변경 X */
     .dash-title {
-        font-size: 18px;
-        font-weight: 700;
-        margin-bottom: 16px;
+        font-size: 20px;
+        font-weight: 800;
+        margin-bottom: 15px;
+    }
+
+    .dash-list-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
     }
 
     .dash-item {
         font-size: 15px;
-        margin: 4px 0;
+        color: #212529;
+        padding-left: 2px;
     }
 
     .more-btn {
         margin-top: auto;
-        width: 100%;
-        padding: 12px;
-        border-radius: 8px;
-        cursor: pointer;
+        padding: 12px 15px;
         background: #f1f3f5;
         border: 1px solid #dee2e6;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: .15s;
     }
 
     .more-btn:hover {
@@ -67,15 +70,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        font-size: 18px;
         font-weight: 600;
         color: #adb5bd;
-    }
-
-    /* 반응형 : 1300px 이하 1열 */
-    @media(max-width: 1300px) {
-        .dash-container {
-            grid-template-columns: 1fr;
-        }
     }
 </style>
 
@@ -96,7 +93,7 @@
                     <span th:text="${c.cardName}"></span>
                 </div>
             </div>
-            <button class="more-btn" onclick="loadPage('cards/list')">전체보기 →</button>
+            <button class="more-btn" onclick="loadPage('cards')">전체보기 →</button>
         </div>
 
         <!-- 최근 혜택 -->
@@ -107,7 +104,7 @@
                     <span th:text="${b.bnfName}"></span>
                 </div>
             </div>
-            <button class="more-btn" onclick="loadPage('benefits/list')">전체보기 →</button>
+            <button class="more-btn" onclick="loadPage('benefits')">전체보기 →</button>
         </div>
 
         <!-- 최근 가입 회원 -->
@@ -118,7 +115,7 @@
                     <span th:text="${m.name}"></span>
                 </div>
             </div>
-            <button class="more-btn" onclick="loadPage('members/list')">전체보기 →</button>
+            <button class="more-btn" onclick="loadPage('members')">전체보기 →</button>
         </div>
 
         <!-- placeholder -->

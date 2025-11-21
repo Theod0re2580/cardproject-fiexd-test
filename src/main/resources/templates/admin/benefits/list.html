@@ -1,139 +1,125 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>혜택 관리</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f4f6fa;
-            margin: 0;
-        }
+<div class="admin-section">
 
-        h1 {
-            text-align: center;
-            color: #333;
-            font-size: 1.9em;
-            margin-bottom: 25px;
-            font-weight: 700;
-        }
+    <h1 class="page-title">혜택 관리</h1>
 
-        .btn {
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 0.9em;
-            font-weight: 600;
-            cursor: pointer;
-            color: #fff;
-            margin: 2px;
-            display: inline-block;
-            text-decoration: none;
-            transition: 0.2s;
-        }
+    <!-- 상단 버튼 -->
+    <div class="top-action">
+        <a href="/admin/benefits/add" class="btn btn-green">혜택 추가하기</a>
+    </div>
 
-        .btn-green {
-            background: #37b24d;
-        }
-        .btn-green:hover {
-            background: #2f9e44;
-        }
+    <table class="admin-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>혜택명</th>
+            <th>카드명</th>
+            <th>관리</th>
+        </tr>
+        </thead>
 
-        .btn-blue {
-            background: #4c6ef5;
-        }
-        .btn-blue:hover {
-            background: #3b5bdb;
-        }
+        <tbody>
+        <tr th:each="b : ${benefits}">
+            <td th:text="${b.id}"></td>
 
-        .btn-red {
-            background: #ff6b6b;
-        }
-        .btn-red:hover {
-            background: #fa5252;
-        }
+            <td class="bnf-name">
+                <a th:href="@{|/admin/benefits/${b.id}|}" class="table-link">
+                    <span th:text="${b.bnfName}"></span>
+                </a>
+            </td>
 
-        .top-action {
-            width: 900px;
-            max-width: 95%;
-            margin: 0 auto 15px auto;
-            text-align: right;
-        }
+            <td class="bnf-card" th:text="${b.card.cardName}"></td>
 
-        table {
-            width: 900px;
-            max-width: 95%;
-            margin: 25px auto;
-            border-collapse: collapse;
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
+            <td>
+                <a th:href="@{|/admin/benefits/${b.id}/edit|}" class="btn btn-green">수정</a>
 
-        th, td {
-            padding: 14px;
-            font-size: 0.95em;
-            border-bottom: 1px solid #e1e5ee;
-            text-align: center;
-        }
+                <form th:action="@{|/admin/benefits/${b.id}/delete|}"
+                      method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-red"
+                            onclick="return confirm('삭제할까요?');">삭제</button>
+                </form>
+            </td>
+        </tr>
 
-        th {
-            background: #e9ecf5;
-            font-weight: 700;
-        }
+        <tr th:if="${benefits == null or #lists.isEmpty(benefits)}">
+            <td colspan="4">등록된 혜택이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
 
-        tr:hover td {
-            background: #f8faff;
-        }
-    </style>
-</head>
-<body>
-
-<h1>혜택 관리</h1>
-
-<div class="top-action">
-    <a href="/admin/benefits/add" class="btn btn-green">혜택 추가하기</a>
 </div>
 
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>혜택명</th>
-        <th>카드명</th>
-        <th>관리</th>
-    </tr>
-    </thead>
+<style>
+    /* ===== admin-section ===== */
+    .admin-section {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
-    <tbody>
-    <tr th:each="b : ${benefits}">
-        <td th:text="${b.id}"></td>
+    /* ===== 제목 ===== */
+    .page-title {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #333;
+    }
 
-        <td>
-            <a th:href="@{|/admin/benefits/${b.id}|}" class="btn btn-blue"
-               style="background:none;color:#4c6ef5;font-weight:bold;padding:0;">
-                <span th:text="${b.bnfName}"></span>
-            </a>
-        </td>
+    /* ===== 상단 버튼 영역 ===== */
+    .top-action {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 15px;
+    }
 
-        <td th:text="${b.card.cardName}"></td>
+    /* ===== 버튼 공통 ===== */
+    .btn {
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 0.9em;
+        font-weight: 600;
+        cursor: pointer;
+        color: #fff;
+        margin: 2px;
+        display: inline-block;
+        text-decoration: none;
+        transition: 0.2s;
+    }
 
-        <td>
-            <a th:href="@{|/admin/benefits/${b.id}/edit|}" class="btn btn-green">수정</a>
+    .btn-green { background: #37b24d; }
+    .btn-green:hover { background: #2f9e44; }
 
-            <form th:action="@{|/admin/benefits/${b.id}/delete|}"
-                  method="post" style="display:inline;">
-                <button type="submit" class="btn btn-red"
-                        onclick="return confirm('삭제할까요?');">삭제</button>
-            </form>
-        </td>
-    </tr>
+    .btn-red { background: #ff6b6b; }
+    .btn-red:hover { background: #fa5252; }
 
-    <tr th:if="${benefits == null or #lists.isEmpty(benefits)}">
-        <td colspan="4">등록된 혜택이 없습니다.</td>
-    </tr>
-    </tbody>
-</table>
+    .table-link {
+        color: #4c6ef5;
+        font-weight: bold;
+        text-decoration: none;
+    }
 
-</body>
-</html>
+    /* ===== 테이블 ===== */
+    .admin-table {
+        width: 100%;
+        background: #fff;
+        border-collapse: collapse;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    th, td {
+        padding: 14px;
+        font-size: 0.95em;
+        border-bottom: 1px solid #e1e5ee;
+        text-align: center;
+    }
+
+    th {
+        background: #e9ecf5;
+        font-weight: 700;
+    }
+
+    tr:hover td {
+        background: #f8faff;
+    }
+</style>
