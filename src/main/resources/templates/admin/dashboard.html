@@ -1,72 +1,130 @@
-<h1>관리자 대시보드</h1>
-
 <style>
+    /* 대시보드 전체 안전 영역 */
+    .dashboard-wrapper {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding-left: 100px; /* 사이드바와 거리 조정 */
+    }
+
+    .dashboard-wrapper h1{
+        margin-top: 50px;
+    }
+    /* 제목 위치: 왼쪽 상단 정확히 */
+    .dash-title-main {
+        font-size: 34px;
+        font-weight: 900;
+        margin: 0 0 28px 0;
+        text-align: left;
+    }
+
+    /* 🔥 2×2 유지 + 간격만 축소 */
     .dash-container {
-        display: flex;
-        gap: 25px;
-        margin-top: 25px;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 22px 26px; /* 카드 사이 공간만 줄임 */
+        align-items: start;
     }
 
+    /* 카드 크기 절대 변경 X */
     .dash-box {
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        width: 30%;
-        min-width: 280px;
+        background: #fff;
+        border-radius: 16px;
+        padding: 28px 30px; /* 기존 유지 */
+        min-height: 250px; /* 유지 */
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.08);
     }
 
+    /* 내부 내용도 변경 X */
     .dash-title {
         font-size: 18px;
         font-weight: 700;
-        margin-bottom: 10px;
+        margin-bottom: 16px;
     }
 
     .dash-item {
-        padding: 6px 0;
-        border-bottom: 1px solid #eee;
-        font-size: 14px;
+        font-size: 15px;
+        margin: 4px 0;
     }
 
     .more-btn {
-        margin-top: 12px;
-        padding: 8px 10px;
-        background: #4dabf7;
-        border: none;
-        border-radius: 6px;
-        color: white;
+        margin-top: auto;
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
         cursor: pointer;
+        background: #f1f3f5;
+        border: 1px solid #dee2e6;
+    }
+
+    .more-btn:hover {
+        background: #e9ecef;
+    }
+
+    .placeholder {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 600;
+        color: #adb5bd;
+    }
+
+    /* 반응형 : 1300px 이하 1열 */
+    @media(max-width: 1300px) {
+        .dash-container {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
 
-<div class="dash-container">
 
-    <!-- 카드 최신 5개 -->
-    <div class="dash-box">
-        <div class="dash-title">최근 카드</div>
-        <div th:each="c : ${latestCards}" class="dash-item">
-            <span th:text="${c.cardName}"></span>
+
+<div class="dashboard-wrapper">
+
+    <!-- 🔥 제목을 wrapper 안으로 이동 -->
+    <h1 class="dash-title-main">관리자 대시보드</h1>
+
+    <div class="dash-container">
+
+        <!-- 최근 카드 -->
+        <div class="dash-box">
+            <div class="dash-title">최근 카드</div>
+            <div class="dash-list-wrapper">
+                <div th:each="c : ${latestCards}" class="dash-item">
+                    <span th:text="${c.cardName}"></span>
+                </div>
+            </div>
+            <button class="more-btn" onclick="loadPage('cards/list')">전체보기 →</button>
         </div>
-        <button class="more-btn" onclick="loadPage('cards/list')">전체보기 →</button>
-    </div>
 
-    <!-- 혜택 최신 5개 -->
-    <div class="dash-box">
-        <div class="dash-title">최근 혜택</div>
-        <div th:each="b : ${latestBenefits}" class="dash-item">
-            <span th:text="${b.bnfName}"></span>
+        <!-- 최근 혜택 -->
+        <div class="dash-box">
+            <div class="dash-title">최근 혜택</div>
+            <div class="dash-list-wrapper">
+                <div th:each="b : ${latestBenefits}" class="dash-item">
+                    <span th:text="${b.bnfName}"></span>
+                </div>
+            </div>
+            <button class="more-btn" onclick="loadPage('benefits/list')">전체보기 →</button>
         </div>
-        <button class="more-btn" onclick="loadPage('benefits/list')">전체보기 →</button>
-    </div>
 
-    <!-- 회원 최신 5명 -->
-    <div class="dash-box">
-        <div class="dash-title">최근 가입 회원</div>
-        <div th:each="m : ${latestMembers}" class="dash-item">
-            <span th:text="${m.name}"></span>   <!-- 🔥 수정됨 -->
+        <!-- 최근 가입 회원 -->
+        <div class="dash-box">
+            <div class="dash-title">최근 가입 회원</div>
+            <div class="dash-list-wrapper">
+                <div th:each="m : ${latestMembers}" class="dash-item">
+                    <span th:text="${m.name}"></span>
+                </div>
+            </div>
+            <button class="more-btn" onclick="loadPage('members/list')">전체보기 →</button>
         </div>
-        <button class="more-btn" onclick="loadPage('members/list')">전체보기 →</button>
-    </div>
 
+        <!-- placeholder -->
+        <div class="dash-box placeholder">
+            Coming Soon...
+        </div>
+
+    </div>
 </div>

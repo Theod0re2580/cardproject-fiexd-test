@@ -5,15 +5,24 @@
     <title>관리자 페이지</title>
     <style>
         * { box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
-        body { margin: 0; display: flex; background: #f5f7fb; }
 
+        body {
+            margin: 0;
+            display: flex;
+            background: #f5f7fb;
+        }
+
+        /* 🟦 사이드바 유지 */
         .sidebar {
             width: 240px;
-            background: #212529;
-            color: #fff;
             height: 100vh;
-            padding: 30px 20px;
+            background: #212529;
             position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            padding: 25px;
+            color: white;
         }
 
         .sidebar h2 { font-size: 20px; margin-bottom: 30px; }
@@ -21,27 +30,33 @@
         .menu-item {
             padding: 12px 15px;
             background: #343a40;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             border-radius: 8px;
             cursor: pointer;
             transition: .2s;
         }
-
         .menu-item:hover { background: #495057; }
         .menu-item.active { background: #4dabf7; color: black; font-weight: bold; }
 
-        .side-btn {
-            width: 100%; margin-top: 20px; padding: 12px 10px;
-            background: #4dabf7; text-align: center;
-        }
-
+        /* 🟧 우측 콘텐츠 전체 영역 */
         .content {
             margin-left: 240px;
-            padding: 30px;
             width: calc(100% - 240px);
             min-height: 100vh;
+            padding: 50px 0;
+            background: #f5f7fb;
+            overflow-x: hidden;
+        }
+
+        /* 🟨 대시보드 전체 고정 폭 + 정중앙 */
+        #content-area {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 30px;
         }
     </style>
+
 </head>
 
 <body>
@@ -51,6 +66,7 @@
     <div class="menu-item" onclick="loadPage('cards/list', event)">카드 관리</div>
     <div class="menu-item" onclick="loadPage('benefits/list', event)">혜택 관리</div>
     <div class="menu-item" onclick="loadPage('members/list', event)">회원 관리</div>
+    <div class="menu-item" onclick="loadPage('events/list', event)">회원 관리</div>
 
     <button onclick="location.href='/'" class="back-home-btn side-btn"
             style="background:#4c6ef5;color:#fff;padding:10px 18px;border-radius:8px;border:none;cursor:pointer;font-size:15px;font-weight:600;">

@@ -48,7 +48,7 @@
 
             <!-- 로그인 O -->
             <div class="login" sec:authorize="isAuthenticated()">
-                <span th:text="${#authentication.principal.member.loginId + '님'}"></span>
+                <span th:text="${#authentication.principal.member.name + '님'}"></span>
 
                 <a th:href="@{/member/mypage}">마이페이지</a>
 
