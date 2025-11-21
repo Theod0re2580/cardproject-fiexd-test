@@ -67,6 +67,29 @@
             min-height: 130px;
         }
 
+        .button-box {
+            text-align: center;
+            margin-top: 35px;
+        }
+
+        .btn {
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            color: #fff;
+            margin: 0 6px;
+            transition: 0.2s;
+        }
+
+        .btn-blue {
+            background: #4c6ef5;
+        }
+        .btn-blue:hover {
+            background: #3b5bdb;
+        }
+
         .btn-submit {
             width: 100%;
             display: block;
@@ -139,7 +162,9 @@
         <button type="submit" class="btn-submit">수정 완료</button>
     </form>
 
-    <a th:href="@{/admin/benefits}" class="btn-back">← 목록으로 돌아가기</a>
+    <div class="button-box">
+        <a th:href="@{/admin(tab=${'benefits'})}" class="btn btn-blue">← 목록으로 돌아가기</a>
+    </div>
 
 </div>
 
