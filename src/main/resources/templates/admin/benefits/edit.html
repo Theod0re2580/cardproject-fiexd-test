@@ -3,41 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <title>혜택 수정</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6fa;
+            margin: 0;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 35px;
+        }
+
+        .edit-container {
+            background: #fff;
+            width: 600px;
+            max-width: 95%;
+            margin: 0 auto;
+            padding: 35px 45px;
+            border-radius: 14px;
+            box-shadow: 0px 6px 20px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 6px;
+            display: inline-block;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            border: 1px solid #ced4da;
+            outline: none;
+            box-sizing: border-box;
+            transition: border .2s ease;
+            background: #f8f9fa;
+        }
+
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #4c6ef5;
+            background: #fff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 130px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            display: block;
+            margin-top: 20px;
+            padding: 14px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            background: #37b24d;
+            color: #fff;
+            transition: 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: #2f9e44;
+        }
+
+        .btn-back {
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-top: 14px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #4c6ef5;
+        }
+        .btn-back:hover {
+            text-decoration: underline;
+        }
+
+    </style>
 </head>
 <body>
 
 <h1>혜택 수정</h1>
 
-<form th:action="@{'/admin/benefits/' + ${benefit.id} + '/edit'}" method="post">
+<div class="edit-container">
 
-    <p>
-        <label>혜택명:</label>
-        <input type="text" name="bnfName" th:value="${benefit.bnfName}">
-    </p>
+    <form th:action="@{'/admin/benefits/' + ${benefit.id} + '/edit'}" method="post">
 
-    <p>
-        <label>요약:</label>
-        <input type="text" name="bnfContent" th:value="${benefit.bnfContent}">
-    </p>
+        <div class="form-group">
+            <label>혜택명</label>
+            <input type="text" name="bnfName" th:value="${benefit.bnfName}">
+        </div>
 
-    <p>
-        <label>상세 설명:</label><br>
-        <textarea name="bnfDetail" cols="60" rows="6"
-                  th:text="${benefit.bnfDetail}"></textarea>
-    </p>
+        <div class="form-group">
+            <label>요약</label>
+            <input type="text" name="bnfContent" th:value="${benefit.bnfContent}">
+        </div>
 
-    <p>
-        <label>카드 변경:</label>
-        <select name="cardId">
-            <option th:each="c : ${cards}"
-                    th:value="${c.id}"
-                    th:selected="${c.id == benefit.card.id}"
-                    th:text="${c.cardName}"></option>
-        </select>
-    </p>
+        <div class="form-group">
+            <label>상세 설명</label>
+            <textarea name="bnfDetail" th:text="${benefit.bnfDetail}"></textarea>
+        </div>
 
-    <button type="submit">수정</button>
-</form>
+        <div class="form-group">
+            <label>카드 변경</label>
+            <select name="cardId">
+                <option th:each="c : ${cards}"
+                        th:value="${c.id}"
+                        th:selected="${c.id == benefit.card.id}"
+                        th:text="${c.cardName}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-submit">수정 완료</button>
+    </form>
+
+    <a th:href="@{/admin/benefits}" class="btn-back">← 목록으로 돌아가기</a>
+
+</div>
 
 </body>
 </html>

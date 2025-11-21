@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>진행중 이벤트</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #f7f7f7, #eaeaea);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 20px 40px 20px;
+            background: linear-gradient(135deg, #444, #777);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin: 0;
+            font-weight: 800;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            margin-top: 12px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* ---------------- 검색 폼 ---------------- */
+        .search-form {
+            margin-top: 20px;
+        }
+
+        .search-form input[type="text"] {
+            padding: 8px 12px;
+            font-size: 1rem;
+            width: 250px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .search-form button {
+            padding: 8px 16px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: none;
+            background-color: #4E73DF;
+            color: white;
+            cursor: pointer;
+        }
+
+        .event-list {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .event-card {
+            display: flex;
+            gap: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .event-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+        }
+
+        .event-banner {
+            width: 100%;
+            max-width: 250px;
+            height: auto;
+            object-fit: contain;
+            border-radius: 0;
+        }
+
+        .event-info {
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .event-info h2 {
+            font-size: 1.3rem;
+            margin: 0 0 10px 0;
+            color: #444;
+        }
+
+        .event-info p {
+            font-size: 0.95rem;
+            margin: 4px 0;
+            line-height: 1.4;
+            color: #666;
+        }
+
+        .event-info p strong {
+            color: #4E73DF;
+        }
+
+        @media screen and (max-width: 768px) {
+            .event-card {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .event-banner {
+                width: 100%;
+                height: 200px;
+            }
+
+            .event-info {
+                padding: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>진행중 이벤트</h1>
+    <p th:text="|${currentDate}, 지금 참여 가능한 최신 이벤트를 확인하세요!|">
+        2025년 11월, 지금 참여 가능한 최신 이벤트를 확인하세요!
+    </p>
+
+    <!-- ====================== 검색 폼 ====================== -->
+    <form class="search-form" th:action="@{/event/eventlist}" method="get">
+        <input type="text" name="keyword" placeholder="검색어 입력" th:value="${keyword}">
+        <button type="submit">🔍 검색</button>
+    </form>
+</div>
+
+<div class="event-list">
+    <a th:each="event : ${events}"
+       th:href="@{'/event/eventlistdetail/' + ${event.eventId}}"
+       class="event-card">
+
+        <img th:src="@{/images/{file}(file=${event.bannerImage})}"
+             alt="이벤트 이미지" class="event-banner">
+
+        <div class="event-info">
+            <h2 th:text="${event.eventName}">이벤트 제목</h2>
+            <p th:text="${event.startDate} + ' ~ ' + ${event.endDate}">기간</p>
+            <p><strong>🎁 혜택:</strong> <span th:text="${event.eventDescription}"></span></p>
+        </div>
+    </a>
+</div>
+
+</body>
+</html>

@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -131,5 +130,10 @@ public class MemberService {
 
     public boolean existsByLoginId(String loginId) {
         return memberRepository.findByLoginId(loginId).isPresent();
+    }
+
+    /** 🔥 관리자 대시보드용 - 최신 카드 N개 조회 */
+    public List<Member> findLatest(int limit) {
+        return memberRepository.findLatest(limit);
     }
 }

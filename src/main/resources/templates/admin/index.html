@@ -1,27 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>관리자 페이지</title>
-
     <style>
-        /* ==========================
-           GLOBAL
-        ========================== */
-        * {
-            box-sizing: border-box;
-            font-family: 'Pretendard', 'Segoe UI', sans-serif;
-        }
+        * { box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+        body { margin: 0; display: flex; background: #f5f7fb; }
 
-        body {
-            margin: 0;
-            display: flex;
-            background: #f5f7fb;
-        }
-
-        /* ==========================
-           SIDEBAR
-        ========================== */
         .sidebar {
             width: 240px;
             background: #212529;
@@ -29,106 +14,77 @@
             height: 100vh;
             padding: 30px 20px;
             position: fixed;
-            top: 0;
-            left: 0;
         }
 
-        .sidebar h2 {
-            font-size: 20px;
-            margin-bottom: 30px;
-        }
+        .sidebar h2 { font-size: 20px; margin-bottom: 30px; }
 
-        .menu-group {
-            margin-bottom: 40px; /* 여백 확실하게 확보 */
-        }
-
-        .menu-item a {
-            display: block;
+        .menu-item {
             padding: 12px 15px;
             background: #343a40;
             margin-bottom: 10px;
             border-radius: 8px;
             cursor: pointer;
-            color: white;
-            text-decoration: none;
             transition: .2s;
         }
 
-        .menu-item a:hover {
-            background: #495057;
-        }
+        .menu-item:hover { background: #495057; }
+        .menu-item.active { background: #4dabf7; color: black; font-weight: bold; }
 
         .side-btn {
-            width: 100%;
-            margin-top: 40px;
-            padding: 12px 10px;
-            background: #4dabf7;
-            text-align: center;
-            border-radius: 8px;
-            cursor: pointer;
-            color: white;
-            text-decoration: none;
+            width: 100%; margin-top: 20px; padding: 12px 10px;
+            background: #4dabf7; text-align: center;
         }
 
-        .side-btn:hover {
-            background: #339af0;
-        }
-
-        /* ==========================
-           CONTENT AREA
-        ========================== */
         .content {
-            margin-left: 260px;
-            padding: 40px;
-            width: calc(100% - 260px);
-        }
-
-        h1 {
-            font-size: 28px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .intro-box {
-            padding: 25px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            font-size: 17px;
-            line-height: 1.5;
+            margin-left: 240px;
+            padding: 30px;
+            width: calc(100% - 240px);
+            min-height: 100vh;
         }
     </style>
 </head>
 
 <body>
-
-<!-- ==========================
-     SIDEBAR
-========================== -->
 <div class="sidebar">
     <h2>관리자 페이지</h2>
 
-    <!-- 메뉴는 실제 라우팅 이동 (admin_A 기능 유지) -->
-    <div class="menu-group">
-        <div class="menu-item"><a href="/admin/cards">카드 관리</a></div>
-        <div class="menu-item"><a href="/admin/benefits">혜택 관리</a></div>
-        <div class="menu-item"><a href="/admin/members">회원 관리</a></div>
-    </div>
+    <div class="menu-item" onclick="loadPage('cards/list', event)">카드 관리</div>
+    <div class="menu-item" onclick="loadPage('benefits/list', event)">혜택 관리</div>
+    <div class="menu-item" onclick="loadPage('members/list', event)">회원 관리</div>
 
-    <a href="/" class="side-btn">← 메인으로 돌아가기</a>
+    <button onclick="location.href='/'" class="back-home-btn side-btn"
+            style="background:#4c6ef5;color:#fff;padding:10px 18px;border-radius:8px;border:none;cursor:pointer;font-size:15px;font-weight:600;">
+        ← 메인으로 돌아가기
+    </button>
 </div>
 
-<!-- ==========================
-     CONTENT
-========================== -->
-<div class="content">
-    <h1>관리자 홈</h1>
+<!-- 🔥 여기 안에 대시보드 + 각 리스트가 동적으로 로드됨 -->
+<div class="content" id="content-area"></div>
 
-    <div class="intro-box">
-        <p>관리자 페이지에 오신 것을 환영합니다.</p>
-        <p>좌측 메뉴에서 원하는 항목을 선택하여 관리 기능을 사용할 수 있습니다.</p>
-    </div>
-</div>
+<script>
+    function loadPage(path, ev) {
+
+        if (ev) {
+            document.querySelectorAll('.menu-item').forEach(e => e.classList.remove('active'));
+            ev.target.classList.add('active');
+        }
+
+        fetch(`/admin/${path}`)
+            .then(res => res.text())
+            .then(html => {
+                document.querySelector('#content-area').innerHTML = html;
+            })
+            .catch(err => {
+                document.querySelector('#content-area').innerHTML = "<p>페이지 로드 실패</p>";
+                console.error(err);
+            });
+    }
+
+    // 🔥 관리자 첫 화면에 대시보드 자동 표시
+    window.onload = function() {
+        loadPage('dashboard');
+    }
+</script>
 
 </body>
 </html>

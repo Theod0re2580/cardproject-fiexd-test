@@ -3,18 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <title>회원 관리</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6fa;
+            padding: 40px;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.9em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            color: #fff;
+            display: inline-block;
+            text-decoration: none;
+            transition: 0.2s;
+            margin: 2px;
+        }
+
+        .btn-green { background: #37b24d; }
+        .btn-green:hover { background: #2f9e44; }
+
+        .btn-blue { background: #4c6ef5; }
+        .btn-blue:hover { background: #3b5bdb; }
+
+        .btn-red { background: #ff6b6b; }
+        .btn-red:hover { background: #fa5252; }
+
+        .top-action {
+            width: 900px;
+            max-width: 95%;
+            margin: 0 auto 15px auto;
+            text-align: right;
+        }
+
+        table {
+            width: 900px;
+            max-width: 95%;
+            margin: 25px auto;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            padding: 14px;
+            font-size: 0.95em;
+            border-bottom: 1px solid #e1e5ee;
+            text-align: center;
+        }
+
+        th {
+            background: #e9ecf5;
+            font-weight: 700;
+        }
+
+        tr:hover td {
+            background: #f8faff;
+        }
+    </style>
+
 </head>
 <body>
 
-<h1>회원 리스트</h1>
+<h1>회원 관리</h1>
 
-<a href="/admin/members/add">회원 등록하기</a>
+<div class="top-action">
+    <a href="/admin/members/add" class="btn btn-green">회원 등록하기</a>
+</div>
 
-<table border="1">
+<table>
     <thead>
     <tr>
         <th>ID</th>
-        <th>로그인ID</th>
+        <th>로그인 ID</th>
         <th>이름</th>
         <th>이메일</th>
         <th>권한</th>
@@ -26,22 +102,35 @@
     <tr th:each="m : ${members}">
         <td th:text="${m.id}"></td>
         <td th:text="${m.loginId}"></td>
+
         <td>
-            <a th:href="@{'/admin/members/' + ${m.id}}">
+            <a th:href="@{|/admin/members/${m.id}|}"
+               class="btn btn-blue"
+               style="background:none;color:#4c6ef5;font-weight:bold;padding:0;">
                 <span th:text="${m.name}"></span>
             </a>
         </td>
+
         <td th:text="${m.email}"></td>
         <td th:text="${m.role}"></td>
-        <td>
-            <a th:href="@{'/admin/members/' + ${m.id} + '/edit'}">수정</a>
 
-            <form th:action="@{'/admin/members/' + ${m.id} + '/delete'}"
+        <td>
+            <a th:href="@{|/admin/members/${m.id}/edit|}" class="btn btn-green">수정</a>
+
+            <form th:action="@{|/admin/members/${m.id}/delete|}"
                   method="post" style="display:inline;">
-                <button type="submit" style="color:red;">삭제</button>
+                <button type="submit" class="btn btn-red"
+                        onclick="return confirm('정말 삭제할까요?');">
+                    삭제
+                </button>
             </form>
         </td>
     </tr>
+
+    <tr th:if="${members == null or #lists.isEmpty(members)}">
+        <td colspan="6">등록된 회원이 없습니다.</td>
+    </tr>
+
     </tbody>
 </table>
 

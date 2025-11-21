@@ -3,28 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <title>카드 상세 정보</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6fa;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .detail-container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 32px 38px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e6e8ef;
+        }
+
+        .detail-row strong {
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .detail-value {
+            font-size: 0.95em;
+            text-align: right;
+            color: #555;
+        }
+
+        .detail-image {
+            width: 200px;
+            height: auto;
+            margin: 15px auto;
+            display: block;
+            border-radius: 12px;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .action-buttons a {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 9px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            margin: 0 6px;
+            transition: 0.2s;
+            color: white;
+        }
+
+        .btn-list {
+            background: #4c6ef5;
+        }
+        .btn-list:hover {
+            background: #3b5bdb;
+        }
+
+        .btn-edit {
+            background: #37b24d;
+        }
+        .btn-edit:hover {
+            background: #2f9e44;
+        }
+
+        /* 모바일 대응 */
+        @media (max-width: 650px) {
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .detail-value {
+                text-align: left;
+                margin-top: 5px;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <h1>카드 상세 정보</h1>
 
-<p><strong>ID:</strong> <span th:text="${card.id}"></span></p>
-<p><strong>카드명:</strong> <span th:text="${card.cardName}"></span></p>
-<p><strong>브랜드:</strong> <span th:text="${card.cardBrand}"></span></p>
+<div class="detail-container">
 
-<p><strong>전월 실적:</strong> <span th:text="${card.cardRecord}"></span></p>
-<p><strong>카드 이미지:</strong> <span th:text="${card.cardImg}"></span></p>
+    <div class="detail-row">
+        <strong>ID</strong>
+        <span class="detail-value" th:text="${card.id}"></span>
+    </div>
 
-<p><strong>해외 겸용:</strong> <span th:text="${card.cardOverseas}"></span></p>
+    <div class="detail-row">
+        <strong>카드명</strong>
+        <span class="detail-value" th:text="${card.cardName}"></span>
+    </div>
 
-<p><strong>혜택 1:</strong> <span th:text="${card.cardInOut1}"></span></p>
-<p><strong>혜택 2:</strong> <span th:text="${card.cardInOut2}"></span></p>
-<p><strong>혜택 3:</strong> <span th:text="${card.cardInOut3}"></span></p>
+    <div class="detail-row">
+        <strong>브랜드</strong>
+        <span class="detail-value" th:text="${card.cardBrand}"></span>
+    </div>
 
-<br>
+    <div class="detail-row">
+        <strong>전월 실적</strong>
+        <span class="detail-value" th:text="${card.cardRecord}"></span>
+    </div>
 
-<a th:href="@{/admin/cards}">← 카드 목록으로</a> |
-<a th:href="@{'/admin/cards/' + ${card.id} + '/edit'}">수정하기</a>
+    <!-- 카드 이미지 URL을 실제 이미지로 표시 -->
+    <img class="detail-image"
+         th:src="${card.cardImg}"
+         th:alt="${card.cardName} + ' 카드 이미지'">
+
+    <div class="detail-row">
+        <strong>해외 겸용</strong>
+        <span class="detail-value" th:text="${card.cardOverseas}"></span>
+    </div>
+
+    <div class="detail-row">
+        <strong>혜택 1</strong>
+        <span class="detail-value" th:text="${card.cardInOut1}"></span>
+    </div>
+
+    <div class="detail-row">
+        <strong>혜택 2</strong>
+        <span class="detail-value" th:text="${card.cardInOut2}"></span>
+    </div>
+
+    <div class="detail-row">
+        <strong>혜택 3</strong>
+        <span class="detail-value" th:text="${card.cardInOut3}"></span>
+    </div>
+
+</div>
+
+<div class="action-buttons">
+    <a th:href="@{/admin/cards}" class="btn-list">← 카드 목록으로</a>
+    <a th:href="@{'/admin/cards/' + ${card.id} + '/edit'}" class="btn-edit">수정하기</a>
+</div>
 
 </body>
 </html>

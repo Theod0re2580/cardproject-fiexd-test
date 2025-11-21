@@ -2,23 +2,139 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>회원 상세보기</title>
+    <title>회원 상세정보</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6fa;
+            padding: 50px 20px;
+            margin: 0;
+        }
+
+        .detail-container {
+            max-width: 650px;
+            margin: auto;
+            background: #fff;
+            padding: 35px 45px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.9em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e4e7ef;
+            font-size: 0.95em;
+        }
+
+        .detail-title {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .detail-value {
+            text-align: right;
+            color: #555;
+            max-width: 60%;
+        }
+
+        .button-box {
+            text-align: center;
+            margin-top: 35px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            color: #fff;
+            margin: 0 6px;
+            transition: 0.2s;
+        }
+
+        .btn-green {
+            background: #37b24d;
+        }
+        .btn-green:hover {
+            background: #2f9e44;
+        }
+
+        .btn-blue {
+            background: #4c6ef5;
+        }
+        .btn-blue:hover {
+            background: #3b5bdb;
+        }
+
+        @media (max-width: 600px) {
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .detail-value {
+                text-align: left;
+                margin-top: 5px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<h1>회원 상세정보</h1>
+<div class="detail-container">
 
-<p><strong>ID:</strong> <span th:text="${member.id}"></span></p>
-<p><strong>로그인 ID:</strong> <span th:text="${member.loginId}"></span></p>
-<p><strong>이름:</strong> <span th:text="${member.name}"></span></p>
-<p><strong>이메일:</strong> <span th:text="${member.email}"></span></p>
-<p><strong>생년월일:</strong> <span th:text="${member.birth}"></span></p>
-<p><strong>권한:</strong> <span th:text="${member.role}"></span></p>
+    <h1>회원 상세정보</h1>
 
-<br>
-<a th:href="@{'/admin/members/' + ${member.id} + '/edit'}">수정하기</a>
-<br><br>
-<a href="/admin/members">← 목록으로 돌아가기</a>
+    <div class="detail-row">
+        <span class="detail-title">ID</span>
+        <span class="detail-value" th:text="${member.id}"></span>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-title">로그인 ID</span>
+        <span class="detail-value" th:text="${member.loginId}"></span>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-title">이름</span>
+        <span class="detail-value" th:text="${member.name}"></span>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-title">이메일</span>
+        <span class="detail-value" th:text="${member.email}"></span>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-title">생년월일</span>
+        <span class="detail-value" th:text="${member.birth}"></span>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-title">권한</span>
+        <span class="detail-value" th:text="${member.role}"></span>
+    </div>
+
+    <div class="button-box">
+        <a th:href="@{'/admin/members/' + ${member.id} + '/edit'}"
+           class="btn btn-green">수정하기</a>
+
+        <a href="/admin/members" class="btn btn-blue">← 목록으로</a>
+    </div>
+
+</div>
 
 </body>
 </html>

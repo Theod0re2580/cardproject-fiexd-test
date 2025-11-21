@@ -4,6 +4,123 @@
     <meta charset="UTF-8">
     <title>혜택 추가</title>
 
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6fa;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .form-container {
+            max-width: 700px;
+            background: #fff;
+            margin: 0 auto;
+            padding: 35px 45px;
+            border-radius: 14px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.9em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #333;
+            display: block;
+            margin: 18px 0 8px 0;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 0.95em;
+            border-radius: 10px;
+            border: 1px solid #ced4da;
+            resize: none;
+            box-sizing: border-box;
+            transition: border 0.2s ease-in-out;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: #4c6ef5;
+            outline: none;
+        }
+
+        .search-box {
+            margin-top: 6px;
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            background: #f8f9fa;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+
+        .card-result {
+            padding: 8px 10px;
+            background: #fff;
+            border: 1px solid #dee2e6;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-result span {
+            font-size: 0.9em;
+            color: #333;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.2s;
+            display: inline-block;
+        }
+
+        .btn-blue {
+            background: #4c6ef5;
+            color: #fff;
+        }
+        .btn-blue:hover {
+            background: #3b5bdb;
+        }
+
+        .btn-green {
+            background: #37b24d;
+            color: #fff;
+        }
+        .btn-green:hover {
+            background: #2f9e44;
+        }
+
+        .submit-box {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* 모바일 대응 */
+        @media (max-width: 650px) {
+            .form-container {
+                padding: 25px;
+            }
+        }
+    </style>
+
     <script>
         function searchCard() {
             let keyword = document.getElementById("cardSearch").value;
@@ -19,11 +136,13 @@
                     let html = "";
                     data.forEach(card => {
                         html += `
-                        <div style="margin-bottom:5px;">
+                        <div class="card-result">
                             <span>[${card.id}] ${card.cardName}</span>
-                            <button type="button" onclick="selectCard(${card.id})">선택</button>
+                            <button type="button" class="btn btn-blue" onclick="selectCard(${card.id})">
+                                선택
+                            </button>
                         </div>
-                    `;
+                        `;
                     });
                     document.getElementById("searchResult").innerHTML = html;
                 });
@@ -38,32 +157,38 @@
 </head>
 <body>
 
-<h1>혜택 추가</h1>
+<div class="form-container">
 
-<form action="/admin/benefits/add" method="post">
+    <h1>혜택 추가</h1>
 
-    <label>혜택명</label><br>
-    <input type="text" name="bnfName" required><br><br>
+    <form action="/admin/benefits/add" method="post">
 
-    <label>혜택 내용</label><br>
-    <textarea name="bnfContent" rows="3"></textarea><br><br>
+        <label>혜택명</label>
+        <input type="text" name="bnfName" required>
 
-    <label>혜택 상세</label><br>
-    <textarea name="bnfDetail" rows="5"></textarea><br><br>
+        <label>혜택 내용</label>
+        <textarea name="bnfContent" rows="3"></textarea>
 
-    <!-- 🔥 카드 검색 기능 -->
-    <label>카드 검색</label><br>
-    <input type="text" id="cardSearch" placeholder="카드명 검색" onkeyup="searchCard()">
-    <div id="searchResult"
-         style="border:1px solid #aaa; padding:10px; margin-top:5px; width:300px;"></div>
-    <br>
+        <label>혜택 상세 설명</label>
+        <textarea name="bnfDetail" rows="6"></textarea>
 
-    <!-- 선택한 카드ID 들어가는 hidden -->
-    <label>선택된 카드 ID</label><br>
-    <input type="text" id="cardId" name="cardId" readonly required><br><br>
+        <!-- 카드 검색 -->
+        <label>카드 검색</label>
+        <input type="text" id="cardSearch" placeholder="카드명 검색" onkeyup="searchCard()">
 
-    <button type="submit">등록하기</button>
-</form>
+        <div id="searchResult" class="search-box"></div>
+
+        <label>선택된 카드 ID</label>
+        <input type="text" id="cardId" name="cardId" readonly required>
+
+        <div class="submit-box">
+            <button type="submit" class="btn btn-green">등록하기</button>
+            <a th:href="@{/admin/benefits}" class="btn btn-blue">← 목록</a>
+        </div>
+
+    </form>
+
+</div>
 
 </body>
 </html>

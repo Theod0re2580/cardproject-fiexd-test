@@ -1,0 +1,72 @@
+<h1>관리자 대시보드</h1>
+
+<style>
+    .dash-container {
+        display: flex;
+        gap: 25px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+
+    .dash-box {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        width: 30%;
+        min-width: 280px;
+    }
+
+    .dash-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .dash-item {
+        padding: 6px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+    }
+
+    .more-btn {
+        margin-top: 12px;
+        padding: 8px 10px;
+        background: #4dabf7;
+        border: none;
+        border-radius: 6px;
+        color: white;
+        cursor: pointer;
+    }
+</style>
+
+<div class="dash-container">
+
+    <!-- 카드 최신 5개 -->
+    <div class="dash-box">
+        <div class="dash-title">최근 카드</div>
+        <div th:each="c : ${latestCards}" class="dash-item">
+            <span th:text="${c.cardName}"></span>
+        </div>
+        <button class="more-btn" onclick="loadPage('cards/list')">전체보기 →</button>
+    </div>
+
+    <!-- 혜택 최신 5개 -->
+    <div class="dash-box">
+        <div class="dash-title">최근 혜택</div>
+        <div th:each="b : ${latestBenefits}" class="dash-item">
+            <span th:text="${b.bnfName}"></span>
+        </div>
+        <button class="more-btn" onclick="loadPage('benefits/list')">전체보기 →</button>
+    </div>
+
+    <!-- 회원 최신 5명 -->
+    <div class="dash-box">
+        <div class="dash-title">최근 가입 회원</div>
+        <div th:each="m : ${latestMembers}" class="dash-item">
+            <span th:text="${m.name}"></span>   <!-- 🔥 수정됨 -->
+        </div>
+        <button class="more-btn" onclick="loadPage('members/list')">전체보기 →</button>
+    </div>
+
+</div>

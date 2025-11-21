@@ -5,105 +5,170 @@
     <title>카드 관리</title>
 
     <style>
-        /* 검색창 스타일(기본 유지하면서 개선) */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6fa;
+            padding: 40px;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 1.9em;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        /* 버튼 UI */
+        .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            color: #fff;
+            margin: 2px;
+            display: inline-block;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .btn-green { background: #37b24d; }
+        .btn-green:hover { background: #2f9e44; }
+
+        .btn-blue { background: #4c6ef5; }
+        .btn-blue:hover { background: #3b5bdb; }
+
+        .btn-red { background: #ff6b6b; }
+        .btn-red:hover { background: #fa5252; }
+
+        .btn-black { background: #343a40; }
+        .btn-black:hover { background: #212529; }
+
+        /* 검색창 */
         #searchBox {
             padding: 10px 14px;
-            width: 280px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 15px;
-            margin-bottom: 18px;
+            width: 250px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-size: 0.9em;
         }
 
         table {
+            width: 900px;
+            max-width: 95%;
+            margin: 25px auto;
             border-collapse: collapse;
-            width: 80%;
-            margin-top: 15px;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
 
         th, td {
-            padding: 8px 12px;
+            padding: 14px;
+            font-size: 0.95em;
+            border-bottom: 1px solid #e1e5ee;
             text-align: center;
         }
 
         th {
-            background: #f1f1f1;
+            background: #e9ecf5;
+            font-weight: 700;
         }
 
-        tr:hover {
-            background: #fafafa;
+        tr:hover td {
+            background: #f8faff;
+        }
+
+        .top-action {
+            width: 900px;
+            max-width: 95%;
+            margin: 0 auto 15px auto;
+            display: flex;
+            justify-content: space-between;
         }
     </style>
-
 </head>
 <body>
 
 <h1>카드 관리</h1>
 
-<a href="/admin/cards/add">카드 추가하기</a>
+<div class="top-action">
+    <input type="text" id="searchBox" placeholder="카드명 또는 브랜드 검색">
+    <a href="/admin/cards/add" class="btn btn-green">카드 추가하기</a>
+</div>
 
-<br><br>
+<form id="deleteForm" th:action="@{/admin/cards/deleteSelected}" method="post">
 
-<!-- 🔎 검색창 추가 -->
-<input type="text" id="searchBox" placeholder="카드명 또는 브랜드 검색...">
+    <table>
+        <thead>
+        <tr>
+            <th><input type="checkbox" id="selectAll"></th>
+            <th>ID</th>
+            <th>카드명</th>
+            <th>브랜드</th>
+            <th>관리</th>
+        </tr>
+        </thead>
 
-<h2>카드 목록</h2>
+        <tbody id="cardTableBody">
+        <tr th:each="c : ${cards}">
+            <td><input type="checkbox" class="rowCheck" name="ids" th:value="${c.id}"></td>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>카드명</th>
-        <th>브랜드</th>
-        <th>관리</th>
-    </tr>
-    </thead>
+            <td th:text="${c.id}"></td>
 
-    <tbody id="cardTableBody">
-    <tr th:each="c : ${cards}">
-        <td th:text="${c.id}"></td>
+            <td>
+                <a th:href="@{|/admin/cards/${c.id}|}" class="btn btn-blue"
+                   style="background:none;color:#4c6ef5;font-weight:bold;padding:0;">
+                    <span th:text="${c.cardName}"></span>
+                </a>
+            </td>
 
-        <!-- 카드 이름 → detail 이동 -->
-        <td>
-            <a th:href="@{'/admin/cards/' + ${c.id}}">
-                <span th:text="${c.cardName}"></span>
-            </a>
-        </td>
+            <td th:text="${c.cardBrand}"></td>
 
-        <td th:text="${c.cardBrand}"></td>
+            <td>
+                <a th:href="@{|/admin/cards/${c.id}/edit|}" class="btn btn-green">수정</a>
 
-        <td>
-            <a th:href="@{'/admin/cards/' + ${c.id} + '/edit'}">수정</a>
+                <form th:action="@{|/admin/cards/${c.id}/delete|}"
+                      method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-red"
+                            onclick="return confirm('정말 삭제할까요?');">삭제</button>
+                </form>
+            </td>
+        </tr>
 
-            <form th:action="@{'/admin/cards/' + ${c.id} + '/delete'}"
-                  method="post" style="display:inline;">
-                <button type="submit" style="color:red;">삭제</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+        <tr th:if="${cards == null or #lists.isEmpty(cards)}">
+            <td colspan="5">등록된 카드가 없습니다.</td>
+        </tr>
 
-<!-- JS 필터 기능 -->
+        </tbody>
+    </table>
+
+    <div style="width:900px;max-width:95%;margin:0 auto;text-align:right;">
+        <button type="submit" class="btn btn-black"
+                onclick="return confirm('선택한 카드를 삭제할까요?');">
+            선택 삭제
+        </button>
+    </div>
+
+</form>
+
 <script>
-    const searchBox = document.getElementById("searchBox");
-    const tableBody = document.getElementById("cardTableBody");
+    // 전체 선택 체크박스
+    document.getElementById("selectAll").addEventListener("click", function () {
+        const checked = this.checked;
+        document.querySelectorAll(".rowCheck").forEach(chk => chk.checked = checked);
+    });
 
-    searchBox.addEventListener("keyup", function () {
+    // 검색 기능
+    document.getElementById("searchBox").addEventListener("keyup", function () {
         const keyword = this.value.toLowerCase();
-        const rows = tableBody.querySelectorAll("tr");
-
-        rows.forEach(row => {
-            const id = row.children[0].textContent.toLowerCase();
-            const name = row.children[1].textContent.toLowerCase();
-            const brand = row.children[2].textContent.toLowerCase();
-
-            const match =
-                id.includes(keyword) ||
-                name.includes(keyword) ||
-                brand.includes(keyword);
-
-            row.style.display = match ? "" : "none";
+        document.querySelectorAll("#cardTableBody tr").forEach(row => {
+            const name = row.cells[2].innerText.toLowerCase();
+            const brand = row.cells[3].innerText.toLowerCase();
+            row.style.display = name.includes(keyword) || brand.includes(keyword) ? "" : "none";
         });
     });
 </script>

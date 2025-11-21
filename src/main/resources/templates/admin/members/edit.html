@@ -3,38 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <title>회원 수정</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6fa;
+            padding: 50px 20px;
+            margin: 0;
+        }
+
+        .edit-container {
+            max-width: 550px;
+            margin: auto;
+            background: #fff;
+            padding: 35px 40px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 1.9em;
+            font-weight: 700;
+            margin-bottom: 28px;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-size: 0.95em;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4c6ef5;
+            box-shadow: 0 0 0 2px rgba(76,110,245,0.2);
+        }
+
+        .info-text {
+            margin-bottom: 18px;
+            font-size: 0.95em;
+            color: #444;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: #4c6ef5;
+            border: none;
+            padding: 12px 0;
+            font-size: 1em;
+            font-weight: bold;
+            color: #fff;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-submit:hover {
+            background: #3b5bdb;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.9em;
+            text-decoration: none;
+            color: #4c6ef5;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+
 </head>
 <body>
 
-<h1>회원 수정</h1>
+<div class="edit-container">
 
-<form th:action="@{/admin/members/{id}/edit(id=${member.id})}" method="post">
+    <h1>회원 수정</h1>
 
-    <p>ID: <strong th:text="${member.id}"></strong></p>
+    <form th:action="@{/admin/members/{id}/edit(id=${member.id})}" method="post">
 
-    <p>
-        로그인 ID:
-        <span th:text="${member.loginId}"></span>
-        <!-- 변경 불가 -->
-    </p>
+        <label>회원 ID</label>
+        <p class="info-text"><strong th:text="${member.id}"></strong></p>
 
-    <p>
-        이름:
+        <label>로그인 ID</label>
+        <p class="info-text" th:text="${member.loginId}"></p>
+
+        <label>이름</label>
         <input type="text" name="name" th:value="${member.name}" required>
-    </p>
 
-    <p>
-        이메일:
+        <label>이메일</label>
         <input type="email" name="email" th:value="${member.email}" required>
-    </p>
 
-    <p>
-        생년월일:
+        <label>생년월일</label>
         <input type="date" name="birth" th:value="${member.birth}" required>
-    </p>
 
-    <p>
-        권한(Role):
+        <label>권한(Role)</label>
         <select name="role">
             <option th:each="r : ${roles}"
                     th:value="${r}"
@@ -42,13 +120,13 @@
                     th:selected="${r == member.role}">
             </option>
         </select>
-    </p>
 
-    <button type="submit">수정 완료</button>
-</form>
+        <button type="submit" class="btn-submit">수정 완료</button>
+    </form>
 
-<br>
-<a href="/admin/members">← 회원 목록으로</a>
+    <a href="/admin/members" class="back-link">← 회원 목록으로 돌아가기</a>
+
+</div>
 
 </body>
 </html>

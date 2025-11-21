@@ -3,15 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <title>혜택 관리</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6fa;
+            padding: 40px;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 1.9em;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            color: #fff;
+            margin: 2px;
+            display: inline-block;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .btn-green {
+            background: #37b24d;
+        }
+        .btn-green:hover {
+            background: #2f9e44;
+        }
+
+        .btn-blue {
+            background: #4c6ef5;
+        }
+        .btn-blue:hover {
+            background: #3b5bdb;
+        }
+
+        .btn-red {
+            background: #ff6b6b;
+        }
+        .btn-red:hover {
+            background: #fa5252;
+        }
+
+        .top-action {
+            width: 900px;
+            max-width: 95%;
+            margin: 0 auto 15px auto;
+            text-align: right;
+        }
+
+        table {
+            width: 900px;
+            max-width: 95%;
+            margin: 25px auto;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            padding: 14px;
+            font-size: 0.95em;
+            border-bottom: 1px solid #e1e5ee;
+            text-align: center;
+        }
+
+        th {
+            background: #e9ecf5;
+            font-weight: 700;
+        }
+
+        tr:hover td {
+            background: #f8faff;
+        }
+    </style>
 </head>
 <body>
 
-<h1>혜택 목록</h1>
+<h1>혜택 관리</h1>
 
-<a href="/admin/benefits/add">혜택 추가하기</a>
-<br><br>
+<div class="top-action">
+    <a href="/admin/benefits/add" class="btn btn-green">혜택 추가하기</a>
+</div>
 
-<table border="1">
+<table>
     <thead>
     <tr>
         <th>ID</th>
@@ -26,7 +111,8 @@
         <td th:text="${b.id}"></td>
 
         <td>
-            <a th:href="@{'/admin/benefits/' + ${b.id}}">
+            <a th:href="@{|/admin/benefits/${b.id}|}" class="btn btn-blue"
+               style="background:none;color:#4c6ef5;font-weight:bold;padding:0;">
                 <span th:text="${b.bnfName}"></span>
             </a>
         </td>
@@ -34,14 +120,18 @@
         <td th:text="${b.card.cardName}"></td>
 
         <td>
-            <a th:href="@{'/admin/benefits/' + ${b.id} + '/edit'}">수정</a>
+            <a th:href="@{|/admin/benefits/${b.id}/edit|}" class="btn btn-green">수정</a>
 
-            <form th:action="@{'/admin/benefits/' + ${b.id} + '/delete'}"
+            <form th:action="@{|/admin/benefits/${b.id}/delete|}"
                   method="post" style="display:inline;">
-                <button style="color:red;">삭제</button>
+                <button type="submit" class="btn btn-red"
+                        onclick="return confirm('삭제할까요?');">삭제</button>
             </form>
         </td>
+    </tr>
 
+    <tr th:if="${benefits == null or #lists.isEmpty(benefits)}">
+        <td colspan="4">등록된 혜택이 없습니다.</td>
     </tr>
     </tbody>
 </table>

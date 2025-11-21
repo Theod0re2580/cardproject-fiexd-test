@@ -90,10 +90,17 @@ public class CardService {
             System.out.println("[ERROR] 카드 삭제 실패: " + e.getMessage());
             throw new RuntimeException("카드 삭제 중 오류가 발생했습니다.");
         }
+
     }
 
     /** 카드 검색 */
     public List<Card> search(String keyword) {
         return cardRepository.findByCardNameContaining(keyword);
     }
+
+    /** 🔥 관리자 대시보드용 - 최신 카드 N개 조회 */
+    public List<Card> findLatest(int limit) {
+        return cardRepository.findLatest(limit);
+    }
+
 }

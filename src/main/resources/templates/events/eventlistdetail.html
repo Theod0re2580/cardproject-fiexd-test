@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${event.eventName}">이벤트 상세</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: #f8f9fc;
+        }
+
+        /* ---------------- 왼쪽 사이드바 ---------------- */
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: #263043;
+            padding: 25px 15px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 8px;
+        }
+
+        .sidebar a {
+            color: #e4e6eb;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #34425a;
+            color: white;
+        }
+
+        /* ---------------- 본문 영역 ---------------- */
+        .main-content {
+            margin-left: 240px;
+            margin-right: 250px; /* 오른쪽 패널 공간 확보 */
+            padding: 30px;
+            width: calc(100% - 490px);
+            box-sizing: border-box;
+            text-align: center; /* 글씨 가운데 정렬 */
+        }
+
+        .event-detail {
+            border-radius: 12px;
+            background: #ffffff;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        /* ---------------- 이벤트 이미지 ---------------- */
+        .event-image {
+            width: 70%;       /* 가로 크기를 70%로 줄임 */
+            height: auto;     /* 세로 비율 자동 유지 */
+            object-fit: contain;
+            border-radius: 12px;
+            margin: 0 auto 20px auto;  /* 가운데 정렬 및 하단 마진 */
+            display: block;
+        }
+
+        .event-name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .event-period {
+            color: #555;
+            margin-bottom: 18px;
+            font-size: 16px;
+        }
+
+        .event-description {
+            white-space: pre-line;
+            line-height: 1.6;
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        .highlight-benefit {
+            background-color: #fffae6;
+            border-left: 4px solid #ffc107;
+            padding: 10px 12px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 15px;
+            line-height: 1.5;
+            display: inline-block; /* 내용 길이에 맞게 크기 */
+            text-align: center;    /* 텍스트 가운데 정렬 */
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 18px;
+            background-color: #4E73DF;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            background-color: #2e59d9;
+        }
+
+        /* ---------------- 오른쪽 진행중 이벤트 패널 ---------------- */
+        .related-events {
+            width: 230px;
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            background-color: #f4f5f7;
+            padding: 25px 15px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            border-left: 1px solid #ddd;
+        }
+
+        .related-events h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .related-event-item {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            font-size: 14px;
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+
+        .related-event-item:hover {
+            background-color: #e8f0fe;
+        }
+
+        .related-event-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .related-event-period {
+            color: #555;
+            font-size: 13px;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- ====================== 왼쪽 사이드바 ====================== -->
+<div class="sidebar">
+    <h2>빠른 이동</h2>
+    <a href="/">🏠 메인 홈</a>
+    <a href="/event/eventlist">📅 진행중 이벤트</a>
+    <a href="/events">🏦 브랜드 선택</a>
+    <a href="/events/brand">💳 브랜드 카드 추천</a>
+    <a href="/events/top">🔥 인기 카드 TOP10</a>
+    <a href="/events/benefits">🎁 혜택별 추천</a>
+    <a href="/events/random">🎲 랜덤 카드 추천</a>
+    <a href="/events/mbti">🧠 MBTI 카드 추천</a>
+</div>
+
+<!-- ====================== 본문 ====================== -->
+<div class="main-content">
+    <div class="event-detail">
+        <!-- 이벤트 이미지 -->
+        <img class="event-image" th:src="@{'/images/' + ${event.bannerImage}}" alt="이벤트 이미지">
+
+        <!-- 이벤트 이름 -->
+        <div class="event-name" th:text="${event.eventName}"></div>
+
+        <!-- 이벤트 기간 -->
+        <div class="event-period">
+            기간: <span th:text="${event.startDate}"></span> ~ <span th:text="${event.endDate}"></span>
+        </div>
+
+        <!-- 강조 혜택 -->
+        <div class="highlight-benefit" th:text="${event.eventDescription}"></div>
+
+        <!-- 전체 상세 설명 -->
+        <div class="event-description" th:text="${event.eventDescription}"></div>
+
+        <!-- 목록으로 돌아가기 -->
+        <a th:href="@{/event/eventlist}" class="back-link">← 이벤트 목록으로 돌아가기</a>
+    </div>
+</div>
+
+<!-- ====================== 오른쪽 진행중 이벤트 패널 ====================== -->
+<div class="related-events">
+    <h2>진행중 이벤트</h2>
+    <a th:each="e : ${relatedEvents}"
+       th:href="@{'/event/eventlistdetail/' + ${e.eventId}}"
+       class="related-event-item">
+        <div class="related-event-title" th:text="${e.eventName}"></div>
+        <div class="related-event-period">
+            <span th:text="${e.startDate}"></span> ~ <span th:text="${e.endDate}"></span>
+        </div>
+    </a>
+</div>
+
+</body>
+</html>

@@ -3,6 +3,8 @@ package com.example.cardtest.service;
 import com.example.cardtest.domain.Benefit;
 import com.example.cardtest.repository.BenefitRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +20,17 @@ public class BenefitService {
         return benefitRepository.findAll();
     }
 
-    /** 단건 조회 (Long → String 변환) */
+    /** 페이징 + 검색 조회 */
+    public Page<Benefit> findAll(String keyword, Pageable pageable) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return benefitRepository.findAll(pageable);
+        }
+        return benefitRepository.findByBnfNameContainingIgnoreCase(keyword, pageable);
+    }
+
+    /** 단건 조회 */
     public Benefit findById(Long id) {
-        return benefitRepository.findById(String.valueOf(id))
+        return benefitRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("혜택을 찾을 수 없습니다. id=" + id));
     }
 
@@ -44,16 +54,13 @@ public class BenefitService {
 
         Benefit benefit = findById(id);
 
-        // 🔥 문자열 null-safe
         benefit.setBnfName((update.getBnfName() == null) ? "" : update.getBnfName().trim());
         benefit.setBnfContent((update.getBnfContent() == null) ? "" : update.getBnfContent().trim());
         benefit.setBnfDetail((update.getBnfDetail() == null) ? "" : update.getBnfDetail().trim());
 
-        // 🔥 cardId null-safe (Long)
         if (update.getCardId() == null) {
             throw new IllegalArgumentException("카드 ID는 반드시 선택해야 합니다.");
         }
-
         benefit.setCardId(update.getCardId());
 
         benefitRepository.save(benefit);
@@ -61,6 +68,11 @@ public class BenefitService {
 
     /** 혜택 삭제 */
     public void delete(Long id) {
-        benefitRepository.deleteById(String.valueOf(id));
+        benefitRepository.deleteById(id);
+    }
+
+    /** 🔥 관리자 대시보드용 - 최신 카드 N개 조회 */
+    public List<Benefit> findLatest(int limit) {
+        return benefitRepository.findLatest(limit);
     }
 }
