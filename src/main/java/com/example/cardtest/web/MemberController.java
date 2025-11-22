@@ -4,8 +4,10 @@ import com.example.cardtest.domain.Member;
 import com.example.cardtest.domain.SessionMember;
 import com.example.cardtest.service.MemberService;
 import com.example.cardtest.security.CustomUserDetails;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -103,16 +105,24 @@ public class MemberController {
         return "redirect:/member/mypage";
     }
 
-    /** 회원 삭제 */
     @PostMapping("/delete")
-    public String delete(@AuthenticationPrincipal CustomUserDetails principal) {
+    public String delete(@AuthenticationPrincipal CustomUserDetails principal,
+                         HttpSession session) {
 
         if (principal == null) {
             return "redirect:/member/login";
         }
 
-        memberService.delete(principal.getId());
+        Long loginUserId = principal.getId();
 
+        // 🔥 1) DB에서 회원 삭제
+        memberService.delete(loginUserId);
+
+        // 🔥 2) 인증정보 삭제 + 세션 무효화 (일반/관리자 모두)
+        SecurityContextHolder.clearContext();
+        session.invalidate();
+
+        // 🔥 3) 홈으로 이동 (완전 로그아웃 상태)
         return "redirect:/";
     }
 
