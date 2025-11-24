@@ -162,6 +162,11 @@
             loadPage("dashboard");
         }
     }
+
+    function goPage(pageNumber) {
+        const keyword = document.querySelector("input[name='adminsearch']").value || "";
+        loadPage(`cards?page=${pageNumber}&size=20&adminsearch=${encodeURIComponent(keyword)}`);
+    }
 </script>
 
 </body>

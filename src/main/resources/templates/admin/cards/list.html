@@ -70,6 +70,48 @@
 
             </tbody>
         </table>
+        <!-- 페이지네이션 (10개씩 블록) -->
+        <div class="pagination" th:if="${totalPages > 1}">
+            <ul>
+                <!-- 🔢 블록 계산 -->
+                <th:block th:with="
+            blockSize=10,
+            currentBlock=${currentPage} / ${blockSize},
+            startPage=${currentBlock} * ${blockSize},
+            endPage=${startPage + blockSize - 1 > totalPages - 1 ? totalPages - 1 : startPage + blockSize - 1}
+        ">
+
+                    <!-- ⏮ 맨 처음 -->
+                    <li th:if="${currentPage > 0}">
+                        <a href="javascript:void(0)" th:attr="onclick=|goPage(0)|">⏮</a>
+                    </li>
+
+                    <!-- ◀ 이전 블록 -->
+                    <li th:if="${startPage > 0}">
+                        <a href="javascript:void(0)" th:attr="onclick=|goPage(${startPage - blockSize})|">◀</a>
+                    </li>
+
+                    <!-- 페이지 번호들 -->
+                    <li th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                        <a href="javascript:void(0)"
+                           th:attr="onclick=|goPage(${i})|"
+                           th:text="${i + 1}"
+                           th:classappend="${i == currentPage} ? 'active' : ''">
+                        </a>
+                    </li>
+
+                    <!-- ▶ 다음 블록 -->
+                    <li th:if="${endPage < totalPages - 1}">
+                        <a href="javascript:void(0)" th:attr="onclick=|goPage(${startPage + blockSize})|">▶</a>
+                    </li>
+
+                    <!-- ⏭ 맨 끝 -->
+                    <li th:if="${currentPage < totalPages - 1}">
+                        <a href="javascript:void(0)" th:attr="onclick=|goPage(${totalPages - 1})|">⏭</a>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
     </form>
 </div>
 
@@ -140,11 +182,6 @@
         text-decoration: none;
     }
 
-    .delete-area {
-        text-align: right;
-        margin-top: 10px;
-    }
-
     .btn {
         padding: 8px 14px;
         border-radius: 8px;
@@ -167,4 +204,36 @@
     .btn-black { background: #343a40; }
     .btn-black:hover { background: #212529; }
 
+    .pagination {
+        margin-top: 25px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .pagination ul {
+        display: flex;
+        gap: 8px;
+        padding: 0;
+        list-style: none;
+    }
+
+    .pagination a {
+        padding: 6px 12px;
+        border-radius: 6px;
+        background: #e9ecef;
+        color: #333;
+        text-decoration: none;
+        font-size: 0.9em;
+        transition: 0.2s;
+    }
+
+    .pagination a:hover {
+        background: #ced4da;
+    }
+
+    .pagination a.active {
+        background: #4c6ef5;
+        color: #fff;
+        font-weight: bold;
+    }
 </style>

@@ -3,6 +3,7 @@ package com.example.cardtest.web;
 import com.example.cardtest.domain.Card;
 import com.example.cardtest.service.CardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,21 +21,25 @@ public class AdminCardController {
     @GetMapping
     public String list(
             @RequestParam(required = false, name = "adminsearch") String adminsearch,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
             Model model) {
 
-        List<Card> cards;
+        // 페이징 적용
+        Page<Card> cardPage;
 
-        // 🔥 admin 전용 검색
         if (adminsearch != null && !adminsearch.trim().isEmpty()) {
-            cards = cardService.adminSearch(adminsearch); // 새로운 adminSearch() 추가
+            cardPage = cardService.adminSearchPaged(adminsearch, page, size);
         } else {
-            cards = cardService.findAll();
+            cardPage = cardService.findAllPaged(page, size);
         }
 
-        model.addAttribute("cards", cards);
-        model.addAttribute("adminsearch", adminsearch);
+        model.addAttribute("cards", cardPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", cardPage.getTotalPages());
+        model.addAttribute("adminsearch", adminsearch == null ? "" : adminsearch);
 
-        return "admin/cards/list";
+        return "admin/cards/list"; // fragment 반환
     }
 
     /** 카드 등록 처리 */

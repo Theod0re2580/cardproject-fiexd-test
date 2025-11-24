@@ -3,6 +3,8 @@ package com.example.cardtest.service;
 import com.example.cardtest.domain.Card;
 import com.example.cardtest.repository.CardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -107,6 +109,19 @@ public class CardService {
     public List<Card> adminSearch(String keyword) {
         return cardRepository.findByCardNameContainingIgnoreCaseOrCardBrandContainingIgnoreCase(
                 keyword, keyword
+        );
+    }
+
+    /* 페이징 기능 추가 */
+    public Page<Card> findAllPaged(int page, int size) {
+        return cardRepository.findAll(PageRequest.of(page, size));
+    }
+
+    public Page<Card> adminSearchPaged(String keyword, int page, int size) {
+        return cardRepository.findByCardNameContainingIgnoreCaseOrCardBrandContainingIgnoreCase(
+                keyword,
+                keyword,
+                PageRequest.of(page, size)
         );
     }
 }
