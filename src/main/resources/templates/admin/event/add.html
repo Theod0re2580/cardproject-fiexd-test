@@ -20,8 +20,8 @@
         <input type="text" name="bannerImage" placeholder="이미지 URL 입력 (선택)">
 
         <button type="submit" class="btn btn-green submit-btn">등록하기</button>
+        <a th:href="@{/admin(tab=${'event'})}" class="btn btn-back">← 목록으로 돌아가기</a>
     </form>
-
 </div>
 
 <style>
@@ -75,5 +75,12 @@
 
     .submit-btn {
         margin-top: 20px;
+    }
+    .btn-back {
+        background: #868e96;
+        margin-top: 10px;
+    }
+    .btn-back:hover {
+        background: #495057;
     }
 </style>
