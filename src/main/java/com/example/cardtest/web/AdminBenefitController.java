@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/benefits")
@@ -18,8 +20,21 @@ public class AdminBenefitController {
 
     /** 목록 */
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("benefits", benefitService.findAll());
+    public String list(
+            @RequestParam(required = false, name = "adminsearch") String adminsearch,
+            Model model) {
+
+        List<Benefit> benefits;
+
+        if (adminsearch != null && !adminsearch.trim().isEmpty()) {
+            benefits = benefitService.adminSearch(adminsearch);
+        } else {
+            benefits = benefitService.findAll();
+        }
+
+        model.addAttribute("benefits", benefits);
+        model.addAttribute("adminsearch", adminsearch);
+
         return "admin/benefits/list";
     }
 

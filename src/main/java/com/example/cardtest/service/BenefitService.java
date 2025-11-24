@@ -75,4 +75,9 @@ public class BenefitService {
     public List<Benefit> findLatest(int limit) {
         return benefitRepository.findLatest(limit);
     }
+
+    public List<Benefit> adminSearch(String keyword) {
+        return benefitRepository
+                .findByBnfNameContainingIgnoreCaseOrCard_CardNameContainingIgnoreCase(keyword, keyword);
+    }
 }

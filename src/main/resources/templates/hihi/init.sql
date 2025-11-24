@@ -432,3 +432,76 @@ CREATE SEQUENCE SEQ_BENEFIT
 DROP SEQUENCE SEQ_BENEFIT;
 
 SELECT * FROM BENEFIT b ORDER BY b.ID DESC;
+
+CREATE TABLE EVENT (
+                       EVENT_ID          NUMBER         PRIMARY KEY,
+                       EVENT_NAME        VARCHAR2(200)  NOT NULL,
+                       EVENT_DESCRIPTION VARCHAR2(4000),
+                       START_DATE        DATE           NOT NULL,
+                       END_DATE          DATE           NOT NULL,
+                       BENEFIT_ID        NUMBER,
+                       CONSTRAINT FK_EVENT_BENEFIT
+                           FOREIGN KEY (BENEFIT_ID)
+                               REFERENCES BENEFIT(id)
+                               ON DELETE SET NULL,
+                       CONSTRAINT CHECK_EVENT_DATES CHECK (END_DATE >= START_DATE)
+);
+
+ALTER TABLE EVENT
+    ADD banner_image VARCHAR2(255);
+
+CREATE SEQUENCE EVENT_SEQ START WITH 5 INCREMENT BY 1;
+
+DROP SEQUENCE event_seq;
+
+INSERT INTO EVENT
+(EVENT_ID, EVENT_NAME, EVENT_DESCRIPTION, START_DATE, END_DATE, BENEFIT_ID, BANNER_IMAGE)
+VALUES
+    (1,
+     '우리카드 11월 한정 이벤트 진행중',
+     'SKYPASS 최대 2마일리지 적립
+    해외 이용 수수료 0.3% 면제
+    국내 공항 라운지 동반 1인 동시 이용',
+     TO_DATE('2025-11-01', 'YYYY-MM-DD'),
+     TO_DATE('2025-11-30', 'YYYY-MM-DD'),
+     NULL,
+     'eventcard1.png');
+
+INSERT INTO EVENT
+(EVENT_ID, EVENT_NAME, EVENT_DESCRIPTION, START_DATE, END_DATE, BENEFIT_ID, BANNER_IMAGE)
+VALUES
+    (2,
+     '삼성카드 최대 95만원 혜택',
+     '아파트관리비 공과금 10% 할인
+    교통, 통신, 배달앱 10%할인
+    스트리밍 1,500원 할인',
+     TO_DATE('2025-11-14', 'YYYY-MM-DD'),
+     TO_DATE('2025-11-30', 'YYYY-MM-DD'),
+     NULL,
+     'eventcard2.jpg');
+
+INSERT INTO EVENT
+(EVENT_ID, EVENT_NAME, EVENT_DESCRIPTION, START_DATE, END_DATE, BENEFIT_ID, BANNER_IMAGE)
+VALUES
+    (3,
+     '삼성카드 최대 92만원 혜택',
+     '스타벅스 50% 할인
+    대중교통 10% 할인
+    CGV, 롯데시네마 5,000원 할인',
+     TO_DATE('2025-11-01', 'YYYY-MM-DD'),
+     TO_DATE('2025-11-30', 'YYYY-MM-DD'),
+     NULL,
+     'samsungcard.png');
+
+INSERT INTO EVENT
+(EVENT_ID, EVENT_NAME, EVENT_DESCRIPTION, START_DATE, END_DATE, BENEFIT_ID, BANNER_IMAGE)
+VALUES
+    (4,
+     '현대카드 M 최대 25만원 캐시백',
+     '5% M포인트 적립
+    1.5% M포인트 적립
+    최대 50만 M 긴급적립',
+     TO_DATE('2025-11-01', 'YYYY-MM-DD'),
+     TO_DATE('2025-11-30', 'YYYY-MM-DD'),
+     NULL,
+     'eventcard3.png');

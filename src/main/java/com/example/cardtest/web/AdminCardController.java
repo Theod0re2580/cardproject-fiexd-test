@@ -16,10 +16,24 @@ public class AdminCardController {
 
     private final CardService cardService;
 
-    /** 카드 목록 */
+    /** 카드 목록 + 관리자 검색(adminsearch) */
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("cards", cardService.findAll());
+    public String list(
+            @RequestParam(required = false, name = "adminsearch") String adminsearch,
+            Model model) {
+
+        List<Card> cards;
+
+        // 🔥 admin 전용 검색
+        if (adminsearch != null && !adminsearch.trim().isEmpty()) {
+            cards = cardService.adminSearch(adminsearch); // 새로운 adminSearch() 추가
+        } else {
+            cards = cardService.findAll();
+        }
+
+        model.addAttribute("cards", cards);
+        model.addAttribute("adminsearch", adminsearch);
+
         return "admin/cards/list";
     }
 

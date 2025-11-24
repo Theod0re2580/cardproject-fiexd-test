@@ -2,8 +2,24 @@
 
     <h1 class="page-title">혜택 관리</h1>
 
-    <!-- 상단 버튼 -->
+    <!-- 상단 검색 + 버튼 -->
     <div class="top-action">
+
+        <!-- 🔍 관리자 서버검색 (SPA) -->
+        <form id="benefitSearchForm"
+              onsubmit="return adminBenefitSearch(event)"
+              style="display:flex; gap:10px; align-items:center;">
+
+            <input type="text"
+                   name="adminsearch"
+                   th:value="${adminsearch}"
+                   placeholder="혜택명 또는 카드명 검색"
+                   class="admin-search-input">
+
+            <button type="submit" class="btn btn-black">검색</button>
+        </form>
+
+        <!-- 혜택 추가 버튼 -->
         <a href="/admin/benefits/add" class="btn btn-green">혜택 추가하기</a>
     </div>
 
@@ -48,15 +64,15 @@
 
 </div>
 
+
 <style>
-    /* ===== admin-section ===== */
+
     .admin-section {
         width: 100%;
         max-width: 1200px;
         margin: 0 auto;
     }
 
-    /* ===== 제목 ===== */
     .page-title {
         font-size: 26px;
         font-weight: 700;
@@ -64,14 +80,22 @@
         color: #333;
     }
 
-    /* ===== 상단 버튼 영역 ===== */
     .top-action {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
+        align-items: center;
         margin-bottom: 15px;
+        gap: 10px;
     }
 
-    /* ===== 버튼 공통 ===== */
+    .admin-search-input {
+        padding: 10px 14px;
+        width: 250px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        font-size: 0.9em;
+    }
+
     .btn {
         padding: 8px 14px;
         border-radius: 8px;
@@ -91,13 +115,9 @@
     .btn-red { background: #ff6b6b; }
     .btn-red:hover { background: #fa5252; }
 
-    .table-link {
-        color: #4c6ef5;
-        font-weight: bold;
-        text-decoration: none;
-    }
+    .btn-black { background: #343a40; }
+    .btn-black:hover { background: #212529; }
 
-    /* ===== 테이블 ===== */
     .admin-table {
         width: 100%;
         background: #fff;
@@ -122,4 +142,11 @@
     tr:hover td {
         background: #f8faff;
     }
+
+    .table-link {
+        color: #4c6ef5;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
 </style>

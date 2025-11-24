@@ -22,4 +22,8 @@ public interface BenefitRepository extends JpaRepository<Benefit, Long> {
 
     @Query(value = "SELECT * FROM BENEFIT ORDER BY ID DESC FETCH FIRST :limit ROWS ONLY", nativeQuery = true)
     List<Benefit> findLatest(@Param("limit") int limit);
+
+    List<Benefit> findByBnfNameContainingIgnoreCaseOrCard_CardNameContainingIgnoreCase(
+            String bnfName, String cardName
+    );
 }

@@ -102,4 +102,11 @@ public class CardService {
     public List<Card> findLatest(int limit) {
         return cardRepository.findLatest(limit);
     }
+
+    /** 관리자 전용 검색 */
+    public List<Card> adminSearch(String keyword) {
+        return cardRepository.findByCardNameContainingIgnoreCaseOrCardBrandContainingIgnoreCase(
+                keyword, keyword
+        );
+    }
 }

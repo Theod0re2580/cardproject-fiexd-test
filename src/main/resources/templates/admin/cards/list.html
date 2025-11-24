@@ -5,12 +5,28 @@
 
     <!-- 🔍 검색 + 상단 버튼 -->
     <div class="top-action">
-        <input type="text" id="searchBox" placeholder="카드명 또는 브랜드 검색">
+
+        <!-- 🔥 관리자 검색 (SPA 방식) -->
+        <form id="adminSearchForm"
+              onsubmit="return adminCardSearch(event)"
+              style="display:flex; gap:10px; align-items:center;">
+
+            <input type="text"
+                   name="adminsearch"
+                   th:value="${adminsearch}"
+                   placeholder="카드명 또는 브랜드 검색"
+                   class="admin-search-input">
+
+            <button type="submit" class="btn btn-black">검색</button>
+        </form>
+
         <a href="/admin/cards/add" class="btn btn-green">카드 추가하기</a>
     </div>
 
     <!-- 🔥 선택 삭제 form -->
-    <form id="deleteForm" th:action="@{/admin/cards/deleteSelected}" method="post">
+    <form id="deleteForm"
+          th:action="@{/admin/cards/deleteSelected}"
+          method="post">
 
         <table class="admin-table">
             <thead>
@@ -23,11 +39,10 @@
             </thead>
 
             <tbody id="cardTableBody">
-            <tr th:each="c : ${cards}">
 
+            <tr th:each="c : ${cards}">
                 <td th:text="${c.id}"></td>
 
-                <!-- ⭐ 검색 가능하게 class 적용 -->
                 <td class="card-name">
                     <a th:href="@{|/admin/cards/${c.id}|}" class="table-link">
                         <span th:text="${c.cardName}"></span>
@@ -40,57 +55,30 @@
                     <a th:href="@{|/admin/cards/${c.id}/edit|}" class="btn btn-green">수정</a>
 
                     <form th:action="@{|/admin/cards/${c.id}/delete|}"
-                          method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-red"
+                          method="post"
+                          style="display:inline;">
+                        <button type="submit"
+                                class="btn btn-red"
                                 onclick="return confirm('정말 삭제할까요?');">삭제</button>
                     </form>
                 </td>
             </tr>
 
-            <tr th:if="${cards == null or #lists.isEmpty(cards)}">
+            <tr th:if="${#lists.isEmpty(cards)}">
                 <td colspan="5">등록된 카드가 없습니다.</td>
             </tr>
+
             </tbody>
         </table>
-
-        <!-- 선택 삭제 버튼 -->
-        <div class="delete-area">
-            <button type="submit" class="btn btn-black"
-                    onclick="return confirm('선택한 카드를 삭제할까요?');">
-                선택 삭제
-            </button>
-        </div>
     </form>
 </div>
 
 
 <!-- =========================
-     검색 JS
-========================= -->
-<script>
-
-    // 검색 기능 (index 의존 X)
-    document.getElementById("searchBox").addEventListener("keyup", function () {
-        const keyword = this.value.toLowerCase();
-
-        document.querySelectorAll("#cardTableBody tr").forEach(row => {
-            const nameCell = row.querySelector(".card-name");
-            const brandCell = row.querySelector(".card-brand");
-
-            const name = nameCell ? nameCell.innerText.toLowerCase() : "";
-            const brand = brandCell ? brandCell.innerText.toLowerCase() : "";
-
-            row.style.display = (name.includes(keyword) || brand.includes(keyword)) ? "" : "none";
-        });
-    });
-</script>
-
-
-<!-- =========================
-     스타일 (fragment 전용)
+     스타일
 ========================= -->
 <style>
-    /* 메인 컨테이너 */
+
     .admin-section {
         width: 100%;
         max-width: 1200px;
@@ -104,14 +92,16 @@
         color: #333;
     }
 
+    /* 상단 검색 + 버튼 */
     .top-action {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 15px;
+        gap: 10px;
     }
 
-    #searchBox {
+    .admin-search-input {
         padding: 10px 14px;
         width: 250px;
         border-radius: 8px;
@@ -119,7 +109,6 @@
         font-size: 0.9em;
     }
 
-    /* 테이블 */
     .admin-table {
         width: 100%;
         background: #fff;
@@ -156,7 +145,6 @@
         margin-top: 10px;
     }
 
-    /* 공통 버튼 */
     .btn {
         padding: 8px 14px;
         border-radius: 8px;
@@ -178,4 +166,5 @@
 
     .btn-black { background: #343a40; }
     .btn-black:hover { background: #212529; }
+
 </style>

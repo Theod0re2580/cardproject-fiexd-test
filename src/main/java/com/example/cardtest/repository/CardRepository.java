@@ -11,4 +11,7 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     List<Card> findByCardNameContaining(String keyword);
     @Query(value = "SELECT * FROM CARD ORDER BY ID DESC FETCH FIRST :limit ROWS ONLY", nativeQuery = true)
     List<Card> findLatest(@Param("limit") int limit);
+    List<Card> findByCardNameContainingIgnoreCaseOrCardBrandContainingIgnoreCase(
+            String name, String brand
+    );
 }
