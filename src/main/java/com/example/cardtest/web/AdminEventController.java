@@ -3,6 +3,8 @@ package com.example.cardtest.web;
 import com.example.cardtest.domain.Event;
 import com.example.cardtest.service.EventListService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +18,40 @@ public class AdminEventController {
 
     private final EventListService eventListService;
 
-    /** 목록 + 검색 */
+    /** 목록 + 검색 + 페이징 */
     @GetMapping
-    public String eventList(@RequestParam(required = false) String keyword, Model model) {
+    public String eventList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String keyword,
+            Model model
+    ) {
+        PageRequest pageable = PageRequest.of(page, size);
 
-        List<Event> events = eventListService.searchAdminEvents(keyword);
-        model.addAttribute("events", events);
+        Page<Event> eventPage =
+                eventListService.searchAdminEventsPaged(keyword, pageable);
+
+        int totalPages = eventPage.getTotalPages();
+        int currentPage = page;
+
+        // 🔥 페이지 블록 계산 (10개 단위)
+        int blockSize = 10;
+        int currentBlock = currentPage / blockSize;
+        int startPage = currentBlock * blockSize;
+        int endPage = Math.min(startPage + blockSize - 1, totalPages - 1);
+
+        model.addAttribute("events", eventPage.getContent());
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("keyword", keyword);
+
+        // 🔥 HTML에서 사용하는 값들 추가
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
 
         return "admin/event/list";
     }
+
 
     /** 등록 페이지 */
     @GetMapping("/add")

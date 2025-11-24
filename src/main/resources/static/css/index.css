@@ -38,6 +38,9 @@ img { display: block; border: 0; }
     height: 100%;
     object-fit: cover;
 }
+.swiper-slide:nth-child(2) img{
+
+}
 
 
 /* ========================= */
@@ -59,7 +62,6 @@ img { display: block; border: 0; }
     display: flex;
     justify-content: space-between;
 }
-
 .cardti li {
     width: 122px;
     height: 145px;
@@ -70,6 +72,7 @@ img { display: block; border: 0; }
     width: 74px;
     height: 74px;
     border-radius: 30px;
+    margin-left: 22px;
 }
 
 .cardti h5 {
@@ -198,8 +201,10 @@ img { display: block; border: 0; }
 /* ========================= */
 /*         영상 영역          */
 /* ========================= */
-.video-wrap,
+
 .video-fi {
-    width: 800px;
-    margin: 50px auto 100px;
+    width: 100%;
+    text-align: center;
+    margin-top: 80px;
+    margin-bottom: 50px;
 }

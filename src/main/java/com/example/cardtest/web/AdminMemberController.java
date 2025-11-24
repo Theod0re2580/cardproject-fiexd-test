@@ -4,6 +4,9 @@ import com.example.cardtest.domain.Member;
 import com.example.cardtest.domain.Role;
 import com.example.cardtest.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +22,18 @@ public class AdminMemberController {
 
     /** 회원 목록 */
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("members", memberService.findAll());
+    public String list(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Member> memberPage = memberService.findAll(pageable);
+
+        model.addAttribute("members", memberPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", memberPage.getTotalPages());
+
         return "admin/members/list";
     }
 

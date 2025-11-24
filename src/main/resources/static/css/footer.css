@@ -1,5 +1,7 @@
 /* 🔥 FOOTER COMPONENT 전용 RESET */
-
+.footer{
+    margin-top: 100px;
+}
 /* footer 전체 영역 reset */
 .footer * {
     margin: 0;

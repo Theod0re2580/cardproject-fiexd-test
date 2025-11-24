@@ -164,13 +164,44 @@
     }
 
     function goPage(pageNumber) {
+        // 페이지 번호가 음수로 내려가지 않도록 보정
+        if (pageNumber < 0) {
+            pageNumber = 0;
+        }
         const keyword = document.querySelector("input[name='adminsearch']").value || "";
         loadPage(`cards?page=${pageNumber}&size=20&adminsearch=${encodeURIComponent(keyword)}`);
     }
 
     function goBenefitPage(pageNumber) {
+        // 페이지 번호가 음수로 내려가지 않도록 보정
+        if (pageNumber < 0) {
+            pageNumber = 0;
+        }
         const keyword = document.querySelector("input[name='adminsearch']").value || "";
         loadPage(`benefits?page=${pageNumber}&size=20&adminsearch=${encodeURIComponent(keyword)}`);
+    }
+    function goMemberPage(pageNumber) {
+        // 페이지 번호가 음수로 내려가지 않도록 보정
+        if (pageNumber < 0) {
+            pageNumber = 0;
+        }
+        loadPage(`members?page=${pageNumber}&size=20`);
+    }
+    const keyword = document.querySelector("input[name='adminsearch']")?.value || '';
+    loadPage(`event?page=${page}&size=10&keyword=${encodeURIComponent(keyword)}`);
+
+    function goEventPage(pageNumber) {
+
+        // 페이지 번호가 음수로 내려가는 것 방지
+        if (pageNumber < 0) {
+            pageNumber = 0;
+        }
+
+        // 검색어가 있을 경우 포함
+        const keywordInput = document.querySelector("input[name='keyword']");
+        const keyword = keywordInput ? keywordInput.value : "";
+
+        loadPage(`event?page=${pageNumber}&size=10&keyword=${encodeURIComponent(keyword)}`);
     }
 </script>
 

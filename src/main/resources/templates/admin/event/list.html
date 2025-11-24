@@ -48,7 +48,45 @@
         </tr>
         </tbody>
     </table>
+    <!-- 페이지네이션 -->
+    <div class="pagination" th:if="${totalPages > 1}">
+        <ul>
 
+            <!-- 맨 처음 -->
+            <li th:if="${currentPage > 0}">
+                <a href="javascript:void(0)"
+                   th:attr="onclick=|goEventPage(0)|">⏮</a>
+            </li>
+
+            <!-- 이전 블록 -->
+            <li th:if="${startPage > 0}">
+                <a href="javascript:void(0)"
+                   th:attr="onclick=|goEventPage(${startPage - 1})|">◀</a>
+            </li>
+
+            <!-- 페이지 번호 -->
+            <li th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                <a href="javascript:void(0)"
+                   th:text="${i + 1}"
+                   th:classappend="${i == currentPage} ? 'active'"
+                   th:attr="onclick=|goEventPage(${i})|">
+                </a>
+            </li>
+
+            <!-- 다음 블록 -->
+            <li th:if="${endPage < totalPages - 1}">
+                <a href="javascript:void(0)"
+                   th:attr="onclick=|goEventPage(${endPage + 1})|">▶</a>
+            </li>
+
+            <!-- 맨 끝 -->
+            <li th:if="${currentPage < totalPages - 1}">
+                <a href="javascript:void(0)"
+                   th:attr="onclick=|goEventPage(${totalPages - 1})|">⏭</a>
+            </li>
+
+        </ul>
+    </div>
 </div>
 
 <style>
@@ -124,5 +162,37 @@
 
     tr:hover td {
         background: #f8faff;
+    }
+    .pagination {
+        margin-top: 25px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .pagination ul {
+        display: flex;
+        gap: 8px;
+        padding: 0;
+        list-style: none;
+    }
+
+    .pagination a {
+        padding: 6px 12px;
+        border-radius: 6px;
+        background: #e9ecef;
+        color: #333;
+        text-decoration: none;
+        font-size: 0.9em;
+        transition: 0.2s;
+    }
+
+    .pagination a:hover {
+        background: #ced4da;
+    }
+
+    .pagination a.active {
+        background: #4c6ef5;
+        color: #fff;
+        font-weight: bold;
     }
 </style>

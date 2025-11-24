@@ -4,6 +4,8 @@ import com.example.cardtest.domain.Member;
 import com.example.cardtest.domain.Role;
 import com.example.cardtest.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -135,5 +137,8 @@ public class MemberService {
     /** 🔥 관리자 대시보드용 - 최신 카드 N개 조회 */
     public List<Member> findLatest(int limit) {
         return memberRepository.findLatest(limit);
+    }
+    public Page<Member> findAll(Pageable pageable) {
+        return memberRepository.findAll(pageable);
     }
 }
