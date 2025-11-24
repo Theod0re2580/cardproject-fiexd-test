@@ -4,6 +4,9 @@ import com.example.cardtest.domain.Benefit;
 import com.example.cardtest.service.BenefitService;
 import com.example.cardtest.service.CardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,18 +24,17 @@ public class AdminBenefitController {
     /** 목록 */
     @GetMapping
     public String list(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
             @RequestParam(required = false, name = "adminsearch") String adminsearch,
             Model model) {
 
-        List<Benefit> benefits;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Benefit> benefitPage = benefitService.findAll(adminsearch, pageable);
 
-        if (adminsearch != null && !adminsearch.trim().isEmpty()) {
-            benefits = benefitService.adminSearch(adminsearch);
-        } else {
-            benefits = benefitService.findAll();
-        }
-
-        model.addAttribute("benefits", benefits);
+        model.addAttribute("benefits", benefitPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", benefitPage.getTotalPages());
         model.addAttribute("adminsearch", adminsearch);
 
         return "admin/benefits/list";

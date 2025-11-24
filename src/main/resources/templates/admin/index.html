@@ -167,6 +167,11 @@
         const keyword = document.querySelector("input[name='adminsearch']").value || "";
         loadPage(`cards?page=${pageNumber}&size=20&adminsearch=${encodeURIComponent(keyword)}`);
     }
+
+    function goBenefitPage(pageNumber) {
+        const keyword = document.querySelector("input[name='adminsearch']").value || "";
+        loadPage(`benefits?page=${pageNumber}&size=20&adminsearch=${encodeURIComponent(keyword)}`);
+    }
 </script>
 
 </body>
